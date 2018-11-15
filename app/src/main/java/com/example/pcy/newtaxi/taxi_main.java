@@ -24,6 +24,7 @@ public class taxi_main extends AppCompatActivity {
     EditText email;
     EditText password;
     Button Login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,39 +58,40 @@ public class taxi_main extends AppCompatActivity {
         Login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginUser(email.getText().toString(),password.getText().toString());
+                loginUser(email.getText().toString(), password.getText().toString());
             }
         });
     }
-        private void loginUser(String email, String password) {
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (!task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Toast.makeText(getApplicationContext(), "로그인 성공!", Toast.LENGTH_SHORT).show();  //이메일,패스워드 입력 로그인
-                            }
 
-                        }
-                    });
-        }
-
-        @Override
-        public void onStart() {
-            super.onStart();
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            mAuth.addAuthStateListener(mAuthListener);
-        }
-
-        @Override
-        public void onStop(){
-            super.onStop();
-            if(mAuthListener != null){
-                mAuth.removeAuthStateListener(mAuthListener);
+    private void loginUser(String email, String password) {
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // If sign in fails, display a message to the user.
+                    Toast.makeText(getApplicationContext(), "로그인 성공!", Toast.LENGTH_SHORT).show();  //이메일,패스워드 입력 로그인
+                }
             }
+
+        });
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+}
 

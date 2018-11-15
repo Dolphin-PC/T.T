@@ -1,6 +1,9 @@
 package com.example.pcy.newtaxi;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -12,39 +15,153 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.Api;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class taxi_client extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private ListView postList;
+    private Button callButton;
+    private ArrayAdapter adapter;
+    private TextView emailText;
+    private TextView pointText;
+    private String index;
+    private String driver;
+    private String phonenumber;
+    private String taxinumber;
+    private DatabaseReference mDriver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taxi_client);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View view = navigationView.getHeaderView(0);
+
+        postList = findViewById(R.id.postListView);
+        callButton = findViewById(R.id.joinButton);
+        emailText = view.findViewById(R.id.header_email_textView);
+        pointText = view.findViewById(R.id.header_point_textView);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice , android.R.id.text1);
+        postList.setAdapter(adapter);
+        postList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String str = (String)adapterView.getAdapter().getItem(i);
+                index = str.split("/")[0];
+            }
+        });
+        emailText.setText(mAuth.getCurrentUser().getEmail());
+        Query query = mDriver.orderByChild("taxi-info").equalTo(mAuth.getCurrentUser().getEmail());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    TaxiData taxiData = appleSnapshot.getValue(TaxiData.class);
+                    emailText.setText(taxiData.getEmail());
+                    pointText.setText("Point : " + taxiData.getPoint());
+                    driver = taxiData.getDrivername();
+                    taxinumber = taxiData.getTaxinumber();
+                    phonenumber = taxiData.getPhonenumber();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        databaseReference.child("call-taxi").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                PostData postData = dataSnapshot.getValue(PostData.class);
+                adapter.add(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                PostData postData = dataSnapshot.getValue(PostData.class);
+                adapter.remove(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i = Integer.parseInt(index.split("/")[0]);
+                update(i);
+            }
+        });
+    }
+    public void update(final int i){
+        final DatabaseReference reference = firebaseDatabase.getReference();
+        Query query = reference.child("post").orderByChild("index").equalTo(i);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
+                String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
+                String path = "/" + dataSnapshot.getKey() + "/" + key;
+                HashMap<String, Object> result = new HashMap<>();
+                result.put("driver", driver);
+                reference.child(path).updateChildren(result);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -80,21 +197,14 @@ public class taxi_client extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_logout) {
+            mAuth.signOut();
+            finish();
+            Intent logoutIntent = new Intent(this, MainActivity.class);
+            startActivity(logoutIntent);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
