@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".taxi_client"
+    tools:layout_editor_absoluteY="25dp"
+    tools:showIn="@layout/app_bar_taxi_client">
+
+    <ListView
+        android:id="@+id/postListView"
+        android:layout_width="368dp"
+        android:layout_height="431dp"
+        android:choiceMode="singleChoice"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="80dp" />
+
+    <Button
+        android:id="@+id/joinButton"
+        android:layout_width="176dp"
+        android:layout_height="46dp"
+        android:text="JOIN"
+        tools:background="@android:color/holo_blue_bright"
+        tools:layout_editor_absoluteX="104dp"
+        tools:layout_editor_absoluteY="513dp" />
+
+</android.support.constraint.ConstraintLayout>

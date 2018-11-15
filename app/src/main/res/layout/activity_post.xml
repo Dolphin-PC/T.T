@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LAY3"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".post"
+    tools:layout_editor_absoluteY="25dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/post_title_Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="게시글 제목"
+            android:inputType="text"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="41dp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout4"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+
+        <EditText
+            android:id="@+id/startText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="출발지"
+            android:inputType="text"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="101dp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="21dp"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5">
+
+        <EditText
+            android:id="@+id/arriveText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="도착지"
+            android:inputType="text"
+            tools:layout_editor_absoluteX="85dp"
+            tools:layout_editor_absoluteY="163dp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/postButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="POST"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout61" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout61"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="47dp"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout6"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout6">
+
+        <EditText
+            android:id="@+id/pointText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Point"
+            android:inputType="number"
+            tools:layout_editor_absoluteX="86dp"
+            tools:layout_editor_absoluteY="308dp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginLeft="1dp"
+        android:text="* 총 금액을 입력해주세요."
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout61"
+        app:layout_constraintStart_toStartOf="@+id/textInputLayout61" />
+</android.support.constraint.ConstraintLayout>

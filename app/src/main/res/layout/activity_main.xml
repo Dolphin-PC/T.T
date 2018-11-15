@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LAY1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    tools:layout_editor_absoluteY="81dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="189dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/emailText"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+        <EditText
+            android:id="@+id/pwText"
+            android:layout_width="372dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/emailButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp"
+        android:text="로그인"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout4" />
+
+    <Button
+        android:id="@+id/registerButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginRight="6dp"
+        android:text="회원가입"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailButton" />
+
+    <TextView
+        android:id="@+id/taxiloginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="19dp"
+        android:text="택시 기사 로그인"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/registerButton" />
+
+</android.support.constraint.ConstraintLayout>

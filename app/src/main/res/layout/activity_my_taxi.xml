@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LAY4"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".my_taxi"
+    tools:layout_editor_absoluteY="81dp">
+
+
+    <TextView
+        android:id="@+id/indexView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="45dp"
+        android:text="제목 : "
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintStart_toStartOf="@+id/IntentView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="247dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="@+id/pointText"
+        app:layout_constraintStart_toEndOf="@+id/pointText"
+        app:layout_constraintTop_toTopOf="@+id/personText" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="출발지 : "
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintEnd_toEndOf="@+id/textView9"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toTopOf="@+id/startText" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="도착지 : "
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintEnd_toEndOf="@+id/textView9"
+        app:layout_constraintStart_toEndOf="@+id/textView9"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/startText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="@+id/arriveText"
+        app:layout_constraintStart_toStartOf="@+id/arriveText"
+        app:layout_constraintTop_toBottomOf="@+id/text" />
+
+    <TextView
+        android:id="@+id/arriveText"
+        android:layout_width="292dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startText" />
+
+    <TextView
+        android:id="@+id/personText"
+        android:layout_width="wrap_content"
+        android:layout_height="16dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+        app:layout_constraintBottom_toTopOf="@+id/text"
+        app:layout_constraintEnd_toStartOf="@+id/titleText"
+        app:layout_constraintTop_toTopOf="@+id/text" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginTop="7dp"
+        android:text="댓글"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <ListView
+        android:id="@+id/commentListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="54dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="54dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textView5" />
+
+    <Button
+        android:id="@+id/commentButon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:text="Comment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout42"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/commentText"
+            android:layout_width="269dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Comment"
+            android:inputType="text"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="516dp" />
+    </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/pointText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="39dp"
+        android:layout_marginRight="39dp"
+        android:text="TextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/titleText"
+        app:layout_constraintEnd_toStartOf="@+id/taxiButton"
+        app:layout_constraintTop_toTopOf="@+id/titleText" />
+
+    <Button
+        android:id="@+id/taxiButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:text="택시 정보"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</android.support.constraint.ConstraintLayout>
