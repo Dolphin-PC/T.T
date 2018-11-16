@@ -45,10 +45,11 @@ public class taxi_client extends AppCompatActivity
     private ArrayAdapter adapter;
     private TextView emailText;
     private TextView pointText;
-    private String index;
+    private int index;
     private String driver;
     private String phonenumber;
     private String taxinumber;
+    private int point=1000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,8 +96,45 @@ public class taxi_client extends AppCompatActivity
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i = Integer.parseInt(index);
-                update(i);
+                final DatabaseReference reference = firebaseDatabase.getReference();
+                Query query1 = reference.child("post").orderByChild("index").equalTo(index);
+                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
+                        PostData postData = nodeDataSnapshot.getValue(PostData.class);
+                        point = postData.getPoint();
+                        String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
+                        String path = "/" + dataSnapshot.getKey() + "/" + key;
+                        HashMap<String, Object> result = new HashMap<>();
+                        reference.child(path).updateChildren(result);
+                        result.put("driver", driver);
+                        result.put("taxinumber",taxinumber);
+                        result.put("phonenumber",phonenumber);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+                Query query3 = reference.child("taxi-info").orderByChild("driver").equalTo(driver);
+                query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
+                        String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
+                        String path = "/" + dataSnapshot.getKey() + "/" + key;
+                        HashMap<String, Object> result = new HashMap<>();
+                        result.put("point", point);
+                        reference.child(path).updateChildren(result);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
@@ -106,13 +144,14 @@ public class taxi_client extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {     //게시물 선택 시 이벤트
                 String str = (String)adapterView.getAdapter().getItem(i);
-                index = str.split("/")[0];
+                index = Integer.parseInt(str.split("/")[0]);
             }
         });
         databaseReference.child("call-taxi").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 PostData postData = dataSnapshot.getValue(PostData.class);
+                index = postData.getIndex();
                 adapter.add(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
             }
 
@@ -139,26 +178,10 @@ public class taxi_client extends AppCompatActivity
         }); //게시물 띄우기
 
     }
-    public void update(final int i){
-        final DatabaseReference reference = firebaseDatabase.getReference();
-        Query query = reference.child("post").orderByChild("index").equalTo(i);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
-                String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
-                String path = "/" + dataSnapshot.getKey() + "/" + key;
-                HashMap<String, Object> result = new HashMap<>();
-                result.put("driver", driver);
-                result.put("taxinumber",taxinumber);
-                result.put("phonenumber",phonenumber);
-                reference.child(path).updateChildren(result);
-            }
+    public void update(int i){
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+
+
     }
 
     @Override

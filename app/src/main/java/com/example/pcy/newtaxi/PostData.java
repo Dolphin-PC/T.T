@@ -14,15 +14,6 @@ public class PostData {
     private String taxinumber;
     public PostData(){}
 
-
-    public int getPay() {
-        return Pay;
-    }
-
-    public void setPay(int pay) {
-        Pay = pay;
-    }
-
     public PostData(String UserID, String Title, String Start, String Arrive, int Person, int index, int point, int pay, String driver, String phonenumber, String taxinumber){
         this.UserID=UserID;
         this.Title=Title;
@@ -47,7 +38,11 @@ public class PostData {
     public int getPoint() {
         return Point;
     }
+    public int getPay() { return Pay; }
 
+    public void setPay(int pay) {
+        this.Pay = pay;
+    }
     public String getTaxinumber() {
         return taxinumber;
     }

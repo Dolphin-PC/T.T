@@ -23,7 +23,7 @@ public class post extends AppCompatActivity {
     EditText arriveText;
     EditText pointText;
     Button postButton;
-    int index = 1;
+    int index;
     static String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class post extends AppCompatActivity {
         setContentView(R.layout.activity_post);
         Intent intent = getIntent();
         userID = intent.getExtras().getString("userID");
+        index = intent.getExtras().getInt("index");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         postText = findViewById(R.id.post_title_Text);
@@ -42,7 +43,9 @@ public class post extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 submitPost();
-                index++;
+                Intent intent1 = new Intent(getApplicationContext(),client.class);
+                startActivity(intent1);
+                finish();
             }
         });
         ConstraintLayout LAY1 = findViewById(R.id.LAY3);

@@ -57,7 +57,6 @@ public class my_taxi extends AppCompatActivity{
             }
         });
 
-
         textView = findViewById(R.id.indexView);
         titleText = findViewById(R.id.titleText);
         startText = findViewById(R.id.startText);
@@ -75,27 +74,25 @@ public class my_taxi extends AppCompatActivity{
         title = intent.getExtras().getString("title");
         start = intent.getExtras().getString("start");
         arrive = intent.getExtras().getString("arrive");
-        pay = intent.getExtras().getInt("point");
-        point = pay;
+        pay = point = intent.getExtras().getInt("point");
         person = intent.getExtras().getInt("person");
         final int perpoint = point / 4;
         textView.setText(String.valueOf(index) + "번 글");
         titleText.setText(title);
         startText.setText(start);
         arriveText.setText(arrive);
-        personText.setText(String.valueOf(person)+"/4");
+        personText.setText(String.valueOf(person) + "/4");
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1 , android.R.id.text1);
+        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         commentList.setAdapter(mAdapter);
-        mPostReference = mDatabase.child("post").equalTo(index).getRef();
         mCommentsReference = mDatabase.child("post-comments");
         mCommentsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 CommentData commentData = dataSnapshot.getValue(CommentData.class);
-                if(commentData.getIndex() == index) {
-                    mAdapter.add(userID + " : " + commentData.getComment());
+                if (commentData.getIndex() == index) {
+                    mAdapter.add(commentData.getuserID() + " : " + commentData.getComment());
                 }
             }
 
@@ -119,10 +116,40 @@ public class my_taxi extends AppCompatActivity{
 
             }
         });
+        mPostReference = mDatabase.child("post");
+        mPostReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                PostData postData = dataSnapshot.getValue(PostData.class);
+                if (!postData.getDriver().equals("")) {
+                    mAdapter.add("택시가 호출되었습니다. 클릭해서 확인");
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddComment(userID,commentText.getText().toString(),index);
+                AddComment(userID, commentText.getText().toString(), index);
             }
         });
         payButton.setOnClickListener(new View.OnClickListener() {
@@ -134,14 +161,13 @@ public class my_taxi extends AppCompatActivity{
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
                         PostData postData = nodeDataSnapshot.getValue(PostData.class);
-                        int point1 = postData.getPoint() - perpoint;
+                        pay = postData.getPay() - perpoint;
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
-                        result.put("pay", point1);
+                        result.put("pay", pay);
                         databaseReference.child(path).updateChildren(result);
                     }
-
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
@@ -152,22 +178,23 @@ public class my_taxi extends AppCompatActivity{
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
                         User userData = nodeDataSnapshot.getValue(User.class);
-                        int point1 = userData.getPoint() - perpoint;
+                        int pay1 = userData.getPoint() - perpoint;
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
-                        result.put("point", point1);
+                        result.put("point", pay1);
                         databaseReference.child(path).updateChildren(result);
-                    }
 
+                        String str = userID + "님이 " + perpoint + "원을 지불하셨습니다.(" + pay + "원 남음)";
+                        AddComment("system",str,index);
+                    }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                     }
                 });
-                pay -= perpoint;
-                payButton.setEnabled(false);
             }
         });
+
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,15 +202,17 @@ public class my_taxi extends AppCompatActivity{
                     Toast.makeText(getApplicationContext(),"호출 비용이 모자랍니다.",Toast.LENGTH_SHORT).show();
                 }else{
                     PostData postData = new PostData(userID, title, start, arrive, person, index, point,pay,"","","");
-                    mPostReference.child("call-taxi").push().setValue(postData);
-
+                    databaseReference.child("call-taxi").push().setValue(postData);
                 }
             }
         });
 
     }
-
-    private void AddComment(String userID,String comment,int index) {
+    public void Addcmt(String str,int index){                 //시스템 댓글
+        CommentData cmt = new CommentData(str,index);
+        mCommentsReference.push().setValue(cmt);
+    }
+    public void AddComment(String userID,String comment,int index) {       //사용자 댓글
         CommentData commentData = new CommentData(userID,comment,index);
         mCommentsReference.push().setValue(commentData);
     }

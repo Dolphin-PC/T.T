@@ -52,6 +52,7 @@ public class client extends AppCompatActivity
     private FirebaseAuth mAuth;
     private static int intentIndex;
     private DatabaseReference mUserInfo;
+    private int indexcount=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -81,6 +82,7 @@ public class client extends AppCompatActivity
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(),post.class);
                 intent.putExtra("userID", nameTextView.getText().toString());
+                intent.putExtra("index",indexcount);
                 startActivity(intent);
             }
         });
@@ -134,6 +136,7 @@ public class client extends AppCompatActivity
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 PostData postData = dataSnapshot.getValue(PostData.class);
                 adapter.add(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+                indexcount++;
             }
 
             @Override
