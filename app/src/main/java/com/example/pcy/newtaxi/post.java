@@ -76,7 +76,7 @@ public class post extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, "모집글 게시중...", Toast.LENGTH_SHORT).show();
-        PostData postData = new PostData(userID,title,start,arrive,1,index,Integer.parseInt(point));
+        PostData postData = new PostData(userID,title,start,arrive,0,index,Integer.parseInt(point),Integer.parseInt(point),"","","");
         mDatabase.child("post").push().setValue(postData);
     }
 

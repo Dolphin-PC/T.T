@@ -13,33 +13,23 @@
         android:id="@+id/indexView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginLeft="18dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintBottom_toTopOf="@+id/text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/text" />
-
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:text="제목 : "
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintStart_toStartOf="@+id/IntentView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBaseline_toBaselineOf="@+id/personText"
+        app:layout_constraintStart_toStartOf="@+id/titleText" />
 
     <TextView
         android:id="@+id/titleText"
-        android:layout_width="247dp"
+        android:layout_width="344dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="9dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        app:layout_constraintEnd_toEndOf="@+id/pointText"
-        app:layout_constraintStart_toEndOf="@+id/pointText"
-        app:layout_constraintTop_toTopOf="@+id/personText" />
+        app:layout_constraintBottom_toTopOf="@+id/startText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/textView4"
@@ -49,49 +39,54 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintEnd_toEndOf="@+id/textView9"
         app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="@+id/startText" />
+        app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="6dp"
         android:text="도착지 : "
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
         app:layout_constraintEnd_toEndOf="@+id/textView9"
-        app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintStart_toEndOf="@+id/textView9" />
 
     <TextView
         android:id="@+id/startText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="114dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="@+id/arriveText"
         app:layout_constraintStart_toStartOf="@+id/arriveText"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/arriveText"
-        android:layout_width="292dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="21dp"
+        android:layout_marginLeft="21dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
         android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/startText" />
 
     <TextView
         android:id="@+id/personText"
         android:layout_width="wrap_content"
         android:layout_height="16dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginBottom="46dp"
         android:text="TextView"
         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        app:layout_constraintBottom_toTopOf="@+id/text"
-        app:layout_constraintEnd_toStartOf="@+id/titleText"
-        app:layout_constraintTop_toTopOf="@+id/text" />
+        app:layout_constraintBottom_toBottomOf="@+id/titleText"
+        app:layout_constraintStart_toEndOf="@+id/indexView"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView9"
@@ -99,11 +94,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="33dp"
         android:text="댓글"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <ListView
         android:id="@+id/commentListView"
@@ -114,7 +109,7 @@
         android:layout_marginTop="54dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
-        android:layout_marginBottom="54dp"
+        android:layout_marginBottom="53dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -124,11 +119,12 @@
         android:id="@+id/commentButon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="2dp"
-        android:layout_marginRight="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginRight="1dp"
         android:text="Comment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commentListView" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout42"
@@ -136,7 +132,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginLeft="4dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -151,28 +147,26 @@
             tools:layout_editor_absoluteY="516dp" />
     </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:id="@+id/pointText"
+    <Button
+        android:id="@+id/payButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="39dp"
-        android:layout_marginRight="39dp"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:layout_marginEnd="11dp"
+        android:layout_marginRight="11dp"
+        android:layout_marginBottom="5dp"
+        android:text="PAY"
         app:layout_constraintBottom_toTopOf="@+id/titleText"
-        app:layout_constraintEnd_toStartOf="@+id/taxiButton"
-        app:layout_constraintTop_toTopOf="@+id/titleText" />
+        app:layout_constraintEnd_toStartOf="@+id/callButton" />
 
     <Button
-        android:id="@+id/taxiButton"
+        android:id="@+id/callButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:text="택시 정보"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="3dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginBottom="5dp"
+        android:text="CALL"
+        app:layout_constraintBottom_toTopOf="@+id/titleText"
+        app:layout_constraintEnd_toEndOf="@+id/titleText" />
 
 </android.support.constraint.ConstraintLayout>

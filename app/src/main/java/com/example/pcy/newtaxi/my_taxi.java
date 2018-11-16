@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +21,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class my_taxi extends AppCompatActivity{
     private DatabaseReference mDatabase;
@@ -31,15 +35,15 @@ public class my_taxi extends AppCompatActivity{
     private TextView pointText;
     private EditText commentText;
     private ListView commentList;
-    private Button commentButton;
-    private Button taxiButton;
+    private Button commentButton,callButton,payButton;
     private ArrayAdapter mAdapter;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    final private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
     private String userID,title,start,arrive;
-    private int index,point,person;
+    private int index,pay,person,point;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,7 @@ public class my_taxi extends AppCompatActivity{
             }
         });
 
+
         textView = findViewById(R.id.indexView);
         titleText = findViewById(R.id.titleText);
         startText = findViewById(R.id.startText);
@@ -60,9 +65,9 @@ public class my_taxi extends AppCompatActivity{
         personText = findViewById(R.id.personText);
         commentList = findViewById(R.id.commentListView);
         commentText = findViewById(R.id.commentText);
-        pointText = findViewById(R.id.pointText);
         commentButton = findViewById(R.id.commentButon);
-        taxiButton = findViewById(R.id.taxiButton);
+        callButton = findViewById(R.id.callButton);
+        payButton = findViewById(R.id.payButton);
 
         final Intent intent = getIntent();
         index = intent.getExtras().getInt("Index");
@@ -70,23 +75,21 @@ public class my_taxi extends AppCompatActivity{
         title = intent.getExtras().getString("title");
         start = intent.getExtras().getString("start");
         arrive = intent.getExtras().getString("arrive");
-        point = intent.getExtras().getInt("point");
+        pay = intent.getExtras().getInt("point");
+        point = pay;
         person = intent.getExtras().getInt("person");
+        final int perpoint = point / 4;
         textView.setText(String.valueOf(index) + "번 글");
         titleText.setText(title);
         startText.setText(start);
         arriveText.setText(arrive);
-        pointText.setText("Point :"+point);
         personText.setText(String.valueOf(person)+"/4");
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1 , android.R.id.text1);
         commentList.setAdapter(mAdapter);
         mPostReference = mDatabase.child("post").equalTo(index).getRef();
         mCommentsReference = mDatabase.child("post-comments");
-        Query query_post = mPostReference.orderByChild("index").equalTo(index);
-
         mCommentsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -122,24 +125,62 @@ public class my_taxi extends AppCompatActivity{
                 AddComment(userID,commentText.getText().toString(),index);
             }
         });
-        if(person == 4){
-            taxiButton.setVisibility(View.VISIBLE);
-        }
-        taxiButton.setOnClickListener(new View.OnClickListener() {
+        payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(getApplicationContext(),call_taxi_info.class);
-                intent1.putExtra("point",pointText.getText().toString());
-                intent1.putExtra("person",personText.getText().toString());
-                intent1.putExtra("userID",userID);
-                intent1.putExtra("title",title);
-                intent1.putExtra("start",start);
-                intent1.putExtra("arrive",arrive);
-                intent1.putExtra("index",index);
+                Query query = databaseReference.child("post").orderByChild("index").equalTo(index);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
+                        PostData postData = nodeDataSnapshot.getValue(PostData.class);
+                        int point1 = postData.getPoint() - perpoint;
+                        String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
+                        String path = "/" + dataSnapshot.getKey() + "/" + key;
+                        HashMap<String, Object> result = new HashMap<>();
+                        result.put("pay", point1);
+                        databaseReference.child(path).updateChildren(result);
+                    }
 
-                startActivity(intent1);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+                Query query1 = databaseReference.child("user").orderByChild("username").equalTo(userID);
+                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
+                        User userData = nodeDataSnapshot.getValue(User.class);
+                        int point1 = userData.getPoint() - perpoint;
+                        String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
+                        String path = "/" + dataSnapshot.getKey() + "/" + key;
+                        HashMap<String, Object> result = new HashMap<>();
+                        result.put("point", point1);
+                        databaseReference.child(path).updateChildren(result);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
+                pay -= perpoint;
+                payButton.setEnabled(false);
             }
         });
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(pay != 0){
+                    Toast.makeText(getApplicationContext(),"호출 비용이 모자랍니다.",Toast.LENGTH_SHORT).show();
+                }else{
+                    PostData postData = new PostData(userID, title, start, arrive, person, index, point,pay,"","","");
+                    mPostReference.child("call-taxi").push().setValue(postData);
+
+                }
+            }
+        });
+
     }
 
     private void AddComment(String userID,String comment,int index) {

@@ -64,6 +64,22 @@ public class call_taxi_info extends AppCompatActivity {
         total_pointText.setText("남은 금액: " + p + "원");
         per_pointText.setText("개인 부담금 : " + p1 + "원");
 
+        Query query = reference.child("post").orderByChild("index").equalTo(index);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
+                PostData postData = nodeDataSnapshot.getValue(PostData.class);
+                driverName.setText(postData.getDriver());
+                phoneNumber.setText(postData.getPhonenumber());
+                taxiNumber.setText(postData.getTaxinumber());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,24 +128,21 @@ public class call_taxi_info extends AppCompatActivity {
                     total_pointText.setText("남은 금액 : " + totalpoint + "원");
                     per_pointText.setText("개인 부담금 : 0원");
                     perpoint=0;
-                    //test
-                    totalpoint=0;
-                    total_pointText.setText("남은 금액 : " + totalpoint + "원");
                 }
             }
         });
-        call.setOnClickListener(new View.OnClickListener() {
+        /*call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (totalpoint == 0) {
-                    PostData postData = new PostData(userID, title, start, arrive, person, index, point);
+                    PostData postData = new PostData(userID, title, start, arrive, person, index, point,"","","");
                     reference.child("call-taxi").push().setValue(postData);
                     call.setEnabled(false);
                 } else {
                     Toast.makeText(getApplicationContext(), "호출 비용이 부족합니다.", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
     }
 }
 

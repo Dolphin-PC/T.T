@@ -36,8 +36,8 @@ import java.util.HashMap;
 
 public class taxi_client extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private DatabaseReference databaseReference = firebaseDatabase.getReference();
+    static private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+    static private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private ListView postList;
@@ -49,15 +49,17 @@ public class taxi_client extends AppCompatActivity
     private String driver;
     private String phonenumber;
     private String taxinumber;
-    private DatabaseReference mDriver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mAuth = FirebaseAuth.getInstance();
+
         setContentView(R.layout.activity_taxi_client);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -69,38 +71,42 @@ public class taxi_client extends AppCompatActivity
 
         postList = findViewById(R.id.postListView);
         callButton = findViewById(R.id.joinButton);
-        emailText = view.findViewById(R.id.header_email_textView);
-        pointText = view.findViewById(R.id.header_point_textView);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
-
-        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice , android.R.id.text1);
-        postList.setAdapter(adapter);
-        postList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String str = (String)adapterView.getAdapter().getItem(i);
-                index = str.split("/")[0];
-            }
-        });
-        emailText.setText(mAuth.getCurrentUser().getEmail());
-        Query query = mDriver.orderByChild("taxi-info").equalTo(mAuth.getCurrentUser().getEmail());
+        emailText = view.findViewById(R.id.header_taxi_name);
+        pointText = view.findViewById(R.id.header_taxi_point);
+        DatabaseReference mDriver = databaseReference.child("taxi-info");
+        Query query = mDriver.orderByChild("email").equalTo(mAuth.getCurrentUser().getEmail());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     TaxiData taxiData = appleSnapshot.getValue(TaxiData.class);
-                    emailText.setText(taxiData.getEmail());
+                    emailText.setText("Driver :" +  taxiData.getDriver());
                     pointText.setText("Point : " + taxiData.getPoint());
-                    driver = taxiData.getDrivername();
-                    taxinumber = taxiData.getTaxinumber();
+                    driver = taxiData.getDriver();
                     phonenumber = taxiData.getPhonenumber();
+                    taxinumber = taxiData.getTaxinumber();
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+    });
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i = Integer.parseInt(index);
+                update(i);
+            }
+        });
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_single_choice , android.R.id.text1);
+        postList.setAdapter(adapter);
+        postList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {     //게시물 선택 시 이벤트
+                String str = (String)adapterView.getAdapter().getItem(i);
+                index = str.split("/")[0];
             }
         });
         databaseReference.child("call-taxi").addChildEventListener(new ChildEventListener() {
@@ -130,14 +136,8 @@ public class taxi_client extends AppCompatActivity
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
-        callButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int i = Integer.parseInt(index.split("/")[0]);
-                update(i);
-            }
-        });
+        }); //게시물 띄우기
+
     }
     public void update(final int i){
         final DatabaseReference reference = firebaseDatabase.getReference();
@@ -150,6 +150,8 @@ public class taxi_client extends AppCompatActivity
                 String path = "/" + dataSnapshot.getKey() + "/" + key;
                 HashMap<String, Object> result = new HashMap<>();
                 result.put("driver", driver);
+                result.put("taxinumber",taxinumber);
+                result.put("phonenumber",phonenumber);
                 reference.child(path).updateChildren(result);
             }
 
@@ -196,7 +198,6 @@ public class taxi_client extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_logout) {
             mAuth.signOut();
             finish();
