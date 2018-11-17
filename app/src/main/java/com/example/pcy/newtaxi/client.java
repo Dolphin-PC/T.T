@@ -48,11 +48,12 @@ public class client extends AppCompatActivity
     private Button joinButton;
     private ListView postList;
     private ArrayAdapter adapter;
-    private static String index;
+    static private String indexS;
     private FirebaseAuth mAuth;
-    private static int intentIndex;
     private DatabaseReference mUserInfo;
     private int indexcount=1;
+    static private String arrive,start,title,userID;
+    static private int point,person,index;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -83,14 +84,8 @@ public class client extends AppCompatActivity
                 Intent intent = new Intent(getApplicationContext(),post.class);
                 intent.putExtra("userID", nameTextView.getText().toString());
                 intent.putExtra("index",indexcount);
+                indexcount=1;
                 startActivity(intent);
-            }
-        });
-        refreshButton = findViewById(R.id.refreshButton);
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                RefreshPost();
             }
         });
         joinButton = findViewById(R.id.joinButton);
@@ -98,7 +93,8 @@ public class client extends AppCompatActivity
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int i = Integer.parseInt(index.split("/")[0]);
+                int i = Integer.parseInt(indexS.split("/")[0]);
+                index = i;
                 updateListView(i);
             }
         });
@@ -107,7 +103,7 @@ public class client extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String str = (String)adapterView.getAdapter().getItem(i);
-                index = str.split("/")[0];
+                indexS = str.split("/")[0];
             }
         });
 
@@ -171,7 +167,7 @@ public class client extends AppCompatActivity
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
                 PostData postData = nodeDataSnapshot.getValue(PostData.class);
-                int person = postData.getPerson();
+                person = postData.getPerson();
                 if(person<4){
                     person++;
                     String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
@@ -180,13 +176,18 @@ public class client extends AppCompatActivity
                     result.put("person", person);
                     reference.child(path).updateChildren(result);
                     Intent intent = new Intent(getApplicationContext(),my_taxi.class);
+                    userID = nameTextView.getText().toString();
+                    title = postData.getTitle();
+                    start = postData.getStart();
+                    arrive = postData.getArrive();
+                    point = postData.getPoint();
                     intent.putExtra("Index", i);
                     intent.putExtra("person",person);
-                    intent.putExtra("userID",nameTextView.getText().toString());
-                    intent.putExtra("title",postData.getTitle());
-                    intent.putExtra("start",postData.getStart());
-                    intent.putExtra("arrive",postData.getArrive());
-                    intent.putExtra("point",postData.getPoint());
+                    intent.putExtra("userID",userID);
+                    intent.putExtra("title",title);
+                    intent.putExtra("start",start);
+                    intent.putExtra("arrive",arrive);
+                    intent.putExtra("point",point);
                     startActivity(intent);
                     finish();
                 }else {
@@ -200,37 +201,7 @@ public class client extends AppCompatActivity
             }
         });
     }
-    public void RefreshPost(){
-        databaseReference.child("post").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                adapter.remove(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명");
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                adapter.remove(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명");
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                adapter.remove(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명");
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     @Override
     public void onBackPressed() {
@@ -274,8 +245,18 @@ public class client extends AppCompatActivity
             finish();
             Intent logoutIntent = new Intent(this, MainActivity.class);
             startActivity(logoutIntent);
-        }else if(id == R.id.nav_manage){
-
+        }
+        else if (id==R.id.nav_reentry){
+            Intent intent = new Intent(getApplicationContext(),my_taxi.class);
+            intent.putExtra("Index", index);
+            intent.putExtra("person",person);
+            intent.putExtra("userID",userID);
+            intent.putExtra("title",title);
+            intent.putExtra("start",start);
+            intent.putExtra("arrive",arrive);
+            intent.putExtra("point",point);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
