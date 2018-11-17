@@ -11,58 +11,46 @@
     <Button
         android:id="@+id/add_post_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginRight="46dp"
+        android:layout_marginBottom="6dp"
         android:text="POST"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/joinButton" />
+        app:layout_constraintStart_toEndOf="@+id/joinButton"
+        app:layout_constraintTop_toBottomOf="@+id/postListView" />
 
     <ListView
         android:id="@+id/postListView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="422dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="4dp"
         android:choiceMode="singleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/refreshButton"
+        app:layout_constraintBottom_toTopOf="@+id/joinButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/refreshButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="REFRESH"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/joinButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postListView" />
-
-    <Button
         android:id="@+id/joinButton"
         android:layout_width="0dp"
-        android:layout_height="46dp"
-        android:layout_marginEnd="104dp"
-        android:layout_marginRight="104dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginLeft="26dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginBottom="6dp"
         android:text="JOIN"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/refreshButton"
+        app:layout_constraintEnd_toStartOf="@+id/add_post_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/postListView"
         tools:background="@android:color/holo_blue_bright" />
 
 </android.support.constraint.ConstraintLayout>
