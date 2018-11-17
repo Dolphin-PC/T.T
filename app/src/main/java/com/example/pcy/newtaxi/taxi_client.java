@@ -93,7 +93,7 @@ public class taxi_client extends AppCompatActivity
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-    });
+        });
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
