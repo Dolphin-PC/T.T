@@ -1,5 +1,8 @@
 package com.example.pcy.newtaxi;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -44,7 +48,7 @@ public class my_taxi extends AppCompatActivity{
     private DatabaseReference mCommentsReference;
     private String userID,title,start,arrive,driver,taxinumber,phonenumber;
     private int index,pay,person,point;
-
+    final Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
