@@ -5,6 +5,7 @@
     android:id="@+id/LAY2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:background="@drawable/Sub"
     tools:context=".register"
     tools:layout_editor_absoluteY="25dp">
 
@@ -114,6 +115,7 @@
         android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:background="@color/colorPrimary"
         android:text="REGISTER"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

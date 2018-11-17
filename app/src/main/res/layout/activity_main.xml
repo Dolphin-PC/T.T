@@ -5,6 +5,7 @@
     android:id="@+id/LAY1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/Main"
     tools:context=".MainActivity"
     tools:layout_editor_absoluteY="81dp">
 
@@ -55,6 +56,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
+        android:background="@color/colorPrimary"
         android:text="로그인"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,6 +71,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="6dp"
         android:layout_marginRight="6dp"
+        android:background="@color/colorPrimary"
         android:text="회원가입"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
