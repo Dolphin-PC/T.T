@@ -1,8 +1,5 @@
 package com.example.pcy.newtaxi;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -48,7 +44,7 @@ public class my_taxi extends AppCompatActivity{
     private DatabaseReference mCommentsReference;
     private String userID,title,start,arrive,driver,taxinumber,phonenumber;
     private int index,pay,person,point;
-    final Context context = this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,12 +71,12 @@ public class my_taxi extends AppCompatActivity{
 
         final Intent intent = getIntent();
         index = intent.getExtras().getInt("Index");
-        userID = intent.getExtras().getString("userID");
         title = intent.getExtras().getString("title");
-        start = intent.getExtras().getString("start");
         arrive = intent.getExtras().getString("arrive");
-        pay = point = intent.getExtras().getInt("point");
+        start = intent.getExtras().getString("start");
         person = intent.getExtras().getInt("person");
+        pay = point = intent.getExtras().getInt("point");
+        userID = intent.getExtras().getString("userID");
         final int perpoint = point / 4;
         textView.setText(String.valueOf(index) + "번 글");
         titleText.setText(title);
@@ -194,7 +190,14 @@ public class my_taxi extends AppCompatActivity{
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
                         User userData = nodeDataSnapshot.getValue(User.class);
-                        int pay1 = userData.getPoint() - perpoint;
+                        int pay1;
+                        if(userData.getPoint()-perpoint < 0){
+                            Toast.makeText(getApplicationContext(),"포인트가 부족합니다.",Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        else{
+                            pay1 = userData.getPoint()-perpoint;
+                        }
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
@@ -214,7 +217,7 @@ public class my_taxi extends AppCompatActivity{
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(pay != 0){
+                if(pay > 0){
                     Toast.makeText(getApplicationContext(),"호출 비용이 모자랍니다.",Toast.LENGTH_SHORT).show();
                 }else{
                     PostData postData = new PostData(userID, title, start, arrive, person, index, point,pay,"","","");
