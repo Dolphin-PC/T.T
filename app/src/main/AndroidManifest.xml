@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pcy.newtaxi">
+package="com.example.pcy.newtaxi">
 
-    <application
-        android:allowBackup="true"
-        android:icon="@drawable/icon"
-        android:label="빨리 매칭해"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity
-            android:name=".splashActivity"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".MainActivity">
-        </activity>
-        <activity
-            android:name=".client"
-            android:label="@string/title_activity_client"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".my_taxi" />
-        <activity android:name=".post" />
-        <activity android:name=".PostData" />
-        <activity android:name=".register" />
-        <activity android:name=".call_taxi_info" />
-        <activity android:name=".taxi_main" />
-        <activity
-            android:name=".taxi_client"
-            android:label="@string/title_activity_taxi_client"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-    </application>
+<application
+    android:allowBackup="true"
+    android:icon="@drawable/icon"
+    android:label="빨리 매칭해"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/AppTheme">
+    <activity
+        android:name=".splashActivity"
+        android:theme="@style/SplashTheme"
+        android:screenOrientation="portrait">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+    </activity>
+    <activity android:name=".MainActivity">
+    </activity>
+    <activity
+        android:name=".client"
+        android:label="@string/title_activity_client"
+        android:theme="@style/AppTheme.NoActionBar" />
+    <activity android:name=".my_taxi" />
+    <activity android:name=".post" />
+    <activity android:name=".PostData" />
+    <activity android:name=".register" />
+    <activity android:name=".call_taxi_info" />
+    <activity android:name=".taxi_main" />
+    <activity
+        android:name=".taxi_client"
+        android:label="@string/title_activity_taxi_client"
+        android:theme="@style/AppTheme.NoActionBar"></activity>
+</application>
 
 </manifest>

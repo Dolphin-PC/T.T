@@ -5,9 +5,9 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_reentry"
+            android:icon="@drawable/ic_menu_send"
+            android:title="재입장" />
     </group>
 
     <item android:title="function">

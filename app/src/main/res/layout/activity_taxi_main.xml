@@ -5,7 +5,7 @@
     android:id="@+id/LAY5"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/Sub"
+    android:background="@drawable/sub"
     tools:context=".taxi_main"
     tools:layout_editor_absoluteY="81dp">
 

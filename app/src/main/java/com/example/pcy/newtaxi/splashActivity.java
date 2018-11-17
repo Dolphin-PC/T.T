@@ -3,6 +3,7 @@ package com.example.pcy.newtaxi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import com.example.pcy.newtaxi.MainActivity;
 public class splashActivity extends Activity {
     public void onCreate(Bundle savedInstanceState){
         super .onCreate(savedInstanceState);

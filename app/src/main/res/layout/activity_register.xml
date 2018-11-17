@@ -5,7 +5,7 @@
     android:id="@+id/LAY2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:background="@drawable/Sub"
+    tools:background="@drawable/sub"
     tools:context=".register"
     tools:layout_editor_absoluteY="25dp">
 

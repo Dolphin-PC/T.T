@@ -5,7 +5,7 @@
     android:id="@+id/LAY1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/Main"
+    android:background="@drawable/main"
     tools:context=".MainActivity"
     tools:layout_editor_absoluteY="81dp">
 

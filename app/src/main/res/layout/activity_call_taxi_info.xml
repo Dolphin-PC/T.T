@@ -11,13 +11,13 @@
         android:id="@+id/imageView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/Texi_move"
+        android:background="@drawable/texi_move"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/Texi_move" />
+        app:srcCompat="@drawable/texi_move" />
 
     <TextView
         android:id="@+id/textView2"
