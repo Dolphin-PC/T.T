@@ -49,7 +49,7 @@ public class taxi_client extends AppCompatActivity
     private String driver;
     private String phonenumber;
     private String taxinumber;
-    private int point=1000;
+    private int point,plus_point;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +83,7 @@ public class taxi_client extends AppCompatActivity
                     TaxiData taxiData = appleSnapshot.getValue(TaxiData.class);
                     emailText.setText("Driver :" +  taxiData.getDriver());
                     pointText.setText("Point : " + taxiData.getPoint());
+                    point = taxiData.getPoint();
                     driver = taxiData.getDriver();
                     phonenumber = taxiData.getPhonenumber();
                     taxinumber = taxiData.getTaxinumber();
@@ -103,14 +104,14 @@ public class taxi_client extends AppCompatActivity
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
                         PostData postData = nodeDataSnapshot.getValue(PostData.class);
-                        point = postData.getPoint();
+                        plus_point = postData.getPoint();
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
-                        reference.child(path).updateChildren(result);
                         result.put("driver", driver);
                         result.put("taxinumber",taxinumber);
                         result.put("phonenumber",phonenumber);
+                        reference.child(path).updateChildren(result);
                     }
 
                     @Override
@@ -126,7 +127,7 @@ public class taxi_client extends AppCompatActivity
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
-                        result.put("point", point);
+                        result.put("point", point + plus_point);
                         reference.child(path).updateChildren(result);
                     }
 

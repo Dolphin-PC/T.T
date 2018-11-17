@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,7 +42,7 @@ public class my_taxi extends AppCompatActivity{
     final private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
-    private String userID,title,start,arrive;
+    private String userID,title,start,arrive,driver,taxinumber,phonenumber;
     private int index,pay,person,point;
 
     @Override
@@ -86,6 +87,17 @@ public class my_taxi extends AppCompatActivity{
 
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         commentList.setAdapter(mAdapter);
+        commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String call_taxi = (String)parent.getAdapter().getItem(position);
+                if(call_taxi.equals("택시가 호출되었습니다. 클릭해서 확인")){
+                    Intent intent1 = new Intent(getApplicationContext(),call_taxi_info.class);
+                    intent1.putExtra("userid",userID);
+                    startActivity(intent1);
+                }
+            }
+        });
         mCommentsReference = mDatabase.child("post-comments");
         mCommentsReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -155,8 +167,8 @@ public class my_taxi extends AppCompatActivity{
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Query query = databaseReference.child("post").orderByChild("index").equalTo(index);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                Query query5 = databaseReference.child("post").orderByChild("index").equalTo(index);
+                query5.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
