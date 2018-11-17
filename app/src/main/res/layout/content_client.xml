@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/Sub"
     tools:context=".client"
     tools:layout_editor_absoluteY="25dp"
     tools:showIn="@layout/app_bar_client">
@@ -63,6 +64,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/refreshButton"
-        tools:background="@android:color/holo_blue_bright" />
+        tools:background="@color/colorPrimary" />
 
 </android.support.constraint.ConstraintLayout>

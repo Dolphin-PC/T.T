@@ -5,6 +5,8 @@
     android:id="@+id/LAY4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:background="@drawable/Sub"
     tools:context=".my_taxi"
     tools:layout_editor_absoluteY="81dp">
 
@@ -122,6 +124,7 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="1dp"
         android:layout_marginRight="1dp"
+        android:background="@color/colorPrimary"
         android:text="Comment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentListView" />
