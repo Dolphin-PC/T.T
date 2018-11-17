@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/sub"
     tools:context=".client"
     tools:layout_editor_absoluteY="25dp"
     tools:showIn="@layout/app_bar_client">
@@ -11,10 +12,10 @@
     <Button
         android:id="@+id/add_post_button"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginRight="46dp"
-        android:layout_marginBottom="6dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="POST"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,15 +25,14 @@
     <ListView
         android:id="@+id/postListView"
         android:layout_width="0dp"
-        android:layout_height="422dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="80dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="4dp"
         android:choiceMode="singleChoice"
-        app:layout_constraintBottom_toTopOf="@+id/joinButton"
+        app:layout_constraintBottom_toTopOf="@+id/add_post_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -40,17 +40,17 @@
     <Button
         android:id="@+id/joinButton"
         android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginRight="40dp"
-        android:layout_marginBottom="6dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:text="JOIN"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/add_post_button"
         app:layout_constraintEnd_toStartOf="@+id/add_post_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/postListView"
-        tools:background="@android:color/holo_blue_bright" />
+        tools:background="@color/colorPrimary" />
 
 </android.support.constraint.ConstraintLayout>
