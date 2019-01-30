@@ -9,7 +9,7 @@
     tools:openDrawer="start">
 
     <include
-        layout="@layout/app_bar_taxi_client"
+        layout="@layout/taxi_driver"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:headerLayout="@layout/nav_header_taxi_client"
+        app:headerLayout="@layout/taxi_driver_tabbar_info"
         app:menu="@menu/activity_taxi_client_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

@@ -20,8 +20,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -32,8 +30,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-import java.util.Map;
-
+//TODO : 클라이언트 layout 확인/ 재구성 필요
 public class client extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     private DatabaseReference mDatabase;
@@ -59,7 +56,7 @@ public class client extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client);
+        setContentView(R.layout.client_tabbar);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -130,8 +127,8 @@ public class client extends AppCompatActivity
         databaseReference.child("post").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                adapter.add(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+                Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
+                adapter.add(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
                 indexcount++;
             }
 
@@ -142,8 +139,8 @@ public class client extends AppCompatActivity
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                adapter.remove(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+                Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
+                adapter.remove(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
             }
 
             @Override
@@ -166,8 +163,8 @@ public class client extends AppCompatActivity
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
-                PostData postData = nodeDataSnapshot.getValue(PostData.class);
-                person = postData.getPerson();
+                Data_Post dataPost = nodeDataSnapshot.getValue(Data_Post.class);
+                person = dataPost.getPerson();
                 if(person<4){
                     person++;
                     String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
@@ -175,12 +172,12 @@ public class client extends AppCompatActivity
                     HashMap<String, Object> result = new HashMap<>();
                     result.put("person", person);
                     reference.child(path).updateChildren(result);
-                    Intent intent = new Intent(getApplicationContext(),my_taxi.class);
+                    Intent intent = new Intent(getApplicationContext(),My_taxi.class);
                     userID = nameTextView.getText().toString();
-                    title = postData.getTitle();
-                    start = postData.getStart();
-                    arrive = postData.getArrive();
-                    point = postData.getPoint();
+                    title = dataPost.getTitle();
+                    start = dataPost.getStart();
+                    arrive = dataPost.getArrive();
+                    point = dataPost.getPoint();
                     intent.putExtra("Index", i);
                     intent.putExtra("person",person);
                     intent.putExtra("userID",userID);
@@ -243,11 +240,11 @@ public class client extends AppCompatActivity
         if(id == R.id.nav_logout) {
             mAuth.signOut();
             finish();
-            Intent logoutIntent = new Intent(this, MainActivity.class);
+            Intent logoutIntent = new Intent(this, Login.class);
             startActivity(logoutIntent);
         }
         else if (id==R.id.nav_reentry){
-            Intent intent = new Intent(getApplicationContext(),my_taxi.class);
+            Intent intent = new Intent(getApplicationContext(),My_taxi.class);
             intent.putExtra("Index", index);
             intent.putExtra("person",person);
             intent.putExtra("userID",userID);

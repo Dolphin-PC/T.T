@@ -26,7 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
-public class my_taxi extends AppCompatActivity{
+public class My_taxi extends AppCompatActivity{
     private DatabaseReference mDatabase;
     private TextView textView;
     private TextView titleText;
@@ -48,7 +48,7 @@ public class my_taxi extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_taxi);
+        setContentView(R.layout.my_taxi);
         ConstraintLayout LAY4 = findViewById(R.id.LAY4);
         LAY4.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +92,7 @@ public class my_taxi extends AppCompatActivity{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String call_taxi = (String)parent.getAdapter().getItem(position);
                 if(call_taxi.equals("택시가 호출되었습니다. 클릭해서 확인")){
-                    Intent intent1 = new Intent(getApplicationContext(),call_taxi_info.class);
+                    Intent intent1 = new Intent(getApplicationContext(),Taxi_info.class);
                     intent1.putExtra("userid",userID);
                     startActivity(intent1);
                 }
@@ -102,9 +102,9 @@ public class my_taxi extends AppCompatActivity{
         mCommentsReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                CommentData commentData = dataSnapshot.getValue(CommentData.class);
-                if (commentData.getIndex() == index) {
-                    mAdapter.add(commentData.getuserID() + " : " + commentData.getComment());
+                Data_Comment dataComment = dataSnapshot.getValue(Data_Comment.class);
+                if (dataComment.getIndex() == index) {
+                    mAdapter.add(dataComment.getuserID() + " : " + dataComment.getComment());
                 }
             }
 
@@ -137,8 +137,8 @@ public class my_taxi extends AppCompatActivity{
 
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                if (!postData.getDriver().equals("")) {
+                Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
+                if (!dataPost.getDriver().equals("")) {
                     mAdapter.add("택시가 호출되었습니다. 클릭해서 확인");
                 }
             }
@@ -172,8 +172,8 @@ public class my_taxi extends AppCompatActivity{
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
-                        PostData postData = nodeDataSnapshot.getValue(PostData.class);
-                        pay = postData.getPay() - perpoint;
+                        Data_Post dataPost = nodeDataSnapshot.getValue(Data_Post.class);
+                        pay = dataPost.getPay() - perpoint;
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
@@ -220,19 +220,19 @@ public class my_taxi extends AppCompatActivity{
                 if(pay > 0){
                     Toast.makeText(getApplicationContext(),"호출 비용이 모자랍니다.",Toast.LENGTH_SHORT).show();
                 }else{
-                    PostData postData = new PostData(userID, title, start, arrive, person, index, point,pay,"","","");
-                    databaseReference.child("call-taxi").push().setValue(postData);
+                    Data_Post dataPost = new Data_Post(userID, title, start, arrive, person, index, point,pay,"","","");
+                    databaseReference.child("call-taxi").push().setValue(dataPost);
                 }
             }
         });
 
     }
     public void Addcmt(String str,int index){                 //시스템 댓글
-        CommentData cmt = new CommentData(str,index);
+        Data_Comment cmt = new Data_Comment(str,index);
         mCommentsReference.push().setValue(cmt);
     }
     public void AddComment(String userID,String comment,int index) {       //사용자 댓글
-        CommentData commentData = new CommentData(userID,comment,index);
-        mCommentsReference.push().setValue(commentData);
+        Data_Comment dataComment = new Data_Comment(userID,comment,index);
+        mCommentsReference.push().setValue(dataComment);
     }
 }

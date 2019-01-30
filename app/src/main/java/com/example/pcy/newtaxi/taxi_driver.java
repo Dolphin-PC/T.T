@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -20,9 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.common.api.Api;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -33,8 +29,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-
-public class taxi_client extends AppCompatActivity
+//TODO : 택시기사 layout 확인/ 재구성 필요
+public class taxi_driver extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     static private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     static private DatabaseReference databaseReference = firebaseDatabase.getReference();
@@ -56,7 +52,7 @@ public class taxi_client extends AppCompatActivity
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        setContentView(R.layout.activity_taxi_client);
+        setContentView(R.layout.taxi_driver_tabbar);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -80,13 +76,13 @@ public class taxi_client extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                    TaxiData taxiData = appleSnapshot.getValue(TaxiData.class);
-                    emailText.setText("Driver :" +  taxiData.getDriver());
-                    pointText.setText("Point : " + taxiData.getPoint());
-                    point = taxiData.getPoint();
-                    driver = taxiData.getDriver();
-                    phonenumber = taxiData.getPhonenumber();
-                    taxinumber = taxiData.getTaxinumber();
+                    Data_Taxi dataTaxi = appleSnapshot.getValue(Data_Taxi.class);
+                    emailText.setText("Driver :" +  dataTaxi.getDriver());
+                    pointText.setText("Point : " + dataTaxi.getPoint());
+                    point = dataTaxi.getPoint();
+                    driver = dataTaxi.getDriver();
+                    phonenumber = dataTaxi.getPhonenumber();
+                    taxinumber = dataTaxi.getTaxinumber();
                 }
             }
             @Override
@@ -103,8 +99,8 @@ public class taxi_client extends AppCompatActivity
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
-                        PostData postData = nodeDataSnapshot.getValue(PostData.class);
-                        plus_point = postData.getPoint();
+                        Data_Post dataPost = nodeDataSnapshot.getValue(Data_Post.class);
+                        plus_point = dataPost.getPoint();
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
@@ -151,9 +147,9 @@ public class taxi_client extends AppCompatActivity
         databaseReference.child("call-taxi").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                index = postData.getIndex();
-                adapter.add(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+                Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
+                index = dataPost.getIndex();
+                adapter.add(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
             }
 
             @Override
@@ -163,8 +159,8 @@ public class taxi_client extends AppCompatActivity
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                PostData postData = dataSnapshot.getValue(PostData.class);
-                adapter.remove(postData.getIndex()+"/"+postData.getTitle() + ": " + postData.getStart() + "->" + postData.getArrive() + "(" + postData.getPerson() + ")명" + ", P("+postData.getPoint()+")");
+                Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
+                adapter.remove(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
             }
 
             @Override
@@ -225,7 +221,7 @@ public class taxi_client extends AppCompatActivity
         if (id == R.id.nav_logout) {
             mAuth.signOut();
             finish();
-            Intent logoutIntent = new Intent(this, MainActivity.class);
+            Intent logoutIntent = new Intent(this, Login.class);
             startActivity(logoutIntent);
         }
 

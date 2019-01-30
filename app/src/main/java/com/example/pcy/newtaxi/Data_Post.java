@@ -1,6 +1,6 @@
 package com.example.pcy.newtaxi;
 
-public class PostData {
+public class Data_Post {
     private String UserID;
     private String Title;
     private String Start;
@@ -12,9 +12,9 @@ public class PostData {
     private String driver;
     private String phonenumber;
     private String taxinumber;
-    public PostData(){}
+    public Data_Post(){}
 
-    public PostData(String UserID, String Title, String Start, String Arrive, int Person, int index, int point, int pay, String driver, String phonenumber, String taxinumber){
+    public Data_Post(String UserID, String Title, String Start, String Arrive, int Person, int index, int point, int pay, String driver, String phonenumber, String taxinumber){
         this.UserID=UserID;
         this.Title=Title;
         this.Start=Start;

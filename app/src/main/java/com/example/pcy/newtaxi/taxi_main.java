@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -28,7 +27,7 @@ public class taxi_main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_taxi_main);
+        setContentView(R.layout.taxi_driver_login);
 
         email = findViewById(R.id.emailText);
         password = findViewById(R.id.passwordText);
@@ -48,7 +47,7 @@ public class taxi_main extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     //user is signed in
-                    Intent intent = new Intent(getApplicationContext(), taxi_client.class);
+                    Intent intent = new Intent(getApplicationContext(), taxi_driver.class);
                     startActivity(intent);
                 } else {
 

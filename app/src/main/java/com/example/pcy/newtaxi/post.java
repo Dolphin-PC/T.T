@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -28,7 +27,7 @@ public class post extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+        setContentView(R.layout.post);
         Intent intent = getIntent();
         userID = intent.getExtras().getString("userID");
         index = intent.getExtras().getInt("index");
@@ -79,8 +78,8 @@ public class post extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, "모집글 게시중...", Toast.LENGTH_SHORT).show();
-        PostData postData = new PostData(userID,title,start,arrive,0,index,Integer.parseInt(point),Integer.parseInt(point),"","","");
-        mDatabase.child("post").push().setValue(postData);
+        Data_Post dataPost = new Data_Post(userID,title,start,arrive,0,index,Integer.parseInt(point),Integer.parseInt(point),"","","");
+        mDatabase.child("post").push().setValue(dataPost);
     }
 
 

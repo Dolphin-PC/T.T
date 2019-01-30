@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@drawable/sub"
-    tools:context=".taxi_client"
+    tools:context=".taxi_driver"
     tools:layout_editor_absoluteY="25dp"
-    tools:showIn="@layout/app_bar_taxi_client">
+    tools:showIn="@layout/taxi_driver">
 
     <ListView
         android:id="@+id/postListView"

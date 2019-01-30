@@ -18,20 +18,20 @@ package="com.example.pcy.newtaxi">
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
     </activity>
-    <activity android:name=".MainActivity">
+    <activity android:name=".Login">
     </activity>
     <activity
         android:name=".client"
         android:label="@string/title_activity_client"
         android:theme="@style/AppTheme.NoActionBar" />
-    <activity android:name=".my_taxi" />
+    <activity android:name=".My_taxi" />
     <activity android:name=".post" />
-    <activity android:name=".PostData" />
+    <activity android:name=".Data_Post" />
     <activity android:name=".register" />
-    <activity android:name=".call_taxi_info" />
+    <activity android:name=".Taxi_info" />
     <activity android:name=".taxi_main" />
     <activity
-        android:name=".taxi_client"
+        android:name=".taxi_driver"
         android:label="@string/title_activity_taxi_client"
         android:theme="@style/AppTheme.NoActionBar"></activity>
 </application>

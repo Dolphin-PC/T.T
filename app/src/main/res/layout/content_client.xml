@@ -7,7 +7,7 @@
     android:background="@drawable/sub"
     tools:context=".client"
     tools:layout_editor_absoluteY="25dp"
-    tools:showIn="@layout/app_bar_client">
+    tools:showIn="@layout/client">
 
     <Button
         android:id="@+id/add_post_button"
