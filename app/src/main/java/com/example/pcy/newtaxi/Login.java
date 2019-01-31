@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity{
                     //user is signed in
                     Intent intent = new Intent(getApplicationContext(),client.class);
                     startActivity(intent);
-                } /* TODO : 구글 로그인 때마다 데이터베이스에 회원정보가 있는지 확인(없으면 번호를 받아오고, DB에 회원정보(이름,전화번호,이메일 저장)
+                } /* TODO : 구글 로그인 때마다 데이터베이스에 회원정보가 있는지 확인(없으면 번호를 받아 번호 인증 후, DB에 회원정보(이름,전화번호,이메일 저장)
                 ->  String name = user.getDisplayName();
                     String email = user.getEmail(); , user.getPhonenumber();
                 else if(user.getPhoneNumber() != null){
