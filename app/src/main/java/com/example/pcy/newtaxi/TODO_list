@@ -7,3 +7,36 @@ TODO : 리스트 재구성, 현재 리스트는 텍스트로만 이루어져 있
 
 TODO : 로그인 방식 추가(Google,Facebook로그인) - Login / 제3자 로그인시 데이터베이스에 사용자 정보 추가
 -> SMS본인인증은 다날 문자 인증 서비스(유료) 이용
+
+
+# 구글 로그인 시, 회원정보 조회
+public void checkCurrentUser() {
+        // [START check_current_user]
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            getUserProfile();
+        } else {
+            Toast.makeText(getApplicationContext(),"사용자 정보 없음",Toast.LENGTH_SHORT).show();
+        }
+        // [END check_current_user]
+    }
+
+    public void getUserProfile() {
+        // [START get_user_profile]
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            // Name, email address, and profile photo Url
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            // Check if user's email is verified
+            boolean emailVerified = user.isEmailVerified();
+
+            // The user's ID, unique to the Firebase project. Do NOT use this value to
+            // authenticate with your backend server, if you have one. Use
+            // FirebaseUser.getIdToken() instead.
+
+        }
+        // [END get_user_profile]
+    }
