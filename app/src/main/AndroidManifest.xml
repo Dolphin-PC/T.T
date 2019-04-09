@@ -1,39 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-package="com.example.pcy.newtaxi">
+    package="app.taxi.newtaxi">
+    <permission
+        android:name="app.taxi.newtaxi.Map.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature"/>
+    <uses-permission android:name="app.taxi.newtaxi.Map.permission.MAPS_RECEIVE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
-<application
-    android:allowBackup="true"
-    android:icon="@drawable/icon"
-    android:label="빨리 매칭해"
-    android:roundIcon="@mipmap/ic_launcher_round"
-    android:supportsRtl="true"
-    android:theme="@style/AppTheme">
-    <activity
-        android:name=".splashActivity"
-        android:theme="@style/SplashTheme"
-        android:screenOrientation="portrait">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
-    <activity android:name=".Login">
-    </activity>
-    <activity
-        android:name=".client"
-        android:label="@string/title_activity_client"
-        android:theme="@style/AppTheme.NoActionBar" />
-    <activity android:name=".My_taxi" />
-    <activity android:name=".post" />
-    <activity android:name=".Data_Post" />
-    <activity android:name=".register" />
-    <activity android:name=".Taxi_info" />
-    <activity android:name=".taxi_main" />
-    <activity
-        android:name=".taxi_driver"
-        android:label="@string/title_activity_taxi_client"
-        android:theme="@style/AppTheme.NoActionBar"></activity>
-</application>
+    <application
+        android:name=".GlobalApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/icon"
+        android:label="T.T"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="f52f753a188af1f4a94675df073415b8" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBtm4wPcDd_6aJu1NGIW-FoGU4_2TCf4Zw" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <activity android:name=".Map">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Charge" />
+        <activity android:name=".KakaoSignupActivity" />
+        <activity android:name=".My" />
+        <activity
+            android:name=".splashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Login" />
+        <activity android:name=".main" />
+        <activity
+            android:name=".client"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".My_taxi" />
+        <activity android:name=".post" />
+        <activity android:name=".register" />
+        <activity android:name=".Taxi_info" />
+        <activity android:name=".taxi_main" />
+        <activity android:name=".taxi_driver" />
+    </application>
 
 </manifest>

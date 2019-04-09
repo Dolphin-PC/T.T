@@ -8,23 +8,19 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:804280661254:android:821ebdc4faf0e042",
+        "mobilesdk_app_id": "1:804280661254:android:1e64879194fc7220",
         "android_client_info": {
-          "package_name": "com.example.pcy.newtaxi"
+          "package_name": "app.taxi.T_T"
         }
       },
       "oauth_client": [
         {
-          "client_id": "804280661254-ghbdc64njl0fr8nd009lj3d60ii0b0gm.apps.googleusercontent.com",
+          "client_id": "804280661254-tke86t4ti196oi77laae04953dnhtbh1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.pcy.newtaxi",
-            "certificate_hash": "050845f48c2fa956e81fcfeff23a2bec27c18204"
+            "package_name": "app.taxi.T_T",
+            "certificate_hash": "0466ff46061758020905b51e0db3bdbcf0182d17"
           }
-        },
-        {
-          "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -33,50 +29,31 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:804280661254:android:8a2e9e2dfb8f2bdb",
+        "mobilesdk_app_id": "1:804280661254:android:98cfb902756cec77",
         "android_client_info": {
-          "package_name": "com.example.pcy.taxi"
+          "package_name": "app.taxi.newtaxi"
         }
       },
       "oauth_client": [
         {
-          "client_id": "804280661254-2moe6a6afefekpnuhprj8agfrbhf25ic.apps.googleusercontent.com",
+          "client_id": "804280661254-qcbtu0gadn2tbh3gc6va7ro2vqa4q5hk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.pcy.taxi",
-            "certificate_hash": "15d183ae9ed790a4e2db70b3024fe1f793bef201"
+            "package_name": "app.taxi.newtaxi",
+            "certificate_hash": "0466ff46061758020905b51e0db3bdbcf0182d17"
           }
-        },
-        {
-          "client_id": "804280661254-snigr6jbq1q34qnn5vd3qmu56g0mberv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.pcy.taxi",
-            "certificate_hash": "050845f48c2fa956e81fcfeff23a2bec27c18204"
-          }
-        },
-        {
-          "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
@@ -85,64 +62,13 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
               "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:804280661254:android:d77ad47628c42e10",
-        "android_client_info": {
-          "package_name": "com.example.pcy.taxi10"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "804280661254-gsjt1cv0g9cs1fai048c014hvdvt3jkp.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.pcy.taxi10",
-            "certificate_hash": "15d183ae9ed790a4e2db70b3024fe1f793bef201"
-          }
-        },
-        {
-          "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBM4a32mGofdqElp6CZWdQRAp6WifZgMeQ"
-        }
-      ],
-      "services": {
-        "analytics_service": {
-          "status": 1
-        },
-        "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

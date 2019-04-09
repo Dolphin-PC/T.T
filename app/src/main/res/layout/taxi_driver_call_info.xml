@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.pcy.newtaxi.Taxi_info"
+    tools:context="com.example.pcy.newtaxi.app.example.pcy.newtaxi.Taxi_info"
     tools:layout_editor_absoluteY="81dp">
 
     <ImageView
@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/driverText" />
 
     <TextView
-        android:id="@+id/phonenumberText"
+        android:id="@+id/phonenumber_Text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="37dp"
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:text="H.P"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toTopOf="@+id/phonenumberText"
+        app:layout_constraintBottom_toTopOf="@+id/phonenumber_Text"
         app:layout_constraintStart_toStartOf="@+id/taxinumberText" />
 
     <TextView

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:background="@drawable/sub"
-    tools:context=".register"
+    tools:context="app.taxi.newtaxi.register"
     tools:layout_editor_absoluteY="25dp">
 
     <android.support.design.widget.TextInputLayout

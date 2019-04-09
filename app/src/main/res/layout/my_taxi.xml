@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/sub"
     tools:background="@drawable/sub"
-    tools:context=".My_taxi"
+    tools:context="app.taxi.newtaxi.My_taxi"
     tools:layout_editor_absoluteY="81dp">
 
 

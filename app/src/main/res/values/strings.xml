@@ -8,4 +8,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_taxi_client">taxi_client</string>
+    //카카오 앱 키
+    <string name="kakao_app_key">f52f753a188af1f4a94675df073415b8</string>
 </resources>
