@@ -1,6 +1,7 @@
 package app.taxi.newtaxi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
@@ -46,10 +47,15 @@ public class main extends AppCompatActivity {
 
     }
     void Setting(){
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = positionDATA.edit();
         final Intent intent = getIntent();
         nickname = intent.getExtras().getString("Nickname");
+        editor.putString("NAME",nickname);
         userid = intent.getExtras().getString("ID");
+        editor.putString("ID",userid);
         profileURL = intent.getExtras().getString("Profile");
+        editor.commit();
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/
@@ -92,7 +98,9 @@ public class main extends AppCompatActivity {
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(getApplicationContext(),Map.class);
+                Intent intent1 = new Intent(getApplicationContext(),Selector.class);
+                intent1.putExtra("START","");
+                intent1.putExtra("ARRIVE","");
                 startActivity(intent1);
             }
         });
