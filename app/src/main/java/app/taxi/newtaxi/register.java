@@ -79,7 +79,7 @@ public class register extends AppCompatActivity implements GoogleApiClient.OnCon
             phone.setError("Required");
             return;
         }
-        User userData = new User(text1,text2,text3,text4,"0",null);
+        User userData = new User(text1,text2,text3,text4,0,null);
         mDatabase.child("user").push().setValue(userData);
 
     }

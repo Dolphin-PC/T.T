@@ -78,8 +78,8 @@ public class post extends AppCompatActivity {
             return;
         }
         Toast.makeText(this, "모집글 게시중...", Toast.LENGTH_SHORT).show();
-        Data_Post dataPost = new Data_Post(userID,title,start,arrive,0,index,Integer.parseInt(point),Integer.parseInt(point),"","","");
-        mDatabase.child("post").push().setValue(dataPost);
+        /*Data_Post dataPost = new Data_Post(userID,title,start,arrive,0,index,Integer.parseInt(point),Integer.parseInt(point),"","","");*/
+        /*mDatabase.child("post").push().setValue(dataPost);*/
     }
 
 

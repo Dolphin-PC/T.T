@@ -9,18 +9,19 @@ public class Data_Post {
     private int index;
     private int Point;
     private int Pay;
-
+    private int MaxPerson;
     private String driver;
     private String phonenumber;
     private String taxinumber;
     public Data_Post(){}
 
-    public Data_Post(String UserID, String Title, String Start, String Arrive, int Person, int index, int point, int pay, String driver, String phonenumber, String taxinumber){
+    public Data_Post(String UserID, String Title, String Start, String Arrive, int Person,int MaxPerson, int index, int point, int pay, String driver, String phonenumber, String taxinumber){
         this.UserID=UserID;
         this.Title=Title;
         this.Start=Start;
         this.Arrive=Arrive;
         this.Person=Person;
+        this.MaxPerson=MaxPerson;
         this.index=index;
         this.Point=point;
         this.driver = driver;
@@ -40,6 +41,14 @@ public class Data_Post {
         return Point;
     }
     public int getPay() { return Pay; }
+
+    public int getMaxPerson() {
+        return MaxPerson;
+    }
+
+    public void setMaxPerson(int maxPerson) {
+        MaxPerson = maxPerson;
+    }
 
     public void setPay(int pay) {
         this.Pay = pay;

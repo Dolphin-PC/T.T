@@ -1,13 +1,13 @@
 package app.taxi.newtaxi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +36,7 @@ public class My extends AppCompatActivity {
     void init(){
         Intent intent = getIntent();
         ID = intent.getExtras().getString("ID");
-        NAME = intent.getExtras().getString("NAME");
+        NAME = intent.getExtras().getString("USERNAME");
         PROFILE_URL = intent.getExtras().getString("PROFILE_URL");
         phonenumber_Text = findViewById(R.id.phonenumber_Text);
         updateBtn = findViewById(R.id.updateBtn);
@@ -92,7 +92,7 @@ public class My extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     User user = appleSnapshot.getValue(User.class);
-                    Point_textview.setText(user.getPoint());
+                    Point_textview.setText(String.valueOf(user.getPoint()));
                     phonenumber_Text.setText(user.getPhonenumber());
                 }
             }
@@ -102,6 +102,9 @@ public class My extends AppCompatActivity {
     }
 
     void Update_user(String phonenumber){
+        final SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        final SharedPreferences.Editor editor = positionDATA.edit();
+
         Query query = mDatabase.child("user").orderByChild("email").equalTo(ID);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -110,7 +113,8 @@ public class My extends AppCompatActivity {
                     User user = appleSnapshot.getValue(User.class);
                     mDatabase = mDatabase.child("user");
                     final String phonenumber = phonenumber_Text.getText().toString();
-                    Log.e("PHONE", phonenumber_Text.getText().toString());
+                    editor.putString("PHONENUMBER",phonenumber_Text.getText().toString());
+                    editor.apply();
 
                     Map<String, Object> taskMap = new HashMap<String, Object>();
                     taskMap.put(ID,new User(NAME,null,ID,phonenumber,user.getPoint(),PROFILE_URL));

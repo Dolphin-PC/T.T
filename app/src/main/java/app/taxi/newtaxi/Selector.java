@@ -79,9 +79,11 @@ public class Selector extends AppCompatActivity {
         final SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
 
-        startTEXT.setText(positionDATA.getString("START",""));
-        arriveTEXT.setText(positionDATA.getString("ARRIVE",""));
+       /* startTEXT.setText(positionDATA.getString("START",""));
+        arriveTEXT.setText(positionDATA.getString("ARRIVE",""));*/
 
+        startTEXT.setText("한림대");
+        arriveTEXT.setText("춘천역");
         URL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
         URL += startTEXT.getText().toString();
         URL += "&destinations=" + arriveTEXT.getText().toString();

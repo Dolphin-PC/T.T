@@ -51,11 +51,12 @@ public class main extends AppCompatActivity {
         SharedPreferences.Editor editor = positionDATA.edit();
         final Intent intent = getIntent();
         nickname = intent.getExtras().getString("Nickname");
-        editor.putString("NAME",nickname);
+        editor.putString("USERNAME",nickname);
         userid = intent.getExtras().getString("ID");
         editor.putString("ID",userid);
         profileURL = intent.getExtras().getString("Profile");
-        editor.commit();
+        editor.putString("PROFILEURL",profileURL);
+        editor.apply();
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/
@@ -120,12 +121,12 @@ public class main extends AppCompatActivity {
                 if(dataSnapshot.getChildren().iterator().hasNext()){
                     for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                         User user = appleSnapshot.getValue(User.class);
-                        Point_textview.setText(user.getPoint());
+                        Point_textview.setText(String.valueOf(user.getPoint()));
                         Update_user(user.getPoint(),user.getPhonenumber());
                         return;
                     }
                 }else{
-                    Update_user("0","0");
+                    Update_user(0,"0");
                 }
             }
 
@@ -134,7 +135,7 @@ public class main extends AppCompatActivity {
             }
         });
     }
-    void Update_user(String point,String phonenumber){
+    void Update_user(int point,String phonenumber){
         Map<String, Object> taskMap = new HashMap<String, Object>();
         taskMap.put(userid,new User(nickname,null,userid,phonenumber,point,null));
         mDatabase.child("user").updateChildren(taskMap);

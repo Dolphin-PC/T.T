@@ -120,6 +120,8 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        /*SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.MAPview);
+        mapFragment.getMapAsync(this);*/
     }
 
     @Override
