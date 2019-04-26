@@ -82,8 +82,9 @@ public class Selector extends AppCompatActivity {
        /* startTEXT.setText(positionDATA.getString("START",""));
         arriveTEXT.setText(positionDATA.getString("ARRIVE",""));*/
 
-        startTEXT.setText("한림대");
-        arriveTEXT.setText("춘천역");
+        startTEXT.setText(positionDATA.getString("출발지",""));
+        arriveTEXT.setText(positionDATA.getString("도착지",""));
+
         URL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
         URL += startTEXT.getText().toString();
         URL += "&destinations=" + arriveTEXT.getText().toString();

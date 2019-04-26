@@ -80,17 +80,9 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
                 address = addressView.getText().toString();
                 SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
                 SharedPreferences.Editor editor = positionDATA.edit();
+                editor.putString(selector+"지",address);
+                editor.apply();
                 Intent intent1 = new Intent(getApplicationContext(),Selector.class);
-                if(selector.equals("출발")) {
-                    editor.putString("START",address);
-                    editor.putString("START_latLng",selectlatLng.latitude + "," + selectlatLng.longitude);
-                    editor.commit();
-                }
-                else if(selector.equals("도착")) {
-                    editor.putString("ARRIVE",address);
-                    editor.putString("ARRIVE_latLng",selectlatLng.latitude + "," + selectlatLng.longitude);
-                    editor.commit();
-                }
                 startActivity(intent1);
                 finish();
             }
@@ -259,12 +251,16 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
 
         @Override
         public void run() {
+            SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+            SharedPreferences.Editor editor = positionDATA.edit();
+
             Geocoder geocoder = new Geocoder(getApplicationContext());
             List<Address> addressList = null;
             String addressText = "";
             try {
                 addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-
+                editor.putString(selector,latLng.latitude + "," + latLng.longitude);
+                editor.apply();
                 Thread.sleep(100);
                 if (addressList != null && addressList.size() > 0) {
                     Address address = addressList.get(0);

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class main extends AppCompatActivity {
-    private static final String TAG = "main";
+    int INDEX;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
     String nickname,userid,profileURL,email;
@@ -40,11 +40,9 @@ public class main extends AppCompatActivity {
         Point_textview = findViewById(R.id.Point_textview);
         My_button = findViewById(R.id.My_button);
         charge_btn = findViewById(R.id.charge_btn);
-        logout_btn = findViewById(R.id.logout_btn);
         start_btn = findViewById(R.id.start_btn);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-
     }
     void Setting(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
@@ -55,7 +53,7 @@ public class main extends AppCompatActivity {
         userid = intent.getExtras().getString("ID");
         editor.putString("ID",userid);
         profileURL = intent.getExtras().getString("Profile");
-        editor.putString("PROFILEURL",profileURL);
+        editor.putString("PROFILE",profileURL);
         editor.apply();
 
         Name_textview.setText(nickname);
@@ -71,15 +69,6 @@ public class main extends AppCompatActivity {
                .load(profileURL)
                .into(profile_imageview);
 
-       logout_btn.setOnClickListener(new View.OnClickListener() {
-           @Override
-           public void onClick(View v) {
-               mAuth.signOut();
-               Intent logoutIntent = new Intent(getApplicationContext(), Login.class);
-               startActivity(logoutIntent);
-               finish();
-           }
-       });
        My_button.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -99,10 +88,19 @@ public class main extends AppCompatActivity {
         start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(getApplicationContext(),Selector.class);
-                intent1.putExtra("START","");
-                intent1.putExtra("ARRIVE","");
-                startActivity(intent1);
+                if(start_btn.getText().toString().equals("노선 생성")) {
+                    Intent intent1 = new Intent(getApplicationContext(), Selector.class);
+                    intent1.putExtra("START", "");
+                    intent1.putExtra("ARRIVE", "");
+                    startActivity(intent1);
+                    finish();
+                }
+                else{
+                    Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
+                    intent1.putExtra("INDEX",String.valueOf(1056252785));
+                    startActivity(intent1);
+                    finish();
+                }
             }
         });
     }
@@ -132,6 +130,22 @@ public class main extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+
+        Query query1 = mDatabase.child("post-members").orderByChild("userid").equalTo(userid);
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getChildren().iterator().hasNext()){
+                    start_btn.setText("내 노선 보기");
+                    INDEX = Integer.valueOf(userid);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

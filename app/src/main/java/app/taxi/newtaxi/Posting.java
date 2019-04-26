@@ -32,16 +32,19 @@ public class Posting extends AppCompatActivity {
     String Time = sdfNow.format(date);
     int Hour = Integer.parseInt(Time.split(":")[0]);
     int Minute = Integer.parseInt(Time.split(":")[1]);
-    int MaxPerson;
+    int MaxPerson,INDEX;
     TimePickerDialog dialog;
     AlertDialog.Builder alertDialogBuilder;
     void init(){
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = positionDATA.edit();
 
         Intent intent = getIntent();
         START= intent.getExtras().getString("START");
         ARRIVE= intent.getExtras().getString("ARRIVE");
         DISTANCE= intent.getExtras().getString("DISTANCE");
         PRICE= intent.getExtras().getString("PRICE");
+        INDEX = Integer.parseInt(positionDATA.getString("ID","1"));                  //카카오톡 사용자의 일련번호로 인덱스 번호.
 
         STARTtext = findViewById(R.id.STARTtext);
         ARRIVEtext = findViewById(R.id.ARRIVEtext);
@@ -74,6 +77,7 @@ public class Posting extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         POST();
                         Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
+                        intent1.putExtra("INDEX",String.valueOf(INDEX));
                         startActivity(intent1);
                         finish();
                     }
@@ -97,17 +101,20 @@ public class Posting extends AppCompatActivity {
         editor.apply();
 
         String userID = positionDATA.getString("USERNAME","");
-        int index = Integer.parseInt(positionDATA.getString("ID","1"));                  //카카오톡 사용자의 일련번호로 인덱스 번호.
+        String URL = positionDATA.getString("PROFILE","");
+
         Data_Post dataPost = new Data_Post(userID //게시자의 이름
                 ,"" //게시글 제목
                 ,START,ARRIVE //출발지/도착지
                 ,1  //person
                 ,MaxPerson
-                ,index  //일련번호 인덱스
+                ,INDEX  //일련번호 인덱스
                 ,Integer.valueOf(PRICE.split(" ")[3]) //전체 가격
                 ,Integer.valueOf(PRICE.split(" ")[3])
                 ,"","","");
+        Data_Members data_members = new Data_Members(userID,INDEX,URL,"남",String.valueOf(INDEX));
         mDatabase.child("post").push().setValue(dataPost);
+        mDatabase.child("post-members").push().setValue(data_members);
     }
 
     void click(){

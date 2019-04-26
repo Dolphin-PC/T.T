@@ -1,6 +1,7 @@
 package app.taxi.newtaxi;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -72,15 +74,16 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     AlertDialog.Builder alertDialogBuilder;
 
     void init(){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
-        String latitude = positionDATA.getString("START_latLng","").split(",")[0];
-        String longitude = positionDATA.getString("START_latLng","").split(",")[1];
-        STARTlatlng = new LatLng(Double.valueOf(latitude),Double.valueOf(longitude));
+        String start_lati = positionDATA.getString("출발","").split(",")[0];
+        String start_long = positionDATA.getString("출발","").split(",")[1];
+        STARTlatlng = new LatLng(Double.valueOf(start_lati),Double.valueOf(start_long));
 
-        latitude=positionDATA.getString("ARRIVE_latLng","").split(",")[0];
-        longitude=positionDATA.getString("ARRIVE_latLng","").split(",")[1];
-        ARRIVElatlng = new LatLng(Double.valueOf(latitude),Double.valueOf(longitude));
+        String arrive_lati=positionDATA.getString("도착","").split(",")[0];
+        String arrive_long=positionDATA.getString("도착","").split(",")[1];
+        ARRIVElatlng = new LatLng(Double.valueOf(arrive_lati),Double.valueOf(arrive_long));
 
         INDEXtext = findViewById(R.id.indexView);
         TIMEtext = findViewById(R.id.TIMEtext);
@@ -113,7 +116,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
 
-        index = Integer.valueOf(positionDATA.getString("ID", "1"));
+        Intent intent = getIntent();
+        index = Integer.valueOf(intent.getExtras().getString("INDEX"));
         title = positionDATA.getString("TITLE","");
         arrive = positionDATA.getString("ARRIVE","");
         start = positionDATA.getString("START","");
@@ -124,8 +128,88 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
 
         PayPerPerson = point / Max;
         INDEXtext.setText(String.valueOf(index) + "번");
-       /* mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
+        final CustomAdapter adapter = new CustomAdapter();
+        LISTview.setAdapter(adapter);
+
+        mCommentsReference = mDatabase.child("post-members");
+        mCommentsReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
+                if (data_members.getINDEX() == index) {
+                    adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });     //사용자 정보 확인
+        /*LISTview.addHeaderView();*/
+        Query query = mDatabase.child("post-members").orderByChild("index").equalTo(index);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
+                    adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                    return;
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        mPostReference = mDatabase.child("post");
+        mPostReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+/*
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         commentList.setAdapter(mAdapter);
 
@@ -211,6 +295,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         });*/
 
     }
+
     public void Addcmt(String str,int index){                 //시스템 댓글
         Data_Comment cmt = new Data_Comment(str,index);
         mCommentsReference.push().setValue(cmt);
