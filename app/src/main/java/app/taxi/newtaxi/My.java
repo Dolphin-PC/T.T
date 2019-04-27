@@ -36,10 +36,12 @@ public class My extends AppCompatActivity {
     private Boolean Enable = false;
     private DatabaseReference mDatabase;
     void init(){
-        Intent intent = getIntent();
-        ID = intent.getExtras().getString("ID");
-        NAME = intent.getExtras().getString("USERNAME");
-        PROFILE_URL = intent.getExtras().getString("PROFILE_URL");
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = positionDATA.edit();
+
+        ID = positionDATA.getString("USERNAME","");
+        NAME = positionDATA.getString("ID","");
+        PROFILE_URL = positionDATA.getString("PROFILE","");
         phonenumber_Text = findViewById(R.id.phonenumber_Text);
         updateBtn = findViewById(R.id.updateBtn);
         UserID_textview = findViewById(R.id.UserID_textview);

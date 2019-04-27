@@ -42,7 +42,7 @@ public class Charge extends AppCompatActivity {
     private final int stuck = 10;
     Button B1,B2,B3,B4,B5;
     TextView point_textview;
-    String userID,USERNAME,PROFILEURL;
+    String userID,USERNAME,PROFILEURL,PHONENUMBER;
     AlertDialog.Builder alertDialogBuilder;
     private DatabaseReference mDatabase;
     void init(){
@@ -61,7 +61,7 @@ public class Charge extends AppCompatActivity {
         USERNAME = positionDATA.getString("USERNAME","");
         userID = positionDATA.getString("ID","");
         PROFILEURL = positionDATA.getString("PROFILE","");
-
+        PHONENUMBER = positionDATA.getString("PHONENUMBER","");
         mDatabase = FirebaseDatabase.getInstance().getReference();
         BootpayAnalytics.init(this, "5c5170df396fa67f8155acbe");
     }
@@ -193,15 +193,12 @@ public class Charge extends AppCompatActivity {
         Update_user(total);
 
         Intent intent = new Intent(getApplicationContext(),main.class);
-        intent.putExtra("USERNAME",USERNAME);
-        intent.putExtra("ID",userID);
-        intent.putExtra("Profile",PROFILEURL);
         startActivity(intent);
         finish();
     }
     void Update_user(int point){
         Map<String, Object> taskMap = new HashMap<String, Object>();
-        taskMap.put(userID,new User("","",userID,"",point,""));
+        taskMap.put(userID,new User(USERNAME,"",userID,PHONENUMBER,point,PROFILEURL));
         mDatabase.child("user").updateChildren(taskMap);
     }
 }

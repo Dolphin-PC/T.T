@@ -48,14 +48,10 @@ public class main extends AppCompatActivity {
     void Setting(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
-        final Intent intent = getIntent();
-        nickname = intent.getExtras().getString("Nickname");
-        editor.putString("USERNAME",nickname);
-        userid = intent.getExtras().getString("ID");
-        editor.putString("ID",userid);
-        profileURL = intent.getExtras().getString("Profile");
-        editor.putString("PROFILE",profileURL);
-        editor.apply();
+
+        nickname = positionDATA.getString("USERNAME","");
+        userid = positionDATA.getString("ID","");
+        profileURL = positionDATA.getString("PROFILE","");
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/
@@ -128,6 +124,7 @@ public class main extends AppCompatActivity {
                     }
                 }else{
                     Update_user(0,"0");
+                    Point_textview.setText("0");
                 }
             }
 
@@ -137,12 +134,14 @@ public class main extends AppCompatActivity {
         });
 
         Query query1 = mDatabase.child("post-members").orderByChild("userid").equalTo(userid);
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+        query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getChildren().iterator().hasNext()){
                     start_btn.setText("내 노선 보기");
                     INDEX = Integer.valueOf(userid);
+                }else{
+                    start_btn.setText("노선 생성");
                 }
             }
 

@@ -2,6 +2,7 @@ package app.taxi.newtaxi;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.kakao.auth.ErrorCode;
@@ -62,10 +63,15 @@ public class KakaoSignupActivity extends Activity{
     }
 
     private void redirectMainActivity(String nickname,String id,String profile) {
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = positionDATA.edit();
+
         Intent intent = new Intent(this,main.class);
-        intent.putExtra("Nickname",nickname);
-        intent.putExtra("ID",id);
-        intent.putExtra("Profile",profile);
+        editor.putString("USERNAME",nickname);
+        editor.putString("ID",id);
+        editor.putString("PROFILE",profile);
+        editor.apply();
+
         startActivity(intent);
         finish();
     }
