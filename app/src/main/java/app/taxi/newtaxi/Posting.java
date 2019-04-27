@@ -112,7 +112,7 @@ public class Posting extends AppCompatActivity {
                 ,Integer.valueOf(PRICE.split(" ")[3]) //전체 가격
                 ,Integer.valueOf(PRICE.split(" ")[3])
                 ,"","","");
-        Data_Members data_members = new Data_Members(userID,INDEX,URL,"남",String.valueOf(INDEX));
+        Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX));
         mDatabase.child("post").push().setValue(dataPost);
         mDatabase.child("post-members").push().setValue(data_members);
     }

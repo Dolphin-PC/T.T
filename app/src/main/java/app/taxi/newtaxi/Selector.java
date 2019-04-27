@@ -45,7 +45,6 @@ public class Selector extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),Map.class);
                 intent.putExtra("POSITION","출발");
                 startActivity(intent);
-                finish();
             }
         });
         arriveTEXT.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +53,6 @@ public class Selector extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),Map.class);
                 intent.putExtra("POSITION","도착");
                 startActivity(intent);
-                finish();
             }
         });
         createButton.setOnClickListener(new View.OnClickListener() {

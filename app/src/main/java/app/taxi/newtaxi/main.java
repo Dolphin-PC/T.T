@@ -93,13 +93,11 @@ public class main extends AppCompatActivity {
                     intent1.putExtra("START", "");
                     intent1.putExtra("ARRIVE", "");
                     startActivity(intent1);
-                    finish();
                 }
                 else{
                     Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
-                    intent1.putExtra("INDEX",String.valueOf(1056252785));
+                    intent1.putExtra("INDEX",String.valueOf(INDEX));
                     startActivity(intent1);
-                    finish();
                 }
             }
         });

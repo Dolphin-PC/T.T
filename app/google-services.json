@@ -21,6 +21,18 @@
             "package_name": "app.taxi.T_T",
             "certificate_hash": "0466ff46061758020905b51e0db3bdbcf0182d17"
           }
+        },
+        {
+          "client_id": "804280661254-n5dek0sfbasqc0ot088cdcbd8bkuq8pt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.taxi.T_T",
+            "certificate_hash": "85169f029c3396cb29cc076084d07cb19faa4802"
+          }
+        },
+        {
+          "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -54,6 +66,10 @@
             "package_name": "app.taxi.newtaxi",
             "certificate_hash": "0466ff46061758020905b51e0db3bdbcf0182d17"
           }
+        },
+        {
+          "client_id": "804280661254-7pdsgn4rr1hel28jg71pp9em920lnek1.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [

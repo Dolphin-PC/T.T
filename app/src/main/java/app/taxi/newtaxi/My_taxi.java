@@ -138,7 +138,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
-                if (data_members.getINDEX() == index) {
+                if (data_members.getINDEX() == String.valueOf(index)) {
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
                 }
             }
@@ -164,14 +164,16 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             }
         });     //사용자 정보 확인
         /*LISTview.addHeaderView();*/
-        Query query = mDatabase.child("post-members").orderByChild("index").equalTo(index);
+        Query query = mDatabase.child("post-members").orderByChild("index").equalTo(String.valueOf(index));
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                    Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
-                    adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
-                    return;
+                if(dataSnapshot.getChildren().iterator().hasNext()) {
+                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                        Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
+                        adapter.addItem(data_members.getPROFILEURL(), data_members.getUSER1(), data_members.getGENDER());
+                        return;
+                    }
                 }
             }
 

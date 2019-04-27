@@ -4,12 +4,12 @@ public class Data_Members {
     private String USER1;
     private String PROFILEURL;
     private String GENDER;
-    private int INDEX;
+    private String INDEX;
     private String USERID;
 
     public Data_Members(){}
 
-    public Data_Members(String USER1, int INDEX, String PROFILEURL, String GENDER,String USERID){
+    public Data_Members(String USER1, String INDEX, String PROFILEURL, String GENDER,String USERID){
         this.USER1= USER1;
         this.INDEX = INDEX;
         this.PROFILEURL=PROFILEURL;
@@ -25,10 +25,10 @@ public class Data_Members {
         this.USERID = USERID;
     }
 
-    public int getINDEX() {
+    public String getINDEX() {
         return INDEX;
     }
-    public void setINDEX(int INDEX) {
+    public void setINDEX(String INDEX) {
         this.INDEX = INDEX;
     }
     public void setUSER1(String USER1) {
