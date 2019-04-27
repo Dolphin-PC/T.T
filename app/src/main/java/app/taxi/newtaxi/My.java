@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,9 +27,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class My extends AppCompatActivity {
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String ID,phonenumber,point,PROFILE_URL,NAME;
     private EditText phonenumber_Text;
-    private TextView UserID_textview,Name_textview,Point_textview;
+    private TextView UserID_textview,Name_textview,Point_textview,LOGOUTbutton;
     private ImageView profile_imageview;
     private Button updateBtn;
     private Boolean Enable = false;
@@ -44,6 +46,7 @@ public class My extends AppCompatActivity {
         Name_textview = findViewById(R.id.Name_textview);
         profile_imageview = findViewById(R.id.profile_imageview);
         Point_textview = findViewById(R.id.Point_textview);
+        LOGOUTbutton = findViewById(R.id.LOGOUTbutton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -75,6 +78,15 @@ public class My extends AppCompatActivity {
                     phonenumber_Text.setEnabled(Enable);
                     Update_user(phonenumber_Text.getText().toString());
                 }
+            }
+        });
+        LOGOUTbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                Intent logoutIntent = new Intent(getApplicationContext(), Login.class);
+                startActivity(logoutIntent);
+                finish();
             }
         });
     }
@@ -129,4 +141,6 @@ public class My extends AppCompatActivity {
         });
 
     }
+
+
 }

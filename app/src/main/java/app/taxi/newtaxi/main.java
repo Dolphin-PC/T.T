@@ -26,13 +26,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class main extends AppCompatActivity {
+    private BackPressCloseHandler backPressCloseHandler;
     int INDEX;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
     String nickname,userid,profileURL,email;
     ImageView profile_imageview;
     TextView Name_textview,Email,Point_textview,UserID_textview;
-    Button My_button,charge_btn,logout_btn,start_btn;
+    Button My_button,charge_btn,start_btn;
     void init(){
         profile_imageview = findViewById(R.id.profile_imageview);
         Name_textview = findViewById(R.id.Name_textview);
@@ -83,6 +84,9 @@ public class main extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                Intent intent1 = new Intent(getApplicationContext(),Charge.class);
+               intent1.putExtra("POINT",Point_textview.getText().toString());
+               startActivity(intent1);
+
            }
        });
         start_btn.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +113,7 @@ public class main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         Setting();
+        backPressCloseHandler = new BackPressCloseHandler(this);
 
         Query query = mDatabase.child("user").orderByChild("email").equalTo(userid);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -153,4 +158,8 @@ public class main extends AppCompatActivity {
         mDatabase.child("user").updateChildren(taskMap);
     }
 
+    @Override
+    public void onBackPressed(){
+        backPressCloseHandler.onBackPressed();
+    }
 }
