@@ -36,17 +36,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import kr.co.bootpay.Bootpay;
-import kr.co.bootpay.enums.Method;
-import kr.co.bootpay.enums.PG;
-import kr.co.bootpay.listner.CancelListener;
-import kr.co.bootpay.listner.CloseListener;
-import kr.co.bootpay.listner.ConfirmListener;
-import kr.co.bootpay.listner.DoneListener;
-import kr.co.bootpay.listner.ErrorListener;
-import kr.co.bootpay.listner.ReadyListener;
-import kr.co.bootpay.model.BootUser;
-
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     private DatabaseReference mDatabase;
     private TextView INDEXtext,TIMEtext;
@@ -114,7 +103,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         init();
         click();
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
-        SharedPreferences.Editor editor = positionDATA.edit();
+        final SharedPreferences.Editor editor = positionDATA.edit();
 
         Intent intent = getIntent();
         index = Integer.valueOf(intent.getExtras().getString("INDEX"));
@@ -133,6 +122,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         final CustomAdapter adapter = new CustomAdapter();
         LISTview.setAdapter(adapter);
 
+        adapter.addItem("","","");
         mCommentsReference = mDatabase.child("post-members");
         mCommentsReference.addChildEventListener(new ChildEventListener() {
             @Override
@@ -140,6 +130,9 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                 if (data_members.getINDEX() == String.valueOf(index)) {
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                    Log.e("adapter",data_members.getPROFILEURL());
+                    Log.e("adapter",data_members.getUSER1());
+                    Log.e("adapter",data_members.getGENDER());
                 }
             }
 
@@ -168,12 +161,12 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getChildren().iterator().hasNext()) {
-                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                        Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
-                        adapter.addItem(data_members.getPROFILEURL(), data_members.getUSER1(), data_members.getGENDER());
-                        return;
-                    }
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
+                    adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                    Log.e("adapter",data_members.getPROFILEURL());
+                    Log.e("adapter",data_members.getUSER1());
+                    Log.e("adapter",data_members.getGENDER());
                 }
             }
 
@@ -182,35 +175,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
 
             }
         });
-        mPostReference = mDatabase.child("post");
-        mPostReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
-
 /*
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         commentList.setAdapter(mAdapter);
@@ -305,64 +269,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     public void AddComment(String userID,String comment,int index) {       //사용자 댓글
         Data_Comment dataComment = new Data_Comment(userID,comment,index);
         mCommentsReference.push().setValue(dataComment);
-    }
-    void PAY(int Price){
-        final SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
-        final SharedPreferences.Editor editor = positionDATA.edit();
-        String phonenumber = positionDATA.getString("PHONENUMBER","010-1234-5678");
-        String orderID = positionDATA.getString("ID","") + MONTH + DAY;
-        BootUser bootUser = new BootUser().setPhone(phonenumber).setUsername(userID);
-        Bootpay.init(getFragmentManager())
-                .setApplicationId("5c5170df396fa67f8155acbe") // 해당 프로젝트(안드로이드)의 application id 값
-                .setPG(PG.KAKAO) // 결제할 PG 사
-                .setBootUser(bootUser)
-                .setMethod(Method.CARD) // 결제수단
-                .setName("택시 비용") // 결제할 상품명
-                .setOrderId(orderID) // 결제 고유번호
-                .setPrice(Price) // 결제할 금액
-                .onConfirm(new ConfirmListener() { // 결제가 진행되기 바로 직전 호출되는 함수로, 주로 재고처리 등의 로직이 수행
-                    @Override
-                    public void onConfirm(@Nullable String message) {
-
-                        if (0 < stuck) Bootpay.confirm(message); // 재고가 있을 경우.
-                        else Bootpay.removePaymentWindow(); // 재고가 없어 중간에 결제창을 닫고 싶을 경우
-                        Log.d("confirm", message);
-                    }
-                })
-                .onDone(new DoneListener() { // 결제완료시 호출, 아이템 지급 등 데이터 동기화 로직을 수행합니다
-                    @Override
-                    public void onDone(@Nullable String message) {
-                        PAY2();
-                        Log.d("done", message);
-                    }
-                })
-                .onReady(new ReadyListener() { // 가상계좌 입금 계좌번호가 발급되면 호출되는 함수입니다.
-                    @Override
-                    public void onReady(@Nullable String message) {
-                        Log.d("ready", message);
-                    }
-                })
-                .onCancel(new CancelListener() { // 결제 취소시 호출
-                    @Override
-                    public void onCancel(@Nullable String message) {
-
-                        Log.d("cancel", message);
-                    }
-                })
-                .onError(new ErrorListener() { // 에러가 났을때 호출되는 부분
-                    @Override
-                    public void onError(@Nullable String message) {
-                        Log.d("error", message);
-                    }
-                })
-                .onClose(
-                        new CloseListener() { //결제창이 닫힐때 실행되는 부분
-                            @Override
-                            public void onClose(String message) {
-                                Log.d("close", "close");
-                            }
-                        })
-                .request();
     }
 
     void PAY2(){

@@ -8,17 +8,22 @@
     <fragment
         android:id="@+id/map"
         class="com.google.android.gms.maps.MapFragment"
-        android:layout_width="411dp"
-        android:layout_height="504dp" />
+        android:layout_width="0dp"
+        android:layout_height="504dp"
+        app:layout_constraintBottom_toTopOf="@+id/addressView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/addressView"
-        android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/settingBUTTON"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map" />

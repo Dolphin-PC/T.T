@@ -33,8 +33,13 @@ public class main extends AppCompatActivity {
     String nickname,userid,profileURL,email;
     ImageView profile_imageview;
     TextView Name_textview,Email,Point_textview,UserID_textview;
-    Button My_button,charge_btn,start_btn;
+    Button My_button,charge_btn,start_btn,JOINbutton;
     void init(){
+        if(start_btn.getText().toString().equals("노선 생성"))
+            JOINbutton.setVisibility(View.VISIBLE);
+        else
+            JOINbutton.setVisibility(View.INVISIBLE);
+
         profile_imageview = findViewById(R.id.profile_imageview);
         Name_textview = findViewById(R.id.Name_textview);
         UserID_textview = findViewById(R.id.UserID_textview);
@@ -42,6 +47,7 @@ public class main extends AppCompatActivity {
         My_button = findViewById(R.id.My_button);
         charge_btn = findViewById(R.id.charge_btn);
         start_btn = findViewById(R.id.start_btn);
+        JOINbutton=findViewById(R.id.JOINbutton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
@@ -99,6 +105,12 @@ public class main extends AppCompatActivity {
                     intent1.putExtra("INDEX",String.valueOf(INDEX));
                     startActivity(intent1);
                 }
+            }
+        });
+        JOINbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
