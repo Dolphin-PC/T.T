@@ -2,6 +2,7 @@ package app.taxi.newtaxi;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.os.Build;
@@ -35,10 +36,6 @@ public class main extends AppCompatActivity {
     TextView Name_textview,Email,Point_textview,UserID_textview;
     Button My_button,charge_btn,start_btn,JOINbutton;
     void init(){
-        if(start_btn.getText().toString().equals("노선 생성"))
-            JOINbutton.setVisibility(View.VISIBLE);
-        else
-            JOINbutton.setVisibility(View.INVISIBLE);
 
         profile_imageview = findViewById(R.id.profile_imageview);
         Name_textview = findViewById(R.id.Name_textview);
@@ -76,9 +73,6 @@ public class main extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                Intent intent1 = new Intent(getApplicationContext(),My.class);
-               intent1.putExtra("ID",userid);
-               intent1.putExtra("NAME",nickname);
-               intent1.putExtra("PROFILE",profileURL);
                startActivity(intent1);
            }
        });
@@ -110,7 +104,8 @@ public class main extends AppCompatActivity {
         JOINbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(),Join.class);
+                startActivity(intent);
             }
         });
     }
@@ -150,10 +145,14 @@ public class main extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getChildren().iterator().hasNext()){
-                    start_btn.setText("내 노선 보기");
-                    INDEX = Integer.valueOf(userid);
+                    Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
+                        start_btn.setText("내 노선 보기");
+                        INDEX = Integer.valueOf(userid);
+                        JOINbutton.setVisibility(View.INVISIBLE);
+
                 }else{
                     start_btn.setText("노선 생성");
+                    JOINbutton.setVisibility(View.VISIBLE);
                 }
             }
 

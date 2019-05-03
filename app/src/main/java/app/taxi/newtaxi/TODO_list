@@ -39,6 +39,7 @@ TODO : 0424, 포인트 충전 방식
     노선 참가 Activity 생성
 
 0429 Error Report : CustomAdapter Initialize problem.
+
 TODO : Join.java - 1) 미터(버튼) 클릭시, 반경 표시
                     2) 좌표를 불러와 마커를 찍고 반경에 있는 것만 표시, (Posting시 출발지/도착지 좌표를 DB에 저장)
                     3) '리스트로 보기'버튼 클릭시, 반경에 있는 정보를 리스트로 표시(리스트 클릭시, 상세정보 표시(다이얼로그))

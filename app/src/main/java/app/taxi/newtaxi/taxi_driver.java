@@ -41,11 +41,12 @@ public class taxi_driver extends AppCompatActivity
     private ArrayAdapter adapter;
     private TextView emailText;
     private TextView pointText;
-    private int index;
+    private String index;
     private String driver;
     private String phonenumber;
     private String taxinumber;
-    private int point,plus_point;
+    String plus_point;
+    private int point;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +142,7 @@ public class taxi_driver extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {     //게시물 선택 시 이벤트
                 String str = (String)adapterView.getAdapter().getItem(i);
-                index = Integer.parseInt(str.split("/")[0]);
+                index = str.split("/")[0];
             }
         });
         databaseReference.child("call-taxi").addChildEventListener(new ChildEventListener() {

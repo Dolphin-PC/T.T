@@ -83,7 +83,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.MAPview);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.MAP);
         mapFragment.getMapAsync(this);
 
         String time = positionDATA.getString("TIME","");
@@ -95,12 +95,34 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     void click(){
 
     }
+    void person_check(int person){
+        Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEXtext.getText().toString());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Data_Post data_post = dataSnapshot.getValue(Data_Post.class);
+                if(data_post.getMaxPerson() == data_post.getPerson()){
+                    Intent intent = new Intent();
+                    startActivity(intent);
+                }
+                else{
+                    //업데이트
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_taxi);
 
         init();
+
         click();
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         final SharedPreferences.Editor editor = positionDATA.edit();
@@ -121,8 +143,9 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
         final CustomAdapter adapter = new CustomAdapter();
         LISTview.setAdapter(adapter);
+        person_check(adapter.getCount());
 
-        adapter.addItem("","","");
+        adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.
         mCommentsReference = mDatabase.child("post-members");
         mCommentsReference.addChildEventListener(new ChildEventListener() {
             @Override

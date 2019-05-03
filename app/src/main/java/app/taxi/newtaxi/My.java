@@ -28,7 +28,7 @@ import java.util.Map;
 
 public class My extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String ID,phonenumber,point,PROFILE_URL,NAME;
+    private String ID,PHONENUMBER,POINT,PROFILE_URL,NAME;
     private EditText phonenumber_Text;
     private TextView UserID_textview,Name_textview,Point_textview,LOGOUTbutton;
     private ImageView profile_imageview;
@@ -42,6 +42,8 @@ public class My extends AppCompatActivity {
         ID = positionDATA.getString("USERNAME","");
         NAME = positionDATA.getString("ID","");
         PROFILE_URL = positionDATA.getString("PROFILE","");
+        POINT = positionDATA.getString("POINT","");
+
         phonenumber_Text = findViewById(R.id.phonenumber_Text);
         updateBtn = findViewById(R.id.updateBtn);
         UserID_textview = findViewById(R.id.UserID_textview);
@@ -58,6 +60,7 @@ public class My extends AppCompatActivity {
         phonenumber_Text.setEnabled(Enable);
         Name_textview.setText(NAME);
         UserID_textview.setText(ID);
+        Point_textview.setText(POINT);
 
         profile_imageview.setBackground(new ShapeDrawable(new OvalShape()));
         if(Build.VERSION.SDK_INT >= 21) {

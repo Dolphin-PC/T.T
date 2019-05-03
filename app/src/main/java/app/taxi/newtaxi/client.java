@@ -49,8 +49,8 @@ public class client extends AppCompatActivity
     private FirebaseAuth mAuth;
     private DatabaseReference mUserInfo;
     private int indexcount=1;
-    static private String arrive,start,title,userID;
-    static private int point,person,index;
+    static private String arrive,start,title,userID,point;
+    static private int person,index;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
