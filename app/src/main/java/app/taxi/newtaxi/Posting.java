@@ -120,7 +120,7 @@ public class Posting extends AppCompatActivity {
                 ,Integer.valueOf(PRICE.split(" ")[3])
                 ,TIMEtext.getText().toString()
                 ,"","","");
-        Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),true);
+        Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),false);
         mDatabase.child("post").push().setValue(dataPost);
         mDatabase.child("post-members").push().setValue(data_members);
     }

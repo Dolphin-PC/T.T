@@ -53,8 +53,6 @@ public class CustomAdapter extends BaseAdapter {
         TextView NAMEtext = convertView.findViewById(R.id.NAMEtext);
         TextView GENDERtext = convertView.findViewById(R.id.GENDERtext);
         Button INFObutton = convertView.findViewById(R.id.INFObutton);
-        if(NAMEtext.getText().toString().equals(""))
-            INFObutton.setVisibility(View.INVISIBLE);
 
         Data_Listview data_listview = listViewItemList.get(position);
 
@@ -75,5 +73,6 @@ public class CustomAdapter extends BaseAdapter {
         item.setNAME(NAME);
         item.setGENDER(GENDER);
 
+        listViewItemList.add(item);
     }
 }

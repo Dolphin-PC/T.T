@@ -1,6 +1,8 @@
 package app.taxi.newtaxi;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     private DatabaseReference mDatabase;
@@ -49,7 +52,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     final private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private DatabaseReference mPostReference;
     private DatabaseReference mCommentsReference;
-    private String userID,title,start,arrive,driver,taxinumber,phonenumber;
+    private String userID,title,start,arrive,driver,taxinumber,phonenumber,ID;
     private int index,pay,person,point,PayPerPerson;
     long now = System.currentTimeMillis ();
     Date date = new Date(now);
@@ -59,7 +62,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     int DAY = Integer.parseInt(Time.split("/")[1]);
     private final int stuck = 10;
     LatLng STARTlatlng,ARRIVElatlng;
-
     AlertDialog.Builder alertDialogBuilder;
 
     void init(){
@@ -95,27 +97,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     void click(){
 
     }
-    void person_check(int person){
-        Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEXtext.getText().toString());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Data_Post data_post = dataSnapshot.getValue(Data_Post.class);
-                if(data_post.getMaxPerson() == data_post.getPerson()){
-                    Intent intent = new Intent();
-                    startActivity(intent);
-                }
-                else{
-                    //업데이트
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +117,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         person = Integer.valueOf(positionDATA.getString("PERSON","1"));
         pay = point = Integer.valueOf(positionDATA.getString("POINT","1000"));
         userID = positionDATA.getString("USERNAME","");
+        ID = positionDATA.getString("ID","");
+
         final int Max = Integer.valueOf(positionDATA.getString("MAX","3"));
 
         PayPerPerson = point / Max;
@@ -143,7 +127,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
         final CustomAdapter adapter = new CustomAdapter();
         LISTview.setAdapter(adapter);
-        person_check(adapter.getCount());
 
         adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.
         mCommentsReference = mDatabase.child("post-members");
@@ -153,9 +136,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                 if (data_members.getINDEX() == String.valueOf(index)) {
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
-                    Log.e("adapter",data_members.getPROFILEURL());
-                    Log.e("adapter",data_members.getUSER1());
-                    Log.e("adapter",data_members.getGENDER());
                 }
             }
 
@@ -187,9 +167,29 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
-                    Log.e("adapter",data_members.getPROFILEURL());
-                    Log.e("adapter",data_members.getUSER1());
-                    Log.e("adapter",data_members.getGENDER());
+                    if(data_members.getJOIN()){
+                        Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
+                        startActivity(intent1);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Query query1 = mDatabase.child("post").orderByChild("index").equalTo(String.valueOf(index));
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                    Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
+                    if (adapter.getCount() - 1 == data_post.getPerson()){
+                        Dialog(data_post.getPay()/data_post.getMaxPerson());
+                        alertDialogBuilder.show();
+                    }
                 }
             }
 
@@ -284,7 +284,39 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         });*/
 
     }
+    private void Dialog(final int Point) {
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("결제 확인");
+        alertDialogBuilder.setMessage(Point + "P : 결제 하시겠습니까?\n(결제 후, 택시가 호출됩니다.)");
+        alertDialogBuilder.setPositiveButton("결제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Query query = mDatabase.child("user").orderByChild("email").equalTo(ID);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
+                            User user = snapshot.getValue(User.class);
+                            String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
+                            Map<String,Object> taskMap = new HashMap<String,Object>();
+                            if(user.getPoint()-Point < 0){
+                                Intent intent = new Intent(getApplicationContext(),Charge.class);
+                                startActivity(intent);
+                            }
+                            taskMap.put("person",user.getPoint()-Point);
+                            mDatabase.child(path).updateChildren(taskMap);
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+    }
     public void Addcmt(String str,int index){                 //시스템 댓글
         Data_Comment cmt = new Data_Comment(str,index);
         mCommentsReference.push().setValue(cmt);

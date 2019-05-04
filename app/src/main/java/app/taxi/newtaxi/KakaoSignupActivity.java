@@ -70,6 +70,7 @@ public class KakaoSignupActivity extends Activity{
         editor.putString("USERNAME",nickname);
         editor.putString("ID",id);
         editor.putString("PROFILE",profile);
+        editor.putString("GENDER","남자");
         editor.apply();
 
         startActivity(intent);

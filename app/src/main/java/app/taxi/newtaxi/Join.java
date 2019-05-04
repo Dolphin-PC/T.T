@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -46,6 +47,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Join extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton;
     private DatabaseReference mDatabase;
@@ -59,7 +63,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     LatLng latLng,selectlatLng;
     int DISTANCE = 500;
     String SELECT_latitude = "37.566643",SELECT_longitude = "126.978279";
-    String USERNAME,USERID,URL,INDEX;
+    String USERNAME,USERID,URL,INDEX,GENDER;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -77,6 +81,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         USERNAME = positionDATA.getString("USERNAME","");
         USERID = positionDATA.getString("ID","");
         URL = positionDATA.getString("PROFILE","");
+        GENDER = positionDATA.getString("GENDER","미정");
 
         m1000button= findViewById(R.id.m1000button);
         m700button= findViewById(R.id.m700button);
@@ -328,6 +333,10 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                             Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                             if(data_post.getPerson() < data_post.getMaxPerson()) {
+                                String path = "/" + dataSnapshot.getKey() + "/" + appleSnapshot.getKey();
+                                Map<String,Object> taskMap = new HashMap<String,Object>();
+                                taskMap.put("person",data_post.getPerson()+1);
+                                mDatabase.child(path).updateChildren(taskMap);
                                 Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,"남",USERID,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
@@ -386,6 +395,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         });
         return true;
     }
+
 
 
 }
