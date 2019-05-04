@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -99,6 +100,8 @@ public class Posting extends AppCompatActivity {
         editor.putString("PERSON",Integer.toString(1));
         editor.putString("POINT",PRICE.split(" ")[3]);
         editor.putString("TIME",TIMEtext.getText().toString());
+        editor.putString("INDEX",INDEX);
+        editor.putString("??",INDEX);
         editor.apply();
 
         String userID = positionDATA.getString("USERNAME","");

@@ -332,6 +332,8 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                             Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
+                            SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+                            SharedPreferences.Editor editor = positionDATA.edit();
                             if(data_post.getPerson() < data_post.getMaxPerson()) {
                                 String path = "/" + dataSnapshot.getKey() + "/" + appleSnapshot.getKey();
                                 Map<String,Object> taskMap = new HashMap<String,Object>();
@@ -339,6 +341,9 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 mDatabase.child(path).updateChildren(taskMap);
                                 Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,"남",USERID,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
+                                editor.putString("INDEX",marker.getTitle());
+                                editor.putString("??",INDEX);
+                                editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
                             }
                             else{

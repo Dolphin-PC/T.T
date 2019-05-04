@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-
         android:name=".GlobalApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
@@ -23,6 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Post_Call">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,19 +37,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".Posting" />
-        <activity android:name=".Selector">
-        </activity>
-
-        <activity android:name=".Map">
-        </activity>
+        <activity android:name=".Selector"></activity>
+        <activity android:name=".Map"></activity>
         <activity android:name=".Charge" />
         <activity android:name=".KakaoSignupActivity" />
         <activity android:name=".My" />
         <activity
             android:name=".splashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
-        </activity>
+            android:theme="@style/SplashTheme"></activity>
         <activity android:name=".Join">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -51,12 +53,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main">
-        </activity>
+        <activity android:name=".main"></activity>
         <activity
             android:name=".client"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".My_taxi"/>
+        <activity android:name=".My_taxi" />
         <activity android:name=".post" />
         <activity android:name=".register" />
         <activity android:name=".Taxi_info" />

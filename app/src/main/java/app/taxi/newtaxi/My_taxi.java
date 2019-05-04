@@ -122,7 +122,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         final int Max = Integer.valueOf(positionDATA.getString("MAX","3"));
 
         PayPerPerson = point / Max;
-        INDEXtext.setText(String.valueOf(index) + "번");
+        INDEXtext.setText(String.valueOf(index) + " 번");
 
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
         final CustomAdapter adapter = new CustomAdapter();
@@ -161,6 +161,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         });     //사용자 정보 확인
         /*LISTview.addHeaderView();*/
         Query query = mDatabase.child("post-members").orderByChild("index").equalTo(String.valueOf(index));
+        final Query query1 = mDatabase.child("post").orderByChild("index").equalTo(String.valueOf(index));
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -169,7 +171,27 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
                     if(data_members.getJOIN()){
                         Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
+                        intent1.putExtra("INDEX",index);
                         startActivity(intent1);
+                        finish();
+                    }
+                    else{
+                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                    Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
+                                    if (adapter.getCount() - 1 == data_post.getMaxPerson()){
+                                        Dialog(data_post.getPay()/data_post.getMaxPerson());
+                                        alertDialogBuilder.show();
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -180,24 +202,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             }
         });
 
-        Query query1 = mDatabase.child("post").orderByChild("index").equalTo(String.valueOf(index));
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                    Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
-                    if (adapter.getCount() - 1 == data_post.getPerson()){
-                        Dialog(data_post.getPay()/data_post.getMaxPerson());
-                        alertDialogBuilder.show();
-                    }
-                }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 /*
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         commentList.setAdapter(mAdapter);
@@ -291,20 +296,41 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         alertDialogBuilder.setPositiveButton("결제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Query query = mDatabase.child("user").orderByChild("email").equalTo(ID);
+                final Query query = mDatabase.child("user").orderByChild("email").equalTo(ID);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                             User user = snapshot.getValue(User.class);
                             String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
-                            Map<String,Object> taskMap = new HashMap<String,Object>();
+                            Map<String,Object> POINTmap = new HashMap<String,Object>();
                             if(user.getPoint()-Point < 0){
                                 Intent intent = new Intent(getApplicationContext(),Charge.class);
                                 startActivity(intent);
                             }
-                            taskMap.put("person",user.getPoint()-Point);
-                            mDatabase.child(path).updateChildren(taskMap);
+                            else {
+                                POINTmap.put("point", user.getPoint() - Point);
+                                mDatabase.child(path).updateChildren(POINTmap);
+                                Query query1 = mDatabase.child("post-members").orderByChild("index").equalTo(INDEXtext.getText().toString().split(" ")[0]);
+                                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                            Data_Members data_members = snapshot.getValue(Data_Members.class);
+                                            String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
+                                            Map<String, Object> JOINmap = new HashMap<String, Object>();
+                                            JOINmap.put("join", true);
+                                            mDatabase.child(path).updateChildren(JOINmap);
+                                        }
+                                    }
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                });
+                                Intent intent = new Intent(getApplicationContext(),Post_Call.class);
+                                intent.putExtra("INDEX",index);
+                                startActivity(intent);
+                                finish();
+                            }
                         }
                     }
 
@@ -313,7 +339,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
 
                     }
                 });
-
             }
         });
     }
