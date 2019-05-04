@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -49,7 +50,7 @@ public class Post_Call extends AppCompatActivity {
     Dialog dialog;
     MapView mMapView;
     TextView TIMEtext,PRICEtext,DISTANCEtext;
-    Button JOINbutton,MAPbutton,COMMENTbutton;
+    Button CALLbutton,MAPbutton,COMMENTbutton,JOINbutton;
     String SELECT_latitude = "37.566643",SELECT_longitude = "126.978279";
     void init(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
@@ -59,12 +60,58 @@ public class Post_Call extends AppCompatActivity {
 
         COMMENTbutton = findViewById(R.id.COMMENTbutton);
         MAPbutton = findViewById(R.id.MAPbutton);
+        CALLbutton = findViewById(R.id.CALLbutton);
         COMMENTedit = findViewById(R.id.COMMENTedit);
         COMMENTlist = findViewById(R.id.MESSAGElist);
 
         ID = positionDATA.getString("ID","");
         INDEX = positionDATA.getString("INDEX","");
         PROFILEURL = positionDATA.getString("PROFILE","");
+    }
+    void click(){
+        MAPbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DIALOG();
+            }
+        });
+        COMMENTbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!COMMENTedit.getText().toString().equals("")){
+                    SB = new StringBuffer(COMMENTedit.getText().toString());
+                    if(SB.length() >= 15){
+                        for(int i=1;i<SB.length()/15;i++){
+                            SB.insert(15*i,"\n");
+                        }
+                    }
+                    mDatabaseMSG.push().setValue(new Data_message(INDEX,PROFILEURL, ID, SB.toString(), Time));
+                    COMMENTedit.setText("");
+                }
+            }
+        });
+        CALLbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                Data_Post data_post = snapshot.getValue(Data_Post.class);
+                                Log.e("INDEX", data_post.getIndex());
+                                mDatabase.child("taxi-call").push().setValue(data_post);
+                                Toast.makeText(getApplicationContext(),"택시를 호출했습니다.",Toast.LENGTH_SHORT).show();
+                            }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,27 +137,8 @@ public class Post_Call extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) { }
         });
-        MAPbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DIALOG();
-            }
-        });
-        COMMENTbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!COMMENTedit.getText().toString().equals("")){
-                    SB = new StringBuffer(COMMENTedit.getText().toString());
-                    if(SB.length() >= 15){
-                        for(int i=1;i<SB.length()/15;i++){
-                            SB.insert(15*i,"\n");
-                        }
-                    }
-                    mDatabaseMSG.push().setValue(new Data_message(INDEX,PROFILEURL, ID, SB.toString(), Time));
-                    COMMENTedit.setText("");
-                }
-            }
-        });
+        click();
+
         Query query = mDatabaseMSG.orderByChild("index").equalTo(INDEX);
         Log.e("INDEX",INDEX);
         query.addChildEventListener(new ChildEventListener() {

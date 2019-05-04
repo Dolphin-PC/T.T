@@ -67,13 +67,14 @@ public class Posting extends AppCompatActivity {
         dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                TIME = "예약 : " + hourOfDay + "시 "+ minute + "분";
+                TIME = "예약 :" + hourOfDay + "시 "+ minute + "분";
                 TIMEtext.setText(TIME);
             }
         },Hour,Minute,false);
+
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("정보 확인")
-                .setMessage("게시글을 등록하시겠습니까? \n" + "(예약)")
+                .setMessage("게시글을 등록하시겠습니까? \n" + TIMEtext.getText().toString())
                 .setPositiveButton("등록", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -121,7 +122,7 @@ public class Posting extends AppCompatActivity {
                 ,INDEX  //일련번호 인덱스
                 ,DISTANCE
                 ,Integer.valueOf(PRICE.split(" ")[3])
-                ,TIMEtext.getText().toString()
+                ,TIMEtext.getText().toString().split(":")[0]
                 ,"","","");
         Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),false);
         mDatabase.child("post").push().setValue(dataPost);

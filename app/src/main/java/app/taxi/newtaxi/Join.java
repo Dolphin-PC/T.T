@@ -345,6 +345,10 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 editor.putString("??",INDEX);
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getApplicationContext(),My_taxi.class);
+                                intent.putExtra("INDEX",marker.getTitle());
+                                startActivity(intent);
+                                finish();
                             }
                             else{
                                 Toast.makeText(getApplicationContext(),"인원이 초과되었습니다.",Toast.LENGTH_SHORT).show();
