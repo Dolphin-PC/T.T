@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -67,6 +69,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     private final int stuck = 10;
     LatLng STARTlatlng,ARRIVElatlng;
     AlertDialog.Builder alertDialogBuilder;
+    My_taxiAdapter adapter;
 
     void init(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -129,10 +132,10 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         INDEXtext.setText(String.valueOf(index) + " 번");
 
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
-        final My_taxiAdapter adapter = new My_taxiAdapter();
+        adapter = new My_taxiAdapter();
         LISTview.setAdapter(adapter);
-
-        adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.
+        /*adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.
+        */
 
         /*LISTview.addHeaderView();*/
         Query query = mDatabase.child("post-members").orderByChild("index").equalTo(String.valueOf(index));
@@ -141,9 +144,9 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                    Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
+                    Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                    adapter.notifyDataSetChanged();
                     if(data_members.getJOIN()){
                         Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
                         intent1.putExtra("INDEX",index);
@@ -156,7 +159,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
-                                    if (adapter.getCount() - 1 == data_post.getMaxPerson()){
+                                    if (adapter.getCount() == data_post.getMaxPerson()){
                                         Dialog(data_post.getPay()/data_post.getMaxPerson());
                                         alertDialogBuilder.show();
                                     }
@@ -167,7 +170,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                         });
                     }
                 }
-            }
+
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override

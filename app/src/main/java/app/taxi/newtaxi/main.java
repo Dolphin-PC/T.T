@@ -37,7 +37,6 @@ public class main extends AppCompatActivity {
     TextView Name_textview,Email,Point_textview,UserID_textview;
     Button My_button,charge_btn,start_btn,JOINbutton;
     void init(){
-
         profile_imageview = findViewById(R.id.profile_imageview);
         Name_textview = findViewById(R.id.Name_textview);
         UserID_textview = findViewById(R.id.UserID_textview);
@@ -49,27 +48,28 @@ public class main extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
-    void Setting(){
-        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+    void Setting() {
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
 
-        nickname = positionDATA.getString("USERNAME","");
-        userid = positionDATA.getString("ID","");
-        profileURL = positionDATA.getString("PROFILE","");
+        nickname = positionDATA.getString("USERNAME", "");
+        userid = positionDATA.getString("ID", "");
+        profileURL = positionDATA.getString("PROFILE", "");
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/
         UserID_textview.setText(userid);
 
         profile_imageview.setBackground(new ShapeDrawable(new OvalShape()));
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             profile_imageview.setClipToOutline(true);
         }
 
-       Glide.with(this)
-               .load(profileURL)
-               .into(profile_imageview);
-
+        Glide.with(this)
+                .load(profileURL)
+                .into(profile_imageview);
+    }
+    void click(){
        My_button.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
@@ -110,6 +110,7 @@ public class main extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     @Override
@@ -118,6 +119,7 @@ public class main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         Setting();
+        click();
         backPressCloseHandler = new BackPressCloseHandler(this);
 
         Query query = mDatabase.child("user").orderByChild("email").equalTo(userid);

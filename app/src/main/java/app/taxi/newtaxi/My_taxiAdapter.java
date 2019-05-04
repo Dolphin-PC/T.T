@@ -38,7 +38,7 @@ public class My_taxiAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         final Context context = parent.getContext();
         if (convertView == null) {
@@ -49,7 +49,6 @@ public class My_taxiAdapter extends BaseAdapter {
         ImageView IMAGEview = convertView.findViewById(R.id.IMAGEview);
         TextView NAMEtext = convertView.findViewById(R.id.NAMEtext);
         TextView GENDERtext = convertView.findViewById(R.id.GENDERtext);
-        Button INFObutton = convertView.findViewById(R.id.INFObutton);
 
         Data_Listview data_listview = listViewItemList.get(position);
 
