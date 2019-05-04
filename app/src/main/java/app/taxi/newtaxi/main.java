@@ -55,6 +55,8 @@ public class main extends AppCompatActivity {
         nickname = positionDATA.getString("USERNAME", "");
         userid = positionDATA.getString("ID", "");
         profileURL = positionDATA.getString("PROFILE", "");
+        editor.putString("POINT",Point_textview.getText().toString());
+        editor.apply();
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/

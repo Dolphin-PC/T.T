@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -40,9 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 //TODO : 1번째 상세정보 클릭시, 게시판의 정보와 결제 버튼 구현(다이얼로그)
 // 나가기 버튼(방장은 나갈때, 다이얼로그 표시)
-//TODO : Adapter 문제 해결하기(초기화 문제), 됐다 안됐다 함.
 //TODO : 지도안에, 출발지와 도착지가 표시되도록
-//TODO : 사용자 상세정보 클릭시, 사용자 정보 표시(다이얼로그)
 
 
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
@@ -68,7 +67,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     int DAY = Integer.parseInt(Time.split("/")[1]);
     private final int stuck = 10;
     LatLng STARTlatlng,ARRIVElatlng;
-    AlertDialog.Builder alertDialogBuilder;
+    AlertDialog.Builder alertDialogBuilder,CHARGEdialogbuilder;
     My_taxiAdapter adapter;
 
     void init(){
@@ -159,6 +158,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
+                                    Log.e("COUNT",adapter.getCount()+"");
                                     if (adapter.getCount() == data_post.getMaxPerson()){
                                         Dialog(data_post.getPay()/data_post.getMaxPerson());
                                         alertDialogBuilder.show();
@@ -282,9 +282,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
                             Map<String,Object> POINTmap = new HashMap<String,Object>();
                             if(user.getPoint()-Point < 0){
-                                //TODO:포인트가 부족합니다. 충전하러 가시겠습니까? ' 다이얼로그 후, 충전 액티비티로
-                                Intent intent = new Intent(getApplicationContext(),Charge.class);
-                                startActivity(intent);
+                                CHARGEDIALOG(user.getPoint());
+                                CHARGEdialogbuilder.show();
                             }
                             else {
                                 POINTmap.put("point", user.getPoint() - Point);
@@ -311,95 +310,37 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             }
                         }
                     }
-
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
                 });
             }
         });
     }
-    public void Addcmt(String str,int index){                 //시스템 댓글
-        Data_Comment cmt = new Data_Comment(str,index);
-        mCommentsReference.push().setValue(cmt);
-    }
-    public void AddComment(String userID,String comment,int index) {       //사용자 댓글
-        Data_Comment dataComment = new Data_Comment(userID,comment,index);
-        mCommentsReference.push().setValue(dataComment);
-    }
-    void PAY2(){
-        Query query5 = databaseReference.child("post").orderByChild("index").equalTo(index);
-        query5.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
-                Data_Post dataPost = nodeDataSnapshot.getValue(Data_Post.class);
-                pay = dataPost.getPay() - PayPerPerson;
-                String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
-                String path = "/" + dataSnapshot.getKey() + "/" + key;
-                HashMap<String, Object> result = new HashMap<>();
-                result.put("pay", pay);
-                databaseReference.child(path).updateChildren(result);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-        Query query1 = databaseReference.child("user").orderByChild("username").equalTo(userID);
-        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
-                User userData = nodeDataSnapshot.getValue(User.class);
-                int pay1;
-                if(Integer.valueOf(userData.getPoint())-PayPerPerson < 0){
-                    Toast.makeText(getApplicationContext(),"포인트가 부족합니다.",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                else{
-                    pay1 = Integer.valueOf(userData.getPoint())-PayPerPerson;
-                }
-                String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
-                String path = "/" + dataSnapshot.getKey() + "/" + key;
-                HashMap<String, Object> result = new HashMap<>();
-                result.put("point", pay1);
-                databaseReference.child(path).updateChildren(result);
+    void CHARGEDIALOG(final int Point){
 
-                String str = userID + "님이 " + PayPerPerson + "원을 지불하셨습니다.(" + pay + "원 남음)";
-                AddComment("system",str,index);
-            }
+        CHARGEdialogbuilder = new AlertDialog.Builder(this);
+        CHARGEdialogbuilder.setTitle("포인트 부족");
+        CHARGEdialogbuilder.setMessage("포인트가 부족합니다.\n충전하러 가시겠습니까?");
+        CHARGEdialogbuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getApplicationContext(), Charge.class);
+                intent.putExtra("POINT",Point+"");
+                Log.e("POINT",Point+"");
+                startActivity(intent);
             }
         });
     }
-
     @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
+    public void onConnected(@Nullable Bundle bundle) { }
     @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
+    public void onConnectionSuspended(int i) { }
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) { }
     @Override
-    public void onCameraIdle() {
-
-    }
-
+    public void onCameraIdle() { }
     @Override
-    public void onCameraMove() {
-
-    }
-
+    public void onCameraMove() { }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MAPview = googleMap;
