@@ -49,7 +49,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//TODO : 원 반경안의 마커 수 계산하여, 건수 표시, '리스트로보기'클릭 시, 반경안에 있는 마커들 리스트로 표시(JOIN_LIST.class)
 public class Join extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton;
     private DatabaseReference mDatabase;

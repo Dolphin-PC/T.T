@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+//TODO: 예약시, 다이얼로그에 표시, 요금 반올림
 public class Posting extends AppCompatActivity {
     private DatabaseReference mDatabase;
     String START,ARRIVE,DISTANCE,PRICE,TIME,INDEX;

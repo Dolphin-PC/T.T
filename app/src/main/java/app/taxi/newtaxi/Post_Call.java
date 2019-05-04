@@ -36,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
+//TODO : 댓글 창 구분선
 public class Post_Call extends AppCompatActivity {
     ArrayList<Data_message> list = new ArrayList<>();
     DatabaseReference mDatabaseMSG,mDatabase;

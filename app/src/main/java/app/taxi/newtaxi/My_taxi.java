@@ -38,6 +38,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+//TODO : 나가기 버튼(방장은 나갈때, 다이얼로그 표시)
+//TODO : 지도안에, 출발지와 도착지가 표시되도록
+//TODO : 1번째 상세정보 클릭시, 게시판의 정보와 결제 버튼 구현(다이얼로그)
+//TODO : 사용자 상세정보 클릭시, 사용자 정보 표시(다이얼로그)
 
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     private DatabaseReference mDatabase;
@@ -305,6 +309,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
                             Map<String,Object> POINTmap = new HashMap<String,Object>();
                             if(user.getPoint()-Point < 0){
+                                //TODO:포인트가 부족합니다. 충전하러 가시겠습니까? ' 다이얼로그 후, 충전 액티비티로
                                 Intent intent = new Intent(getApplicationContext(),Charge.class);
                                 startActivity(intent);
                             }
@@ -350,7 +355,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         Data_Comment dataComment = new Data_Comment(userID,comment,index);
         mCommentsReference.push().setValue(dataComment);
     }
-
     void PAY2(){
         Query query5 = databaseReference.child("post").orderByChild("index").equalTo(index);
         query5.addListenerForSingleValueEvent(new ValueEventListener() {

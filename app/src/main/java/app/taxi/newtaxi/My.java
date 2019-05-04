@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//TODO : main에서 My로 넘어갈때, 포인트 안넘어가는 문제
 public class My extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String ID,PHONENUMBER,POINT,PROFILE_URL,NAME;
