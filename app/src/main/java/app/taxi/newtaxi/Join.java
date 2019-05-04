@@ -2,6 +2,7 @@ package app.taxi.newtaxi;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -47,10 +48,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-//TODO : 원 반경안의 마커 수 계산하여, 건수 표시, '리스트로보기'클릭 시, 반경안에 있는 마커들 리스트로 표시(JOIN_LIST.class)
+
 public class Join extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
+    public static Activity JoinActivity;
     Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton;
     private DatabaseReference mDatabase;
     GoogleMap map;
@@ -62,6 +65,8 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     CircleOptions circle;
     LatLng latLng,selectlatLng;
     int DISTANCE = 500;
+    int MARKERcount=0;
+    ArrayList<String> MARKERlist = new ArrayList<String>();
     String SELECT_latitude = "37.566643",SELECT_longitude = "126.978279";
     String USERNAME,USERID,URL,INDEX,GENDER;
     private static final String KEY_CAMERA_POSITION = "camera_position";
@@ -76,6 +81,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     TextView TIMEtext,PRICEtext,DISTANCEtext;
 
     void init(){
+        JoinActivity = Join.this;
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
         USERNAME = positionDATA.getString("USERNAME","");
@@ -163,7 +169,10 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         LISTbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getApplicationContext(),Join_list.class);
+                intent.putExtra("MARKER",MARKERlist);
+                intent.putExtra("MARKER_COUNT",MARKERcount);
+                startActivity(intent);
             }
         });
     }
@@ -285,7 +294,9 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
 
         final Double latitude = latLng.latitude;
         final Double longitude = latLng.longitude;
-
+        MARKERcount=0;
+        MARKERlist.clear();
+        LISTbutton.setText("리스트로 보기");
         mDatabase.child("post").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -297,8 +308,12 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                         map.addMarker(new MarkerOptions().position(new LatLng(Start_Latitude, Start_Longitude)).title(data_post.getIndex())
                                 .icon(BitmapDescriptorFactory
                                         .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                        MARKERcount++;
+                        MARKERlist.add(data_post.getIndex());
+
                     }
                 }
+                LISTbutton.setText(LISTbutton.getText().toString() + "(" + MARKERcount + "건)");
             }
 
             @Override

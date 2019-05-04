@@ -1,8 +1,6 @@
 package app.taxi.newtaxi;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +12,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends BaseAdapter {
+public class My_taxiAdapter extends BaseAdapter {
     private ArrayList<Data_Listview> listViewItemList = new ArrayList<Data_Listview>() ;
     DatabaseReference mDatabase;
 
-    public CustomAdapter() {
+    public My_taxiAdapter() {
     }
 
     @Override
@@ -46,7 +43,7 @@ public class CustomAdapter extends BaseAdapter {
         final Context context = parent.getContext();
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.custom_listview, null);
+            convertView = inflater.inflate(R.layout.my_taxi_listview, null);
         }
 
         ImageView IMAGEview = convertView.findViewById(R.id.IMAGEview);

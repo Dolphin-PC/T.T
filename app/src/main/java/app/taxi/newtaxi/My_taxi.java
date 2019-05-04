@@ -1,7 +1,6 @@
 package app.taxi.newtaxi;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -89,7 +87,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 .addOnConnectionFailedListener(this)
                 .build();
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.MAP);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.MY_MAP);
         mapFragment.getMapAsync(this);
 
         String time = positionDATA.getString("TIME","");
@@ -129,7 +127,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         INDEXtext.setText(String.valueOf(index) + " 번");
 
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
-        final CustomAdapter adapter = new CustomAdapter();
+        final My_taxiAdapter adapter = new My_taxiAdapter();
         LISTview.setAdapter(adapter);
 
         adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.

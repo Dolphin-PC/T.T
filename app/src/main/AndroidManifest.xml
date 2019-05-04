@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".Join_list"></activity>
         <activity android:name=".Post_Call">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,15 +38,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".Posting" />
-        <activity android:name=".Selector"></activity>
-        <activity android:name=".Map"></activity>
+        <activity android:name=".Selector" />
+        <activity android:name=".Map" />
         <activity android:name=".Charge" />
         <activity android:name=".KakaoSignupActivity" />
         <activity android:name=".My" />
         <activity
             android:name=".splashActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme"></activity>
+            android:theme="@style/SplashTheme" />
         <activity android:name=".Join">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,7 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main"></activity>
+        <activity android:name=".main" />
         <activity
             android:name=".client"
             android:theme="@style/AppTheme.NoActionBar" />
