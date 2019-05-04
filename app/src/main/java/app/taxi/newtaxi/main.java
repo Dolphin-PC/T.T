@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class main extends AppCompatActivity {
+    public static main mainActivity;
     private BackPressCloseHandler backPressCloseHandler;
     int INDEX;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -73,6 +74,7 @@ public class main extends AppCompatActivity {
            @Override
            public void onClick(View v) {
                Intent intent1 = new Intent(getApplicationContext(),My.class);
+               intent1.putExtra("POINT",Point_textview.getText().toString());
                startActivity(intent1);
            }
        });
@@ -119,7 +121,7 @@ public class main extends AppCompatActivity {
         backPressCloseHandler = new BackPressCloseHandler(this);
 
         Query query = mDatabase.child("user").orderByChild("email").equalTo(userid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getChildren().iterator().hasNext()){

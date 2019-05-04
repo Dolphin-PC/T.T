@@ -23,7 +23,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Selector extends AppCompatActivity {
-
+    public static Selector Selector;
     Button createButton;
     TextView startTEXT,arriveTEXT,distanceText,priceText;
     String START,ARRIVE,resultText,URL;
@@ -31,6 +31,7 @@ public class Selector extends AppCompatActivity {
     double DISTANCE;
     ProgressDialog pd;
     void init(){
+        Selector = Selector.this;
         startTEXT=findViewById(R.id.startTEXT);
         arriveTEXT=findViewById(R.id.arriveTEXT);
         distanceText = findViewById(R.id.distanceText);

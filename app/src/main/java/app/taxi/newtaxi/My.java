@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
-//TODO : main에서 My로 넘어갈때, 포인트 안넘어가는 문제
+
 public class My extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private String ID,PHONENUMBER,POINT,PROFILE_URL,NAME;
@@ -38,11 +38,11 @@ public class My extends AppCompatActivity {
     void init(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
-
+        Intent intent = getIntent();
         ID = positionDATA.getString("USERNAME","");
         NAME = positionDATA.getString("ID","");
         PROFILE_URL = positionDATA.getString("PROFILE","");
-        POINT = positionDATA.getString("POINT","");
+        POINT = intent.getExtras().getString("POINT");
 
         phonenumber_Text = findViewById(R.id.phonenumber_Text);
         updateBtn = findViewById(R.id.updateBtn);

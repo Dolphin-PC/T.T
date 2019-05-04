@@ -46,6 +46,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Login extends AppCompatActivity  {
+    private BackPressCloseHandler backPressCloseHandler;
     private FirebaseAuth mAuth;
     private EditText emailText;
     private EditText pwText;
@@ -70,9 +71,9 @@ public class Login extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
         init();
         Auth();
+        backPressCloseHandler = new BackPressCloseHandler(this);
         callback = new SessionCallback();
         Session.getCurrentSession().addCallback(callback);
         UserManagement.requestLogout(new LogoutResponseCallback() {
@@ -134,7 +135,7 @@ public class Login extends AppCompatActivity  {
                     intent.putExtra("Email",mAuth.getCurrentUser());
                     startActivity(intent);
                     finish();
-                } /* TODO : 구글 로그인 때마다 데이터베이스에 회원정보가 있는지 확인(없으면 번호를 받아 번호 인증 후, DB에 회원정보(이름,전화번호,이메일 저장)
+                } /*
                 ->  String name = user.getDisplayName();
                     String email = user.getEmail(); , user.getPhonenumber();
                 else if(user.getPhoneNumber() != null){
@@ -271,7 +272,6 @@ public class Login extends AppCompatActivity  {
                 Log.e("Hash key", something);
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             Log.e("name not found", e.toString());
         }
     }

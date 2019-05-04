@@ -36,10 +36,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-//TODO : 나가기 버튼(방장은 나갈때, 다이얼로그 표시)
-//TODO : 지도안에, 출발지와 도착지가 표시되도록
 //TODO : 1번째 상세정보 클릭시, 게시판의 정보와 결제 버튼 구현(다이얼로그)
+// 나가기 버튼(방장은 나갈때, 다이얼로그 표시)
+//TODO : Adapter 문제 해결하기(초기화 문제), 됐다 안됐다 함.
+//TODO : 지도안에, 출발지와 도착지가 표시되도록
 //TODO : 사용자 상세정보 클릭시, 사용자 정보 표시(다이얼로그)
+
 
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     private DatabaseReference mDatabase;
@@ -131,43 +133,14 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         LISTview.setAdapter(adapter);
 
         adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.
-        mCommentsReference = mDatabase.child("post-members");
-        mCommentsReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
-                if (data_members.getINDEX() == String.valueOf(index)) {
-                    adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
-                }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });     //사용자 정보 확인
         /*LISTview.addHeaderView();*/
         Query query = mDatabase.child("post-members").orderByChild("index").equalTo(String.valueOf(index));
         final Query query1 = mDatabase.child("post").orderByChild("index").equalTo(String.valueOf(index));
 
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Members data_members = appleSnapshot.getValue(Data_Members.class);
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
@@ -190,21 +163,20 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                                 }
                             }
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
                         });
                     }
                 }
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-
-
 /*
         mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
         commentList.setAdapter(mAdapter);

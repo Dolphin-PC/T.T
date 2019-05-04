@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 //TODO: 예약시, 다이얼로그에 표시, 요금 반올림
 public class Posting extends AppCompatActivity {
+    Selector selector = Selector.Selector;
     private DatabaseReference mDatabase;
     String START,ARRIVE,DISTANCE,PRICE,TIME,INDEX;
     TextView STARTtext,ARRIVEtext,DISTANCEtext,PRICEtext,PERSONPRICEtext,TIMEtext;
@@ -82,6 +83,7 @@ public class Posting extends AppCompatActivity {
                         Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
                         intent1.putExtra("INDEX",String.valueOf(INDEX));
                         startActivity(intent1);
+                        selector.finish();
                         finish();
                     }
                 })
