@@ -41,7 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 //TODO : 1번째 상세정보 클릭시, 게시판의 정보와 결제 버튼 구현(다이얼로그)
 // 나가기 버튼(방장은 나갈때, 다이얼로그 표시)
-//TODO : 지도안에, 출발지와 도착지가 표시되도록
+
 
 
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
@@ -50,9 +50,9 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     private GoogleMap MAPview;
     GoogleApiClient googleApiClient;
     Marker marker;
-    private static int DEFAULT_ZOOM = 15; //0~21 level
+    private static int DEFAULT_ZOOM = 14; //0~21 level
+    int MIDDLE_ZOOM = 14;
     private ListView LISTview;
-    private ArrayAdapter mAdapter;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
     final private DatabaseReference databaseReference = firebaseDatabase.getReference();
     private DatabaseReference mPostReference;
@@ -66,21 +66,51 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     int MONTH = Integer.parseInt(Time.split("/")[0]);
     int DAY = Integer.parseInt(Time.split("/")[1]);
     private final int stuck = 10;
-    LatLng STARTlatlng,ARRIVElatlng;
+    LatLng STARTlatlng,ARRIVElatlng,MIDDLElatlng;
     AlertDialog.Builder alertDialogBuilder,CHARGEdialogbuilder;
     My_taxiAdapter adapter;
+    Double MIDDLE_latitude,MIDDLE_longitude;
 
-    void init(){
+    void init() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
-        String start_lati = positionDATA.getString("출발","").split(",")[0];
-        String start_long = positionDATA.getString("출발","").split(",")[1];
-        STARTlatlng = new LatLng(Double.valueOf(start_lati),Double.valueOf(start_long));
+        String start_lati = positionDATA.getString("출발", "").split(",")[0];
+        String start_long = positionDATA.getString("출발", "").split(",")[1];
+        STARTlatlng = new LatLng(Double.valueOf(start_lati), Double.valueOf(start_long));
 
-        String arrive_lati=positionDATA.getString("도착","").split(",")[0];
-        String arrive_long=positionDATA.getString("도착","").split(",")[1];
-        ARRIVElatlng = new LatLng(Double.valueOf(arrive_lati),Double.valueOf(arrive_long));
+        String arrive_lati = positionDATA.getString("도착", "").split(",")[0];
+        String arrive_long = positionDATA.getString("도착", "").split(",")[1];
+        ARRIVElatlng = new LatLng(Double.valueOf(arrive_lati), Double.valueOf(arrive_long));
+
+        MIDDLE_latitude = Math.abs(STARTlatlng.latitude - ARRIVElatlng.latitude) / 2.0;
+        MIDDLE_longitude = Math.abs(STARTlatlng.longitude - ARRIVElatlng.longitude) / 2.0;
+
+        if (STARTlatlng.latitude > ARRIVElatlng.latitude)
+            MIDDLE_latitude += ARRIVElatlng.latitude;
+        else
+            MIDDLE_latitude += STARTlatlng.latitude;
+        if (STARTlatlng.longitude > ARRIVElatlng.longitude)
+            MIDDLE_longitude += ARRIVElatlng.longitude;
+        else
+            MIDDLE_longitude += STARTlatlng.longitude;
+        MIDDLElatlng = new LatLng(MIDDLE_latitude, MIDDLE_longitude);
+
+        if (MIDDLE_latitude <= 0.0108 || MIDDLE_longitude <= 0.0108){    //출발지와 도착지가 중간지점에서부터 1.2km 이상이면,
+            MIDDLE_ZOOM = 14;
+        }else if(MIDDLE_latitude <= 0.0216 || MIDDLE_longitude <= 0.0216){
+            MIDDLE_ZOOM =13;
+        }else if(MIDDLE_latitude <= 0.0432 || MIDDLE_longitude <= 0.0432){
+            MIDDLE_ZOOM =12;
+        }else if(MIDDLE_latitude <= 0.0864 || MIDDLE_longitude <= 0.0864){
+            MIDDLE_ZOOM =11;
+        }else if(MIDDLE_latitude <= 0.1728 || MIDDLE_longitude <= 0.1728){
+            MIDDLE_ZOOM =10;
+        }else if(MIDDLE_latitude <= 0.3456 || MIDDLE_longitude <= 0.3456){
+            MIDDLE_ZOOM =9;
+        }
+
+
 
         INDEXtext = findViewById(R.id.indexView);
         TIMEtext = findViewById(R.id.TIMEtext);
@@ -133,8 +163,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
         adapter = new My_taxiAdapter();
         LISTview.setAdapter(adapter);
-        /*adapter.addItem("","",""); //1번째가 추가가 안되있으면 표시가 안됨.
-        */
 
         /*LISTview.addHeaderView();*/
         Query query = mDatabase.child("post-members").orderByChild("index").equalTo(String.valueOf(index));
@@ -180,91 +208,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-/*
-        mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, android.R.id.text1);
-        commentList.setAdapter(mAdapter);
-
-        commentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String call_taxi = (String)parent.getAdapter().getItem(position);
-                if(call_taxi.equals("택시가 호출되었습니다. 클릭해서 확인")){
-                    Intent intent1 = new Intent(getApplicationContext(),Taxi_info.class);
-                    intent1.putExtra("userid",userID);
-                    startActivity(intent1);
-                }
-            }
-        });
-        mCommentsReference = mDatabase.child("post-comments");
-        mCommentsReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Data_Comment dataComment = dataSnapshot.getValue(Data_Comment.class);
-                if (dataComment.getIndex() == index) {
-                    mAdapter.add(dataComment.getuserID() + " : " + dataComment.getComment());
-                }
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        mPostReference = mDatabase.child("post");
-        mPostReference.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
-                if (!dataPost.getDriver().equals("")) {
-                    mAdapter.add("택시가 호출되었습니다. 클릭해서 확인");
-                }
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-        commentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!commentText.getText().toString().isEmpty()){
-                    AddComment(userID, commentText.getText().toString(), index);
-                }
-                commentText.setText("");
-            }
-        });*/
-
     }
     private void Dialog(final int Point) {
         alertDialogBuilder = new AlertDialog.Builder(this);
@@ -317,7 +260,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         });
     }
     void CHARGEDIALOG(final int Point){
-
         CHARGEdialogbuilder = new AlertDialog.Builder(this);
         CHARGEdialogbuilder.setTitle("포인트 부족");
         CHARGEdialogbuilder.setMessage("포인트가 부족합니다.\n충전하러 가시겠습니까?");
@@ -344,7 +286,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     @Override
     public void onMapReady(GoogleMap googleMap) {
         MAPview = googleMap;
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(STARTlatlng,DEFAULT_ZOOM));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MIDDLElatlng,MIDDLE_ZOOM));
         marker = googleMap.addMarker(new MarkerOptions().position(STARTlatlng).title("출발 위치").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         marker = googleMap.addMarker(new MarkerOptions().position(ARRIVElatlng).title("도착 위치").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
     }

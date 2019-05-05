@@ -47,7 +47,10 @@ public class Posting extends AppCompatActivity {
         ARRIVE= intent.getExtras().getString("ARRIVE");
         DISTANCE= intent.getExtras().getString("DISTANCE");
         PRICE= intent.getExtras().getString("PRICE");
-        INDEX = positionDATA.getString("ID","1");                  //카카오톡 사용자의 일련번호로 인덱스 번호.
+        INDEX = positionDATA.getString("ID","1");//카카오톡 사용자의 일련번호로 인덱스 번호.
+
+        editor.putString("DISTANCE",DISTANCE);
+        editor.apply();
 
         STARTtext = findViewById(R.id.STARTtext);
         ARRIVEtext = findViewById(R.id.ARRIVEtext);

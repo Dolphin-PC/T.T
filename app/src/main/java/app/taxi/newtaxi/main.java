@@ -55,8 +55,6 @@ public class main extends AppCompatActivity {
         nickname = positionDATA.getString("USERNAME", "");
         userid = positionDATA.getString("ID", "");
         profileURL = positionDATA.getString("PROFILE", "");
-        editor.putString("POINT",Point_textview.getText().toString());
-        editor.apply();
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/
@@ -130,8 +128,14 @@ public class main extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getChildren().iterator().hasNext()){
                     for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = positionDATA.edit();
+
                         User user = appleSnapshot.getValue(User.class);
                         Point_textview.setText(String.valueOf(user.getPoint()));
+                        editor.putString("POINT",Point_textview.getText().toString());
+                        editor.apply();
+
                         Update_user(user.getPoint(),user.getPhonenumber());
                         return;
                     }
