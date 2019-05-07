@@ -48,6 +48,10 @@ TODO : Join.java - 1) 미터(버튼) 클릭시, 반경 표시
 
 TODO : 0504, 택시기사 구현(콜 목록을 확인후, post에 택시기사의 정보입력
 TODO : 택시기사의 정보가 입력이 되면, Post_Call의 버튼을 '택시 정보보기'로 변경 후, 택시기사의 정보를 표시하는 액티비티로(전화번호는 전화걸기 기능)
+
+TODO : 0505 문제점 발견, 노선 생성, 참가 할때의 positionDATA editor 가 다름.(똑같이 설정)
+        채팅시, 프로필안보임 및 이름(ID로 뜸)
+
 # 구글 로그인 시, 회원정보 조회
 public void checkCurrentUser() {
         // [START check_current_user]

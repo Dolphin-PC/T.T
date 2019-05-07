@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -330,7 +329,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     public boolean onMarkerClick(final Marker marker) {
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setContentView(R.layout.map_dialog);
         dialog.show();
         mMapView = dialog.findViewById(R.id.MAP_Dialog);
         TIMEtext = dialog.findViewById(R.id.TIMEtext);
@@ -358,6 +357,8 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 mDatabase.child("post-members").push().setValue(data_members);
                                 editor.putString("INDEX",marker.getTitle());
                                 editor.putString("??",INDEX);
+                                editor.putString("출발",data_post.getStart_Latitude()+","+data_post.getStart_Longitude());
+                                editor.putString("도착",data_post.getArrive_Latitude()+","+data_post.getArrive_Longitude());
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),My_taxi.class);

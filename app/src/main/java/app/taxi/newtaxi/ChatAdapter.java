@@ -89,6 +89,7 @@ public class ChatAdapter extends BaseAdapter {
             Glide.with(convertView)
                     .load(chatData.get(position).getPROFILEURL())
                     .into(holder.img);
+            Log.e("PROFILE",chatData.get(position).getPROFILEURL());
             holder.tv_msg.setText(chatData.get(position).getComment());
             holder.tv_time.setText(chatData.get(position).getTime());
             holder.tv_name.setText(chatData.get(position).getId());

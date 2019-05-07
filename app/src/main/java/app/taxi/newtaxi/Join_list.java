@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,10 +49,16 @@ public class Join_list extends AppCompatActivity {
     String USERNAME,URL,GENDER,USERID;
     String SELECT_latitude = "37.566643",SELECT_longitude = "126.978279";
     void init(){
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        SharedPreferences.Editor editor = positionDATA.edit();
+
         Intent intent = getIntent();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         MARKERlist = intent.getExtras().getStringArrayList("MARKER");
         MARKER_COUNT = intent.getExtras().getString("MARKER_COUNT");
+        USERNAME = positionDATA.getString("USERNAME","");
+        URL = positionDATA.getString("PROFILE","");
+        USERID=positionDATA.getString("ID","");
         LIST = findViewById(R.id.MARKERlist);
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_single_choice);
         LIST.setAdapter(adapter);
@@ -97,7 +102,7 @@ public class Join_list extends AppCompatActivity {
         final int index = i;
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setContentView(R.layout.map_dialog);
         dialog.show();
         mMapView = dialog.findViewById(R.id.MAP_Dialog);
         TIMEtext = dialog.findViewById(R.id.TIMEtext);

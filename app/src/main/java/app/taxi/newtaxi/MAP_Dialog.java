@@ -1,29 +1,20 @@
 package app.taxi.newtaxi;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -36,7 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class CustomDialog extends DialogFragment implements OnMapReadyCallback {
+public class MAP_Dialog extends DialogFragment implements OnMapReadyCallback {
     DatabaseReference mDatabase;
     private SupportMapFragment fragment;
 
@@ -48,30 +39,12 @@ public class CustomDialog extends DialogFragment implements OnMapReadyCallback {
     LatLng ARRIVElatlng;
     private static int DEFAULT_ZOOM = 15;
 
-    /*public CustomDialog(Context context, String USERNAME, String USERID, String URL, String INDEX) {
-        super();
-        this.context = context;
-        this.USERNAME = USERNAME;
-        this.USERID = USERID;
-        this.URL = URL;
-        this.INDEX = INDEX;
-        this.context = context;
-    }*/
-
-    public CustomDialog(String USERNAME, String USERID, String URL, String INDEX) {
-        fragment = new SupportMapFragment();
-        this.USERNAME = USERNAME;
-        this.USERID = USERID;
-        this.URL = URL;
-        this.INDEX = INDEX;
-        this.context = context;
-    }
-
+    public MAP_Dialog(){}
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.custom_dialog, container, false);
+        final View view = inflater.inflate(R.layout.map_dialog, container, false);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.MAP_Dialog, fragment).commit();
 
@@ -113,12 +86,6 @@ public class CustomDialog extends DialogFragment implements OnMapReadyCallback {
         return view;
     }
 
-    // 호출할 다이얼로그 함수를 정의한다.
-    public void callFunction() {
-
-
-    }
-
     void LATLNG(){
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -129,7 +96,7 @@ public class CustomDialog extends DialogFragment implements OnMapReadyCallback {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
-                    PRICEtext.setText(data_post.getPoint());
+                    PRICEtext.setText(data_post.getPoint() + "P");
                     DISTANCEtext.setText(data_post.getDistance().split(":")[1]);
                     ARRIVElatlng = new LatLng(37.566643, 126.978279);
                 }

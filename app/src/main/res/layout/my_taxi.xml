@@ -15,7 +15,7 @@
         android:id="@+id/view9"
         android:layout_width="300dp"
         android:layout_height="5dp"
-        android:layout_marginTop="310dp"
+        android:layout_marginTop="250dp"
         android:background="#ff9900"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,40 +38,36 @@
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toTopOf="@+id/view9"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/indexView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ListView
         android:id="@+id/LISTview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TIMEtext" />
-
-    <TextView
-        android:id="@+id/TIMEtext"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
-        android:text="예약 없음"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@android:color/holo_orange_dark"
-        android:textStyle="bold"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@+id/INFObutton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view9" />
+
+    <Button
+        android:id="@+id/INFObutton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_orange_dark"
+        android:text="매칭 중"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--
 

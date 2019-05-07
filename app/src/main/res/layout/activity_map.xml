@@ -9,7 +9,7 @@
         android:id="@+id/map"
         class="com.google.android.gms.maps.MapFragment"
         android:layout_width="0dp"
-        android:layout_height="504dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/addressView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,7 +18,7 @@
     <TextView
         android:id="@+id/addressView"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="35dp"
         android:text="TextView"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -31,7 +31,7 @@
     <Button
         android:id="@+id/settingBUTTON"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         android:background="@android:color/holo_orange_dark"
         android:text="설정"
         android:textStyle="bold"

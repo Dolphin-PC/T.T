@@ -1,7 +1,6 @@
 package app.taxi.newtaxi;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -42,7 +41,7 @@ public class Post_Call extends AppCompatActivity {
     DatabaseReference mDatabaseMSG,mDatabase;
     ListView COMMENTlist;
     EditText COMMENTedit;
-    String ID,INDEX,PROFILEURL;
+    String USERNAME,INDEX,PROFILEURL,ID;
     Date today = new Date();
     SimpleDateFormat timeNow = new SimpleDateFormat("a K:mm");
     String Time = timeNow.format(today);
@@ -64,9 +63,10 @@ public class Post_Call extends AppCompatActivity {
         COMMENTedit = findViewById(R.id.COMMENTedit);
         COMMENTlist = findViewById(R.id.MESSAGElist);
 
-        ID = positionDATA.getString("ID","");
+        USERNAME = positionDATA.getString("USERNAME","");
         INDEX = positionDATA.getString("INDEX","");
         PROFILEURL = positionDATA.getString("PROFILE","");
+        ID = positionDATA.getString("ID","");
     }
     void click(){
         MAPbutton.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +85,7 @@ public class Post_Call extends AppCompatActivity {
                             SB.insert(15*i,"\n");
                         }
                     }
-                    mDatabaseMSG.push().setValue(new Data_message(INDEX,PROFILEURL, ID, SB.toString(), Time));
+                    mDatabaseMSG.push().setValue(new Data_message(INDEX,PROFILEURL, USERNAME, SB.toString(), Time));
                     COMMENTedit.setText("");
                 }
             }
@@ -161,7 +161,7 @@ public class Post_Call extends AppCompatActivity {
     void DIALOG(){
         dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.custom_dialog);
+        dialog.setContentView(R.layout.map_dialog);
         dialog.show();
         mMapView = dialog.findViewById(R.id.MAP_Dialog);
         TIMEtext = dialog.findViewById(R.id.TIMEtext);
