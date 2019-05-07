@@ -29,10 +29,9 @@ import java.util.Map;
 public class main extends AppCompatActivity {
     public static main mainActivity;
     private BackPressCloseHandler backPressCloseHandler;
-    int INDEX;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private DatabaseReference mDatabase;
-    String nickname,userid,profileURL,email;
+    String nickname,userid,profileURL,email,INDEX;
     ImageView profile_imageview;
     TextView Name_textview,Email,Point_textview,UserID_textview;
     Button My_button,charge_btn,start_btn,JOINbutton;
@@ -55,6 +54,7 @@ public class main extends AppCompatActivity {
         nickname = positionDATA.getString("USERNAME", "");
         userid = positionDATA.getString("ID", "");
         profileURL = positionDATA.getString("PROFILE", "");
+        INDEX = positionDATA.getString("INDEX","");
 
         Name_textview.setText(nickname);
         /*Email.setText(email);*/
@@ -157,7 +157,6 @@ public class main extends AppCompatActivity {
                 if(dataSnapshot.getChildren().iterator().hasNext()){
                     Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                         start_btn.setText("내 노선 보기");
-                        INDEX = Integer.valueOf(userid);
                         JOINbutton.setVisibility(View.INVISIBLE);
 
                 }else{

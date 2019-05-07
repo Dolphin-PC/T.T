@@ -50,11 +50,11 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     GoogleApiClient googleApiClient;
     Marker marker;
     private static int DEFAULT_ZOOM = 14; //0~21 level
-    int POINT=1000,MIDDLE_ZOOM = 14;
+    int POINT=1000,MIDDLE_ZOOM = 14,Max;
     private ListView LISTview,MYDIALOGlist;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private String userID,title,start,arrive,driver,taxinumber,phonenumber,ID;
-    private int index,pay,person,point,PayPerPerson;
+    private String userID,title,start,arrive,driver,taxinumber,phonenumber,ID,INDEX;
+    private int pay,person,point,PayPerPerson;
     long now = System.currentTimeMillis ();
     Date date = new Date(now);
     SimpleDateFormat sdfNow = new SimpleDateFormat("MM/DD");
@@ -70,9 +70,39 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     Dialog dialog;
 
     void init() {
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+        final SharedPreferences.Editor editor = positionDATA.edit();
+
+        INFObutton = findViewById(R.id.INFObutton);
+        INDEXtext = findViewById(R.id.indexView);
+        LISTview = findViewById(R.id.LISTview);
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.MY_MAP);
+        mapFragment.getMapAsync(this);
+
+        dialog = new Dialog(this);
+
+        Intent intent = getIntent();
+        INDEX = intent.getExtras().getString("INDEX");
+        title = positionDATA.getString("TITLE","");
+        arrive = positionDATA.getString("ARRIVE","");
+        start = positionDATA.getString("START","");
+        person = Integer.valueOf(positionDATA.getString("PERSON","1"));
+        pay = point = Integer.valueOf(positionDATA.getString("POINT","1000"));
+        userID = positionDATA.getString("USERNAME","");
+        ID = positionDATA.getString("ID","");
+
+        Max = Integer.valueOf(positionDATA.getString("MAX","3"));
+
+        PayPerPerson = point / Max;
+        INDEXtext.setText(INDEX + " 번");
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
-        SharedPreferences.Editor editor = positionDATA.edit();
         String start_lati = positionDATA.getString("출발", "").split(",")[0];
         String start_long = positionDATA.getString("출발", "").split(",")[1];
         STARTlatlng = new LatLng(Double.valueOf(start_lati), Double.valueOf(start_long));
@@ -107,20 +137,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         } else if (MIDDLE_latitude <= 0.3456 || MIDDLE_longitude <= 0.3456) {
             MIDDLE_ZOOM = 9;
         }
-
-        INFObutton = findViewById(R.id.INFObutton);
-        INDEXtext = findViewById(R.id.indexView);
-        LISTview = findViewById(R.id.LISTview);
-        googleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.MY_MAP);
-        mapFragment.getMapAsync(this);
-
-        dialog = new Dialog(this);
     }
     void click(){
         INFObutton.setOnClickListener(new View.OnClickListener() {
@@ -160,32 +176,13 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         init();
         click();
 
-        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
-        final SharedPreferences.Editor editor = positionDATA.edit();
-
-        Intent intent = getIntent();
-        index = Integer.valueOf(intent.getExtras().getString("INDEX"));
-        title = positionDATA.getString("TITLE","");
-        arrive = positionDATA.getString("ARRIVE","");
-        start = positionDATA.getString("START","");
-        person = Integer.valueOf(positionDATA.getString("PERSON","1"));
-        pay = point = Integer.valueOf(positionDATA.getString("POINT","1000"));
-        userID = positionDATA.getString("USERNAME","");
-        ID = positionDATA.getString("ID","");
-
-        final int Max = Integer.valueOf(positionDATA.getString("MAX","3"));
-
-        PayPerPerson = point / Max;
-        INDEXtext.setText(String.valueOf(index) + " 번");
-
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
         adapter = new My_taxiAdapter();
         LISTview.setAdapter(adapter);
 
         /*LISTview.addHeaderView();*/
-        Query query = mDatabase.child("post-members").orderByChild("index").equalTo(String.valueOf(index));
-        final Query query1 = mDatabase.child("post").orderByChild("index").equalTo(String.valueOf(index));
-
+        Query query = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);
+        final Query query1 = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -194,7 +191,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                     adapter.notifyDataSetChanged();
                     if(data_members.getJOIN()){
                         Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
-                        intent1.putExtra("INDEX",index);
+                        intent1.putExtra("INDEX",INDEX);
                         startActivity(intent1);
                         finish();
                     }
@@ -208,13 +205,14 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                                     if (adapter.getCount() == data_post.getMaxPerson()){
                                         POINT = data_post.getPay()/data_post.getMaxPerson();
                                         PAYDIALOG(data_post.getPay()/data_post.getMaxPerson());
+                                        if(adapter.getCount() == Max)
+                                            PAYdialog.show(); //TODO : 동승자 수만큼 메시지 표시됨
                                     }
                                 }
                             }
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) { }
                         });
-                        PAYdialog.show();
                     }
                 }
 
@@ -266,7 +264,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                                     public void onCancelled(@NonNull DatabaseError databaseError) { }
                                 });
                                 Intent intent = new Intent(getApplicationContext(),Post_Call.class);
-                                intent.putExtra("INDEX",index);
+                                intent.putExtra("INDEX",INDEX);
                                 startActivity(intent);
                                 finish();
                             }

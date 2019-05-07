@@ -85,7 +85,7 @@ public class Post_Call extends AppCompatActivity {
                             SB.insert(15*i,"\n");
                         }
                     }
-                    mDatabaseMSG.push().setValue(new Data_message(INDEX,PROFILEURL, USERNAME, SB.toString(), Time));
+                    mDatabaseMSG.push().setValue(new Data_message(INDEX,PROFILEURL,ID, USERNAME, SB.toString(), Time));
                     COMMENTedit.setText("");
                 }
             }
@@ -116,11 +116,11 @@ public class Post_Call extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post__call);
+        setContentView(R.layout.activity_post_call);
         init();
 
         final ChatAdapter adapter = new ChatAdapter(getApplicationContext(), R.layout.comment_listview,list,ID);
-        COMMENTlist.setAdapter(adapter);
+        COMMENTlist.setAdapter(adapter);//TODO : 마지막 채팅이 보이게끔 화면 내림.
         COMMENTedit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}

@@ -7,16 +7,17 @@ public class Data_message {
     private String id;
     private String comment;
     private String time;
-    private String INDEX;
+    private String INDEX,username;
 
     public Data_message(){}
 
-    public Data_message(String INDEX, String URL, String id, String comment, String time) {
+    public Data_message(String INDEX, String URL, String id,String username, String comment, String time) {
         this.INDEX = INDEX;
         this.URL = URL;
         this.id = id;
         this.comment = comment;
         this.time = time;
+        this.username = username;
     }
 
     public String getPROFILEURL() {
@@ -37,5 +38,9 @@ public class Data_message {
 
     public String getINDEX() {
         return INDEX;
+    }
+
+    public String getUsername() {
+        return username;
     }
 }

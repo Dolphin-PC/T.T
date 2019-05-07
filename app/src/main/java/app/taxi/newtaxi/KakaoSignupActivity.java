@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.kakao.auth.ErrorCode;
 import com.kakao.network.ErrorResult;
@@ -69,7 +70,10 @@ public class KakaoSignupActivity extends Activity{
         Intent intent = new Intent(this,main.class);
         editor.putString("USERNAME",nickname);
         editor.putString("ID",id);
-        editor.putString("PROFILE",profile);
+        if(profile=="")
+            editor.putString("PROFILE","");
+        else
+            editor.putString("PROFILE",profile);
         editor.putString("GENDER","남자");
         editor.apply();
 

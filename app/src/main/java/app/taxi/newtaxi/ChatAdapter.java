@@ -20,6 +20,7 @@ public class ChatAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private String id;
 
+    public ChatAdapter(){}
     public ChatAdapter(Context applicationContext, int talklist, ArrayList<Data_message> list, String id) {
         this.context = applicationContext;
         this.layout = talklist;
@@ -89,13 +90,11 @@ public class ChatAdapter extends BaseAdapter {
             Glide.with(convertView)
                     .load(chatData.get(position).getPROFILEURL())
                     .into(holder.img);
-            Log.e("PROFILE",chatData.get(position).getPROFILEURL());
             holder.tv_msg.setText(chatData.get(position).getComment());
             holder.tv_time.setText(chatData.get(position).getTime());
-            holder.tv_name.setText(chatData.get(position).getId());
+            holder.tv_name.setText(chatData.get(position).getUsername());
+            Log.e("INDEX",chatData.get(position).getUsername());
         }
-
-
         return convertView;
     }
 
