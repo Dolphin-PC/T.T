@@ -10,13 +10,13 @@
         android:id="@+id/textView9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:text="시간 : "
         android:textColor="@color/com_kakao_button_text_press"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/MYDIALOGlist" />
 
     <TextView
         android:id="@+id/TIMEtext"
@@ -28,7 +28,7 @@
         android:textColor="@color/com_kakao_button_text_press"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView9"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/MYDIALOGlist" />
 
     <TextView
         android:id="@+id/textView21"
@@ -42,7 +42,7 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toStartOf="@+id/PERSONtext"
         app:layout_constraintStart_toEndOf="@+id/TIMEtext"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/MYDIALOGlist" />
 
     <TextView
         android:id="@+id/PERSONtext"
@@ -54,13 +54,13 @@
         android:textColor="@color/com_kakao_button_text_press"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView21"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/MYDIALOGlist" />
 
     <TextView
         android:id="@+id/textView15"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:text="요금 : "
         android:textColor="@color/com_kakao_button_text_press"
@@ -130,11 +130,19 @@
         app:layout_constraintStart_toEndOf="@+id/view10"
         app:layout_constraintTop_toBottomOf="@+id/DISTANCEtext" />
 
+    <ListView
+        android:id="@+id/MYDIALOGlist"
+        android:layout_width="0dp"
+        android:layout_height="190dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:id="@+id/view10"
         android:layout_width="1dp"
         android:layout_height="10dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="300dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

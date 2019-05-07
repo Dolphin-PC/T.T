@@ -178,7 +178,7 @@ public class Post_Call extends AppCompatActivity {
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
                     PRICEtext.setText(data_post.getPoint());
-                    DISTANCEtext.setText(data_post.getDistance().split(":")[1]);
+                    DISTANCEtext.setText(data_post.getDistance());
                     SELECT_latitude = data_post.getStart_Latitude();
                     SELECT_longitude = data_post.getStart_Longitude();
                 }

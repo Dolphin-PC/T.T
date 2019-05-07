@@ -54,6 +54,7 @@ TODO : 0505 문제점 발견, 노선 생성, 참가 할때의 positionDATA edito
 
 TODO : 카카오 로그인, 프로필 이미지가 없을시, PROFILE = "default"저장, 추후에 기본이미지 설정하기
 TODO : drawble21~24 : API 버전 차이에 따라 오류발생 처리
+TODO : positionDATA(post/user정보 분리하기)
 # 구글 로그인 시, 회원정보 조회
 public void checkCurrentUser() {
         // [START check_current_user]

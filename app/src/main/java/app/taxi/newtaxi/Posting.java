@@ -49,8 +49,6 @@ public class Posting extends AppCompatActivity {
         PRICE= intent.getExtras().getString("PRICE");
         INDEX = positionDATA.getString("ID","1");//카카오톡 사용자의 일련번호로 인덱스 번호.
 
-        editor.putString("DISTANCE",DISTANCE);
-        editor.apply();
 
         STARTtext = findViewById(R.id.STARTtext);
         ARRIVEtext = findViewById(R.id.ARRIVEtext);
@@ -108,6 +106,7 @@ public class Posting extends AppCompatActivity {
         editor.putString("TIME",TIMEtext.getText().toString());
         editor.putString("INDEX",INDEX);
         editor.putString("??",INDEX);
+        editor.putString("DISTANCE",DISTANCE);
         editor.apply();
 
         String userID = positionDATA.getString("USERNAME","");
@@ -125,7 +124,7 @@ public class Posting extends AppCompatActivity {
                 ,1  //person
                 ,MaxPerson
                 ,INDEX  //일련번호 인덱스
-                ,DISTANCE
+                ,DISTANCE.split(":")[1]
                 ,Integer.valueOf(PRICE.split(" ")[3])
                 ,TIMEtext.getText().toString().split(":")[0]
                 ,"","","");

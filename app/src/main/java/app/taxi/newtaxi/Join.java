@@ -360,6 +360,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 editor.putString("출발",data_post.getStart_Latitude()+","+data_post.getStart_Longitude());
                                 editor.putString("도착",data_post.getArrive_Latitude()+","+data_post.getArrive_Longitude());
                                 editor.putString("MAX",data_post.getMaxPerson()+"");
+                                editor.putString("TIME",data_post.getTime());
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),My_taxi.class);

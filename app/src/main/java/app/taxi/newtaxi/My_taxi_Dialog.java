@@ -41,7 +41,7 @@ public class My_taxi_Dialog  extends DialogFragment {
         PERSONtext = view.findViewById(R.id.PERSONtext);
         OUTbutton = view.findViewById(R.id.OUTbutton);
         PAYbutton = view.findViewById(R.id.PAYbutton);
-
+        MYDIALOGlist = view.findViewById(R.id.MYDIALOGlist);
         return view;
     }
 }

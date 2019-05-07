@@ -163,7 +163,7 @@ public class Selector extends AppCompatActivity {
             if (pd.isShowing()){
                 pd.dismiss();
             }
-            distanceText.setText("예상 거리 : " + result);
+            distanceText.setText("예상 거리 :" + result);
             if(Double.valueOf(result.split(" ")[0]) >= 2.0){
                 DISTANCE = Double.valueOf(result.split(" ")[0]) - 2.0; //기본거리 제외
                 DISTANCE *= 1000;                                             //km -> m 단위로
