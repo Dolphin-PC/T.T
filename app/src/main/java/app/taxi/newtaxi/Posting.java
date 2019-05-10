@@ -35,7 +35,7 @@ public class Posting extends AppCompatActivity {
     String Time = sdfNow.format(date);
     int Hour = Integer.parseInt(Time.split(":")[0]);
     int Minute = Integer.parseInt(Time.split(":")[1]);
-    int MaxPerson,PAY_up,PAY;
+    int MaxPerson,PAY_up=0,PAY;
     TimePickerDialog dialog;
     AlertDialog.Builder alertDialogBuilder;
     void init(){
@@ -67,6 +67,8 @@ public class Posting extends AppCompatActivity {
         PRICEtext.setText(PRICE);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        TIME = Hour+"시 " + Minute + "분";
     }
 
     private void POST() {
@@ -79,7 +81,6 @@ public class Posting extends AppCompatActivity {
         editor.putString("INDEX",INDEX);
         editor.putString("??",INDEX);
         editor.putString("DISTANCE",DISTANCE.split(":")[1]);
-        editor.putString("PAY",PAY+"");
         editor.apply();
 
         String userID = positionDATA.getString("USERNAME","");
@@ -90,14 +91,14 @@ public class Posting extends AppCompatActivity {
         String Arrive_longitude = positionDATA.getString("도착","").split(",")[1];
 
         Data_Post dataPost = new Data_Post(userID //게시자의 이름
-                ,PRICE.split(" ")[3]
+                ,(PAY*MaxPerson)+""
                 ,"" //게시글 제목
                 ,START,Start_latitude,Start_longitude,ARRIVE,Arrive_latitude,Arrive_longitude //출발지/도착지
                 ,1  //person
                 ,MaxPerson
                 ,INDEX  //일련번호 인덱스
                 ,DISTANCE.split(":")[1]
-                ,Integer.valueOf(PRICE.split(" ")[3])
+                ,PAY
                 ,TIMEtext.getText().toString().split(":")[0]
                 ,"","","");
         Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),false);
@@ -119,13 +120,13 @@ public class Posting extends AppCompatActivity {
                     PERSONPRICEtext.setText("개인 부담 금액은 " + PAY/2 + " 원 입니다.(2인 탑승)");
                 else {
                     PAY_up = 100 - (PAY / 2 % 100);
-                    PAY += PAY_up;
-                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY / 2 + PAY_up
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + (PAY / 2 + PAY_up)
                             + " 원 입니다.(2인 탑승)");
                 }
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=2;
                 editor.putString("MAX",String.valueOf(MaxPerson));
+                editor.putString("PAY",(PAY/2+PAY_up)+"");
                 POSTbutton.setEnabled(true);
             }
         });
@@ -139,13 +140,13 @@ public class Posting extends AppCompatActivity {
                     PERSONPRICEtext.setText("개인 부담 금액은 " + PAY/3 + " 원 입니다.(3인 탑승)");
                 else {
                     PAY_up = 100 - (PAY / 3 % 100);
-                    PAY += PAY_up;
-                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY / 3 + PAY_up
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + (PAY / 3 + PAY_up)
                             + " 원 입니다.(3인 탑승)");
                 }
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=3;
                 editor.putString("MAX",String.valueOf(MaxPerson));
+                editor.putString("PAY",(PAY/3+PAY_up)+"");
                 POSTbutton.setEnabled(true);
             }
         });
@@ -159,13 +160,13 @@ public class Posting extends AppCompatActivity {
                     PERSONPRICEtext.setText("개인 부담 금액은 " + PAY/4 + " 원 입니다.(4인 탑승)");
                 else {
                     PAY_up = 100 - (PAY / 4 % 100);
-                    PAY += PAY_up;
-                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY / 4 + PAY_up
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + (PAY / 4 + PAY_up)
                             + " 원 입니다.(4인 탑승)");
                 }
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=4;
                 editor.putString("MAX",String.valueOf(MaxPerson));
+                editor.putString("PAY",(PAY/4+PAY_up)+"");
                 POSTbutton.setEnabled(true);
             }
         });
@@ -175,9 +176,8 @@ public class Posting extends AppCompatActivity {
                 if(TIMEcheck.isChecked()){
                     dialog.show();
                 }
-                else{
+                else
                     TIME = Hour+"시 " + Minute + "분";
-                }
             }
         });
         POSTbutton.setOnClickListener(new View.OnClickListener() {

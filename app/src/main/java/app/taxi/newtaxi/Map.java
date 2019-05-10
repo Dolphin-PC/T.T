@@ -40,6 +40,7 @@ import java.util.List;
 
 public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     Selector S = Selector.Selector;
+    main main = new main();
     GoogleMap map;
     GoogleApiClient googleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;

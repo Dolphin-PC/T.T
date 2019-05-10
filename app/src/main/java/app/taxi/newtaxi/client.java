@@ -128,7 +128,7 @@ public class client extends AppCompatActivity
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
-                adapter.add(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
+                adapter.add(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPrice()+")");
                 indexcount++;
             }
 
@@ -140,7 +140,7 @@ public class client extends AppCompatActivity
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
-                adapter.remove(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
+                adapter.remove(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPrice()+")");
             }
 
             @Override
@@ -177,7 +177,7 @@ public class client extends AppCompatActivity
                     title = dataPost.getTitle();
                     start = dataPost.getStart();
                     arrive = dataPost.getArrive();
-                    point = dataPost.getPoint();
+                    point = dataPost.getPrice();
                     intent.putExtra("Index", i);
                     intent.putExtra("person",person);
                     intent.putExtra("userID",userID);

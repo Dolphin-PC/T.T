@@ -101,7 +101,7 @@ public class taxi_driver extends AppCompatActivity
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         DataSnapshot nodeDataSnapshot = dataSnapshot.getChildren().iterator().next();
                         Data_Post dataPost = nodeDataSnapshot.getValue(Data_Post.class);
-                        plus_point = dataPost.getPoint();
+                        plus_point = dataPost.getPrice();
                         String key = nodeDataSnapshot.getKey(); // this key is `K1NRz9l5PU_0CFDtgXz`
                         String path = "/" + dataSnapshot.getKey() + "/" + key;
                         HashMap<String, Object> result = new HashMap<>();
@@ -150,7 +150,7 @@ public class taxi_driver extends AppCompatActivity
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
                 index = dataPost.getIndex();
-                adapter.add(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
+                adapter.add(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPrice()+")");
             }
 
             @Override
@@ -161,7 +161,7 @@ public class taxi_driver extends AppCompatActivity
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Data_Post dataPost = dataSnapshot.getValue(Data_Post.class);
-                adapter.remove(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPoint()+")");
+                adapter.remove(dataPost.getIndex()+"/"+ dataPost.getTitle() + ": " + dataPost.getStart() + "->" + dataPost.getArrive() + "(" + dataPost.getPerson() + ")명" + ", P("+ dataPost.getPrice()+")");
             }
 
             @Override

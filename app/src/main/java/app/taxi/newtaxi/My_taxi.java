@@ -53,8 +53,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     int POINT=1000,MIDDLE_ZOOM = 14,Max;
     private ListView LISTview,MYDIALOGlist;
     private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    private String userID,title,start,arrive,driver,taxinumber,phonenumber,ID,INDEX,TIME,DISTANCE;
-    private int pay,person,point,PayPerPerson;
+    private String userID,title,start,arrive,driver,taxinumber,phonenumber,ID,INDEX,TIME,DISTANCE,PAY;
+    private int person,PRICE;
     long now = System.currentTimeMillis ();
     Date date = new Date(now);
     SimpleDateFormat sdfNow = new SimpleDateFormat("MM/DD");
@@ -93,15 +93,15 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         arrive = positionDATA.getString("ARRIVE","");
         start = positionDATA.getString("START","");
         person = Integer.valueOf(positionDATA.getString("PERSON","1"));
-        pay = point = Integer.valueOf(positionDATA.getString("PRICE","1000"));
+        PRICE = Integer.valueOf(positionDATA.getString("PRICE","1000"));
         userID = positionDATA.getString("USERNAME","");
         ID = positionDATA.getString("ID","");
         TIME = positionDATA.getString("TIME","");
         DISTANCE = positionDATA.getString("DISTANCE","");
+        PAY = positionDATA.getString("PAY","");
 
         Max = Integer.valueOf(positionDATA.getString("MAX","3"));
 
-        PayPerPerson = point / Max;
         INDEXtext.setText(INDEX);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -156,7 +156,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
 
                 MYDIALOGlist.setAdapter(adapter);
                 TIMEtext.setText(TIME);
-                PRICEtext.setText(point/adapter.getCount()+"");
+                PRICEtext.setText(PAY + "원");
                 DISTANCEtext.setText(DISTANCE);
                 PERSONtext.setText(adapter.getCount() + "/" + Max);
 
@@ -172,7 +172,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                     @Override
                     public void onClick(View v) {
                         dialog.dismiss();
-                        PAYDIALOG(PayPerPerson);
+                        PAYDIALOG(Integer.parseInt(PAY));
                         PAYdialog.show();
                     }
                 });
@@ -238,7 +238,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 QUITDIALOG(m);
                 QUITdialog.show();
                 startActivity(intent);
-                finish();
+                finish(); //TODO : 오류 처리하기
             }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }

@@ -55,6 +55,7 @@ import java.util.Map;
 
 public class Join extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     public static Activity JoinActivity;
+    main main = new main();
     Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton;
     private DatabaseReference mDatabase;
     GoogleMap map;
@@ -83,6 +84,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     void init(){
         JoinActivity = Join.this;
+        main.chkGpsService();
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
         USERNAME = positionDATA.getString("USERNAME","");
@@ -367,7 +369,8 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 editor.putString("MAX",data_post.getMaxPerson()+"");
                                 editor.putString("TIME",TIMEtext.getText().toString());
                                 editor.putString("DISTANCE",DISTANCEtext.getText().toString());
-                                editor.putString("PRICE",PRICEtext.getText().toString());
+                                editor.putString("PAY",PRICEtext.getText().toString());
+                                editor.putString("PRICE",data_post.getPrice());
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),My_taxi.class);
@@ -395,7 +398,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
-                    PRICEtext.setText(data_post.getPoint());
+                    PRICEtext.setText(data_post.getPay());
                     DISTANCEtext.setText(data_post.getDistance());
                     SELECT_latitude = data_post.getArrive_Latitude();
                     SELECT_longitude = data_post.getArrive_Longitude();

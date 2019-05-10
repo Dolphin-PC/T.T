@@ -165,7 +165,7 @@ public class Join_list extends AppCompatActivity {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
-                    PRICEtext.setText(data_post.getPoint());
+                    PRICEtext.setText(data_post.getPrice());
                     DISTANCEtext.setText(data_post.getDistance().split(":")[1]);
                     SELECT_latitude = data_post.getArrive_Latitude();
                     SELECT_longitude = data_post.getArrive_Longitude();

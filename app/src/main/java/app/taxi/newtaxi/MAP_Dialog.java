@@ -92,7 +92,7 @@ public class MAP_Dialog extends DialogFragment implements OnMapReadyCallback {
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
-                    PRICEtext.setText(data_post.getPoint() + "P");
+                    PRICEtext.setText(data_post.getPrice() + "P");
                     DISTANCEtext.setText(data_post.getDistance().split(":")[1]);
                     ARRIVElatlng = new LatLng(37.566643, 126.978279);
                 }
