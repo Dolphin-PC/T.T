@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.Task;
 import java.util.List;
 
 public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
+    Selector S = Selector.Selector;
     GoogleMap map;
     GoogleApiClient googleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -82,6 +83,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
                 SharedPreferences.Editor editor = positionDATA.edit();
                 editor.putString(selector+"지",address);
                 editor.apply();
+                S.finish();
                 Intent intent1 = new Intent(getApplicationContext(),Selector.class);
                 startActivity(intent1);
                 finish();

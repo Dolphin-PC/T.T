@@ -146,7 +146,7 @@ public class Posting extends AppCompatActivity {
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=2;
                 editor.putString("MAX",String.valueOf(MaxPerson));
-                editor.apply();
+                POSTbutton.setEnabled(true);
             }
         });
         PERSONbutton2.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +160,7 @@ public class Posting extends AppCompatActivity {
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=3;
                 editor.putString("MAX",String.valueOf(MaxPerson));
-                editor.apply();
+                POSTbutton.setEnabled(true);
             }
         });
         PERSONbutton3.setOnClickListener(new View.OnClickListener() {
@@ -174,7 +174,7 @@ public class Posting extends AppCompatActivity {
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=4;
                 editor.putString("MAX",String.valueOf(MaxPerson));
-                editor.apply();
+                POSTbutton.setEnabled(true);
             }
         });
         TIMEcheck.setOnClickListener(new CheckBox.OnClickListener(){
@@ -185,7 +185,7 @@ public class Posting extends AppCompatActivity {
                     TIMEtext.setVisibility(View.VISIBLE);
                 }
                 else{
-                    TIMEtext.setVisibility(View.INVISIBLE);
+                    TIMEtext.setVisibility(View.INVISIBLE); //TODO : dialog -> 시간, 체크 안했을 경우, 현재 시각 저장
                 }
             }
         });
@@ -193,6 +193,7 @@ public class Posting extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 alertDialogBuilder.show();
+                editor.apply();
             }
         });
 
@@ -204,8 +205,5 @@ public class Posting extends AppCompatActivity {
         init();
         click();
         POSTbutton.setEnabled(false);
-        if(PERSONPRICEtext != null){
-            POSTbutton.setEnabled(true);
-        }
     }
 }

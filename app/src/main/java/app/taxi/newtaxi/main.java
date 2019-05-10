@@ -162,11 +162,8 @@ public class main extends AppCompatActivity {
                     JOINbutton.setVisibility(View.VISIBLE);
                 }
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
     void Update_user(int point,String phonenumber){
