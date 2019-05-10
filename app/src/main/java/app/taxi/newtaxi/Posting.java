@@ -77,7 +77,7 @@ public class Posting extends AppCompatActivity {
 
         editor.putString("PERSON",Integer.toString(1));
         editor.putString("PRICE",PRICE.split(" ")[3]);
-        editor.putString("TIME",TIMEtext.getText().toString());
+        editor.putString("TIME",TIME);
         editor.putString("INDEX",INDEX);
         editor.putString("??",INDEX);
         editor.putString("DISTANCE",DISTANCE.split(":")[1]);
