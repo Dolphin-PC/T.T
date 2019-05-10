@@ -358,7 +358,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 Map<String,Object> taskMap = new HashMap<String,Object>();
                                 taskMap.put("person",data_post.getPerson()+1);
                                 mDatabase.child(path).updateChildren(taskMap);
-                                Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,"남",USERID,false);
+                                Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,GENDER,USERID,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
                                 editor.putString("INDEX",marker.getTitle());
                                 editor.putString("??",INDEX);

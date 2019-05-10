@@ -59,6 +59,7 @@ public class Join_list extends AppCompatActivity {
         USERNAME = positionDATA.getString("USERNAME","");
         URL = positionDATA.getString("PROFILE","");
         USERID=positionDATA.getString("ID","");
+        GENDER = positionDATA.getString("GENDER","미정");
         LIST = findViewById(R.id.MARKERlist);
         adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_single_choice);
         LIST.setAdapter(adapter);
@@ -126,10 +127,16 @@ public class Join_list extends AppCompatActivity {
                                 Map<String,Object> taskMap = new HashMap<String,Object>();
                                 taskMap.put("person",data_post.getPerson()+1);
                                 mDatabase.child(path).updateChildren(taskMap);
-                                Data_Members data_members = new Data_Members(USERNAME,MARKERlist.get(index),URL,"남",USERID,false);
+                                Data_Members data_members = new Data_Members(USERNAME,MARKERlist.get(index),URL,GENDER,USERID,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
                                 editor.putString("INDEX",String.valueOf(index));
                                 editor.putString("??",String.valueOf(index));
+                                editor.putString("출발",data_post.getStart_Latitude()+","+data_post.getStart_Longitude());
+                                editor.putString("도착",data_post.getArrive_Latitude()+","+data_post.getArrive_Longitude());
+                                editor.putString("MAX",data_post.getMaxPerson()+"");
+                                editor.putString("TIME",TIMEtext.getText().toString());
+                                editor.putString("DISTANCE",DISTANCEtext.getText().toString());
+                                editor.putString("PRICE",PRICEtext.getText().toString());
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),My_taxi.class);
