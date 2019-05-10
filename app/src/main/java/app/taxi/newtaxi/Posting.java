@@ -65,34 +65,7 @@ public class Posting extends AppCompatActivity {
         ARRIVEtext.setText(ARRIVE);
         DISTANCEtext.setText(DISTANCE);
         PRICEtext.setText(PRICE);
-        dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                TIME = "예약 :" + hourOfDay + "시 "+ minute + "분";
-                TIMEtext.setText(TIME);
-            }
-        },Hour,Minute,false);
 
-        alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setTitle("정보 확인")
-                .setMessage("게시글을 등록하시겠습니까? \n" + TIMEtext.getText().toString())
-                .setPositiveButton("등록", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        POST();
-                        Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
-                        intent1.putExtra("INDEX",String.valueOf(INDEX));
-                        startActivity(intent1);
-                        selector.finish();
-                        finish();
-                    }
-                })
-                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
@@ -114,7 +87,6 @@ public class Posting extends AppCompatActivity {
         String Start_longitude = positionDATA.getString("출발","").split(",")[1];
         String Arrive_latitude = positionDATA.getString("도착","").split(",")[0];
         String Arrive_longitude = positionDATA.getString("도착","").split(",")[1];
-
 
         Data_Post dataPost = new Data_Post(userID //게시자의 이름
                 ,PRICE.split(" ")[3]
@@ -182,21 +154,20 @@ public class Posting extends AppCompatActivity {
             public void onClick(View v) {
                 if(TIMEcheck.isChecked()){
                     dialog.show();
-                    TIMEtext.setVisibility(View.VISIBLE);
                 }
                 else{
-                    TIMEtext.setVisibility(View.INVISIBLE); //TODO : dialog -> 시간, 체크 안했을 경우, 현재 시각 저장
+                    TIME = Hour+"시 " + Minute + "분";
                 }
             }
         });
         POSTbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                TIMEDIALOG();
                 alertDialogBuilder.show();
                 editor.apply();
             }
         });
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +175,39 @@ public class Posting extends AppCompatActivity {
         setContentView(R.layout.activity_posting);
         init();
         click();
+        dialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if(minute == 0)
+                    TIME = hourOfDay + "시";
+                else
+                    TIME = hourOfDay + "시 "+ minute + "분";
+                TIMEtext.setText(TIME);
+            }
+        },Hour,Minute,false);
+
         POSTbutton.setEnabled(false);
+    }
+    void TIMEDIALOG(){
+        alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setTitle("정보 확인")
+                .setMessage("게시글을 등록하시겠습니까? \n" + TIME)
+                .setPositiveButton("등록", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        POST();
+                        Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
+                        intent1.putExtra("INDEX",String.valueOf(INDEX));
+                        startActivity(intent1);
+                        selector.finish();
+                        finish();
+                    }
+                })
+                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
     }
 }
