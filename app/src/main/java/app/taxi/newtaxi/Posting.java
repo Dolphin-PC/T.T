@@ -35,7 +35,7 @@ public class Posting extends AppCompatActivity {
     String Time = sdfNow.format(date);
     int Hour = Integer.parseInt(Time.split(":")[0]);
     int Minute = Integer.parseInt(Time.split(":")[1]);
-    int MaxPerson;
+    int MaxPerson,PAY_up,PAY;
     TimePickerDialog dialog;
     AlertDialog.Builder alertDialogBuilder;
     void init(){
@@ -79,6 +79,7 @@ public class Posting extends AppCompatActivity {
         editor.putString("INDEX",INDEX);
         editor.putString("??",INDEX);
         editor.putString("DISTANCE",DISTANCE.split(":")[1]);
+        editor.putString("PAY",PAY+"");
         editor.apply();
 
         String userID = positionDATA.getString("USERNAME","");
@@ -107,14 +108,21 @@ public class Posting extends AppCompatActivity {
     void click(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         final SharedPreferences.Editor editor = positionDATA.edit();
+        PAY = Integer.valueOf(PRICE.split(" ")[3]);
         PERSONbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 PERSONbutton.setTextColor(Color.parseColor("#FF6600"));
                 PERSONbutton2.setTextColor(Color.parseColor("#000000"));
                 PERSONbutton3.setTextColor(Color.parseColor("#000000"));
-                PERSONPRICEtext.setText("개인 부담 금액은 " + (Integer.valueOf(PRICE.split(" ")[3])/2)
-                        + " 원 입니다.(2인 탑승)");
+                if((PAY / 2) % 100 == 0)
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY/2 + " 원 입니다.(2인 탑승)");
+                else {
+                    PAY_up = 100 - (PAY / 2 % 100);
+                    PAY += PAY_up;
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY / 2 + PAY_up
+                            + " 원 입니다.(2인 탑승)");
+                }
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=2;
                 editor.putString("MAX",String.valueOf(MaxPerson));
@@ -127,8 +135,14 @@ public class Posting extends AppCompatActivity {
                 PERSONbutton.setTextColor(Color.parseColor("#000000"));
                 PERSONbutton2.setTextColor(Color.parseColor("#FF6600"));
                 PERSONbutton3.setTextColor(Color.parseColor("#000000"));
-                PERSONPRICEtext.setText("개인 부담 금액은 " + (Integer.valueOf(PRICE.split(" ")[3])/3)
-                        + " 원 입니다.(3인 탑승)");
+                if((PAY / 3) % 100 == 0)
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY/3 + " 원 입니다.(3인 탑승)");
+                else {
+                    PAY_up = 100 - (PAY / 3 % 100);
+                    PAY += PAY_up;
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY / 3 + PAY_up
+                            + " 원 입니다.(3인 탑승)");
+                }
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=3;
                 editor.putString("MAX",String.valueOf(MaxPerson));
@@ -141,8 +155,14 @@ public class Posting extends AppCompatActivity {
                 PERSONbutton.setTextColor(Color.parseColor("#000000"));
                 PERSONbutton2.setTextColor(Color.parseColor("#000000"));
                 PERSONbutton3.setTextColor(Color.parseColor("#FF6600"));
-                PERSONPRICEtext.setText("개인 부담 금액은 " + (Integer.valueOf(PRICE.split(" ")[3])/4)
-                        + " 원 입니다.(4인 탑승)");
+                if((PAY / 4) % 100 == 0)
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY/4 + " 원 입니다.(4인 탑승)");
+                else {
+                    PAY_up = 100 - (PAY / 4 % 100);
+                    PAY += PAY_up;
+                    PERSONPRICEtext.setText("개인 부담 금액은 " + PAY / 4 + PAY_up
+                            + " 원 입니다.(4인 탑승)");
+                }
                 PERSONPRICEtext.setVisibility(View.VISIBLE);
                 MaxPerson=4;
                 editor.putString("MAX",String.valueOf(MaxPerson));
