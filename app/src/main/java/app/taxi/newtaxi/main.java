@@ -147,12 +147,12 @@ public class main extends AppCompatActivity {
                 if(start_btn.getText().toString().equals("노선 생성")) {
                     Intent intent1 = new Intent(getApplicationContext(), Selector.class);
                     intent1.putExtra("START", "");
-                    intent1.putExtra("ARRIVE", "");
+                    intent1.putExtra("ARRIVE", ""); //Selector <-> Map간의 intent를 위함.
                     startActivity(intent1);
                 }
                 else{
                     Intent intent1 = new Intent(getApplicationContext(),My_taxi.class);
-                    intent1.putExtra("INDEX",String.valueOf(INDEX));
+                    intent1.putExtra("INDEX",INDEX);
                     startActivity(intent1);
                 }
             }

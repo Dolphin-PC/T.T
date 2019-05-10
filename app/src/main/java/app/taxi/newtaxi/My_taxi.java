@@ -68,6 +68,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     Double MIDDLE_latitude,MIDDLE_longitude;
     Button INFObutton,OUTbutton,PAYbutton;
     Dialog dialog;
+    Query MEMBERSquery;
 
     void init() {
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
@@ -105,6 +106,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         INDEXtext.setText(INDEX);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        MEMBERSquery = mDatabase.child("post-members").orderByChild("userid").equalTo(ID);
+
         String start_lati = positionDATA.getString("출발", "").split(",")[0];
         String start_long = positionDATA.getString("출발", "").split(",")[1];
         STARTlatlng = new LatLng(Double.valueOf(start_lati), Double.valueOf(start_long));
@@ -154,6 +157,21 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 OUTbutton = dialog.findViewById(R.id.OUTbutton);
                 PAYbutton = dialog.findViewById(R.id.PAYbutton);
 
+                MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Data_Members data_members = snapshot.getValue(Data_Members.class);
+                            if (data_members.getJOIN()) {
+                                Log.e("JOIN", "왜");
+                                PAYbutton.setText("채팅 창으로");
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
+                });
+
                 MYDIALOGlist.setAdapter(adapter);
                 TIMEtext.setText(TIME);
                 PRICEtext.setText(PAY + "원");
@@ -171,9 +189,15 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 PAYbutton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        dialog.dismiss();
-                        PAYDIALOG(Integer.parseInt(PAY));
-                        PAYdialog.show();
+                        if(PAYbutton.getText().toString().equals("결제하기")) {
+                            dialog.dismiss();
+                            PAYDIALOG(Integer.parseInt(PAY));
+                            PAYdialog.show();
+                        }else{
+                            Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
+                            intent1.putExtra("INDEX",INDEX);
+                            startActivity(intent1);
+                        }
                     }
                 });
             }
@@ -202,32 +226,23 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                     Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
                     adapter.notifyDataSetChanged();
-                    if(data_members.getJOIN()){             //전체중 하나만 True일 경우, 통과함(ID를 통해 접근후, 해당ID의 JOIN이 True일 경우, 통과시키게 하기
-                                                            //모두 True일 경우, 넘어가게, 결제 했는지 안했는지 여부는 다이얼로그나 리스트뷰에서 확인가능
-                        Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
-                        intent1.putExtra("INDEX",INDEX);
-                        startActivity(intent1);
-                        finish();
-                    }
-                    else{
-                        query1.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
-                                    Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
-                                    Log.e("COUNT",adapter.getCount()+"");
-                                    if (adapter.getCount() == data_post.getMaxPerson()){
-                                        POINT = data_post.getPay()/data_post.getMaxPerson();
-                                        PAYDIALOG(data_post.getPay()/data_post.getMaxPerson());
-                                        //TODO : 다른 방식으로 결제하기 알리기(Toast, Background Message)
-                                    }
+                    query1.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
+                                Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
+                                Log.e("COUNT", adapter.getCount() + "");
+                                if (adapter.getCount() == data_post.getMaxPerson()) {
+                                    POINT = data_post.getPay() / data_post.getMaxPerson();
+                                    PAYDIALOG(data_post.getPay() / data_post.getMaxPerson());
+                                    //TODO : 다른 방식으로 결제하기 알리기(Toast, Background Message)
                                 }
                             }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) { }
-                        });
-                    }
-                }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) { }
+                    });
+            }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -238,13 +253,14 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 QUITDIALOG(m);
                 QUITdialog.show();
                 startActivity(intent);
-                finish(); //TODO : 오류 처리하기
+                finish(); //TODO : 오류 처리하기(다른 액티비티로 강제 전환 후, 다이얼로그 창 띄우기)
             }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
+
         Log.e("MAX",Max+"");
         Log.e("adapter",adapter.getCount()+"");
         if(Max == adapter.getCount())

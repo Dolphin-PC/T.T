@@ -56,11 +56,13 @@ TODO : 택시기사의 정보가 입력이 되면, Post_Call의 버튼을 '택�
 TODO : 카카오 로그인, 프로필 이미지가 없을시, PROFILE = "default"저장, 추후에 기본이미지 설정하기
 TODO : drawble21~24 : API 버전 차이에 따라 오류발생 처리
 
-TODO : My_taxi에서 바로 Post_call로 넘어가지 말고, 다이얼로그로 넘어가도록
+ My_taxi에서 바로 Post_call로 넘어가지 말고, 다이얼로그로 넘어가도록
 TODO : My_taxi에서 결제한 사람 정보 볼 수 있게,
 TODO : 모두 들어오거나 결제시에, 백그라운드 알림
 TODO : 이용내역 database 구축 및 이용내역을 볼 수 있는 액티비티 만들기(포인트 충전/차감, 이용일시, 절약 내용)
 
+TODO : bug report/출발지나 도착지가 null일 경우, 강제종료됨. null일 경우 해결 하기
+TODO : bug report/내 노선 보기 됐다 안됐다 함.
 
 
 // 현재 JsonTask API version 문제 있음
