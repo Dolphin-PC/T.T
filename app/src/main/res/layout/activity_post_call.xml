@@ -17,7 +17,8 @@
         android:divider="@android:color/white"
         android:footerDividersEnabled="true"
         android:headerDividersEnabled="true"
-        app:layout_constraintBottom_toTopOf="@+id/CALLbutton"
+        android:transcriptMode="alwaysScroll"
+        app:layout_constraintBottom_toTopOf="@+id/COMMENTbutton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,26 +39,13 @@
         android:layout_height="0dp"
         android:background="@drawable/ic_menu_send"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CALLbutton" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/MAPbutton"
         android:layout_width="50dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/CALLbutton" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <Button
-        android:id="@+id/CALLbutton"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:background="@android:color/holo_orange_dark"
-        android:text="택시 호출"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/COMMENTedit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

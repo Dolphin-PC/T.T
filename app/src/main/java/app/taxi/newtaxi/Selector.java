@@ -76,7 +76,7 @@ public class Selector extends AppCompatActivity {
         init();
         click();
         final SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
-        SharedPreferences.Editor editor = positionDATA.edit();
+
 
        /* startTEXT.setText(positionDATA.getString("START",""));
         arriveTEXT.setText(positionDATA.getString("ARRIVE",""));*/

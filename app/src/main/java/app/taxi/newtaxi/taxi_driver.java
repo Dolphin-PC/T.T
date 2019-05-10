@@ -29,7 +29,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
-//TODO : 택시기사 layout 확인/ 재구성 필요
+
 public class taxi_driver extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     static private FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();

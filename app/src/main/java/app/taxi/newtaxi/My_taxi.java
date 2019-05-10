@@ -2,6 +2,7 @@ package app.taxi.newtaxi;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,7 +64,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     int DAY = Integer.parseInt(Time.split("/")[1]);
     private final int stuck = 10;
     LatLng STARTlatlng,ARRIVElatlng,MIDDLElatlng;
-    AlertDialog.Builder PAYdialog, CHARGEdialog,OUTdialog;
+    AlertDialog.Builder PAYdialog, CHARGEdialog,OUTdialog,QUITdialog;
     My_taxiAdapter adapter;
     Double MIDDLE_latitude,MIDDLE_longitude;
     Button INFObutton,OUTbutton,PAYbutton;
@@ -74,7 +75,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         final SharedPreferences.Editor editor = positionDATA.edit();
 
         INFObutton = findViewById(R.id.INFObutton);
-        INDEXtext = findViewById(R.id.indexView);
+        INDEXtext = findViewById(R.id.INDEXtext);
         LISTview = findViewById(R.id.LISTview);
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -93,7 +94,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         arrive = positionDATA.getString("ARRIVE","");
         start = positionDATA.getString("START","");
         person = Integer.valueOf(positionDATA.getString("PERSON","1"));
-        pay = point = Integer.valueOf(positionDATA.getString("POINT","1000"));
+        pay = point = Integer.valueOf(positionDATA.getString("PRICE","1000"));
         userID = positionDATA.getString("USERNAME","");
         ID = positionDATA.getString("ID","");
         TIME = positionDATA.getString("TIME","");
@@ -156,9 +157,9 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
 
                 MYDIALOGlist.setAdapter(adapter);
                 TIMEtext.setText(TIME);
-                PRICEtext.setText(point+"");
+                PRICEtext.setText(point/adapter.getCount()+"");
                 DISTANCEtext.setText(DISTANCE);
-                PERSONtext.setText(person + "/" + Max);
+                PERSONtext.setText(adapter.getCount() + "/" + Max);
 
                 OUTbutton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -187,7 +188,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
 
         init();
         click();
-
         // Custom Adapter Instance 생성 및 ListView에 Adapter 지정
         adapter = new My_taxiAdapter();
         LISTview.setAdapter(adapter);
@@ -195,20 +195,23 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         /*LISTview.addHeaderView();*/
         Query query = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);
         final Query query1 = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
+
+        Log.e("index",INDEXtext.getText().toString());
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                     Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                     adapter.addItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
                     adapter.notifyDataSetChanged();
-                    if(data_members.getJOIN()){
+                    if(data_members.getJOIN()){             //전체중 하나만 True일 경우, 통과함(ID를 통해 접근후, 해당ID의 JOIN이 True일 경우, 통과시키게 하기
+                                                            //모두 True일 경우, 넘어가게, 결제 했는지 안했는지 여부는 다이얼로그나 리스트뷰에서 확인가능
                         Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
                         intent1.putExtra("INDEX",INDEX);
                         startActivity(intent1);
                         finish();
                     }
                     else{
-                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                        query1.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
@@ -217,18 +220,23 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                                     if (adapter.getCount() == data_post.getMaxPerson()){
                                         POINT = data_post.getPay()/data_post.getMaxPerson();
                                         PAYDIALOG(data_post.getPay()/data_post.getMaxPerson());
-                                        PAYdialog.show();
-                                        break;
-                                         //TODO : 동승자 수만큼 메시지 표시됨(오류 : 처음 입장시)
+                                        //TODO : 다른 방식으로 결제하기 알리기(Toast, Background Message)
                                     }
                                 }
                             }
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) { }
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Intent intent = new Intent(getApplicationContext(),main.class);
+                                startActivity(intent);
+                                main m = main.mainActivity;
+                                QUIT_PROCESS();
+                                QUITDIALOG(m);
+                                QUITdialog.show();
+                                finish();
+                            }
                         });
                     }
                 }
-
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -238,6 +246,10 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
+        Log.e("MAX",Max+"");
+        Log.e("adapter",adapter.getCount()+"");
+        if(Max == adapter.getCount())
+            PAYdialog.show();
     }
     private void PAYDIALOG(final int Point) {
         PAYdialog = new AlertDialog.Builder(this);
@@ -261,7 +273,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             else {
                                 POINTmap.put("point", user.getPoint() - Point);
                                 mDatabase.child(path).updateChildren(POINTmap);
-                                Query query1 = mDatabase.child("post-members").orderByChild("index").equalTo(INDEXtext.getText().toString().split(" ")[0]);
+                                Query query1 = mDatabase.child("post-members").orderByChild("index").equalTo(INDEXtext.getText().toString().split(" ")[0]);     //INDEX를 통해 JOIN을 바꾸면, 전체가 바뀜(ID를 통해 접근을 해서 해당 ID만 바꾸기)
                                 query1.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -306,11 +318,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     void OUTDIALOG(){
         OUTdialog = new AlertDialog.Builder(this);
         OUTdialog.setTitle("퇴장");
-        final Query POSTquery = mDatabase.child("post").orderByChild("index").equalTo(INDEXtext.getText().toString());
-        final Query MEMBERSquery = mDatabase.child("post-members").orderByChild("userid").equalTo(ID);
-        final Query MESSAGEquery_1 = mDatabase.child("post-message").orderByChild("index").equalTo(ID); //방장이 나갔을때, post-message전체 삭제
-        final Query MESSAGEquery_2 = mDatabase.child("post-message").orderByChild("id").equalTo(ID);
-
         if(INDEXtext.getText().toString() == ID)
             OUTdialog.setMessage("노선에서 나가시겠습니까?\n(팀원 전체 퇴장됩니다.)");
         else
@@ -324,73 +331,21 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         OUTdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                POSTquery.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Data_Post data_post = snapshot.getValue(Data_Post.class);
-                            if (ID.equals(data_post.getIndex())){           //방장일 때, 방 전체 파기(post/post-members/post-message)
-                                Log.d("post","방장일 때");
-                                mDatabase.child("post").child(snapshot.getKey()).removeValue();
-                                MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                            mDatabase.child("post-members").child(snapshot1.getKey()).removeValue();
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
-                                });
-                                MESSAGEquery_1.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                            mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
-                                });
-                            }
-                            else{                                           //참가한 인원일경우, person-1, post-members 파기
-                                Log.d("post","참가일 때");
-                                String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
-                                Map<String,Object> taskMap = new HashMap<String,Object>();
-                                taskMap.put("person",data_post.getPerson()-1);
-                                mDatabase.child(path).updateChildren(taskMap);
-                                MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                            mDatabase.child("post-members").child(snapshot1.getKey()).removeValue();
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
-                                });
-                                MESSAGEquery_2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
-                                            mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
-                                        }
-                                    }
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) { }
-                                });
-                            }
-
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) { }
-                });     //post 갱신,post-members삭제
-                DATA_REMOVE();
-
+                QUIT_PROCESS();
                 Intent intent = new Intent(getApplicationContext(),main.class);
                 startActivity(intent);
                 finish();
+            }
+        });
+    }
+    void QUITDIALOG(Context context){
+        QUITdialog = new AlertDialog.Builder(context);
+        QUITdialog.setTitle("퇴장");
+        QUITdialog.setMessage("방장님이 퇴장하여,\n전체퇴장 처리되었습니다.");
+        QUITdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onDestroy();
             }
         });
     }
@@ -414,7 +369,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         marker = googleMap.addMarker(new MarkerOptions().position(ARRIVElatlng).title("도착 위치").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
     }
 
-    void DATA_REMOVE(){
+    void QUIT_PROCESS(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
         editor.remove("DISTANCE");
@@ -427,5 +382,72 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         editor.remove("출발지");
         editor.remove("INDEX");
         editor.apply();
+        final Query POSTquery = mDatabase.child("post").orderByChild("index").equalTo(INDEXtext.getText().toString());
+        final Query MEMBERSquery = mDatabase.child("post-members").orderByChild("userid").equalTo(ID);
+        final Query MESSAGEquery_1 = mDatabase.child("post-message").orderByChild("index").equalTo(ID); //방장이 나갔을때, post-message전체 삭제
+        final Query MESSAGEquery_2 = mDatabase.child("post-message").orderByChild("id").equalTo(ID);
+        POSTquery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Data_Post data_post = snapshot.getValue(Data_Post.class);
+                    if (ID.equals(data_post.getIndex())){           //방장일 때, 방 전체 파기(post/post-members/post-message)
+                        Log.d("post","방장일 때");
+                        mDatabase.child("post").child(snapshot.getKey()).removeValue();
+                        MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                    mDatabase.child("post-members").child(snapshot1.getKey()).removeValue();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        });
+                        MESSAGEquery_1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                    mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        });
+                    }
+                    else{                                           //참가한 인원일경우, person-1, post-members 파기
+                        Log.d("post","참가일 때");
+                        String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
+                        Map<String,Object> taskMap = new HashMap<String,Object>();
+                        taskMap.put("person",data_post.getPerson()-1);
+                        mDatabase.child(path).updateChildren(taskMap);
+                        MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                    mDatabase.child("post-members").child(snapshot1.getKey()).removeValue();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        });
+                        MESSAGEquery_2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
+                                    mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
+                        });
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
     }
+
 }

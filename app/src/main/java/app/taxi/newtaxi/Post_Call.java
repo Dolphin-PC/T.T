@@ -22,6 +22,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.ChildEventListener;
@@ -35,7 +36,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-//TODO : 댓글 창 구분선
+
 public class Post_Call extends AppCompatActivity {
     ArrayList<Data_message> list = new ArrayList<>();
     DatabaseReference mDatabaseMSG,mDatabase;
@@ -59,7 +60,6 @@ public class Post_Call extends AppCompatActivity {
 
         COMMENTbutton = findViewById(R.id.COMMENTbutton);
         MAPbutton = findViewById(R.id.MAPbutton);
-        CALLbutton = findViewById(R.id.CALLbutton);
         COMMENTedit = findViewById(R.id.COMMENTedit);
         COMMENTlist = findViewById(R.id.MESSAGElist);
 
@@ -90,28 +90,6 @@ public class Post_Call extends AppCompatActivity {
                 }
             }
         });
-        CALLbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                Data_Post data_post = snapshot.getValue(Data_Post.class);
-                                Log.e("INDEX", data_post.getIndex());
-                                mDatabase.child("taxi-call").push().setValue(data_post);
-                                Toast.makeText(getApplicationContext(),"택시를 호출했습니다.",Toast.LENGTH_SHORT).show();
-                            }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-            }
-        });
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +98,7 @@ public class Post_Call extends AppCompatActivity {
         init();
 
         final ChatAdapter adapter = new ChatAdapter(getApplicationContext(), R.layout.comment_listview,list,ID);
-        COMMENTlist.setAdapter(adapter);//TODO : 마지막 채팅이 보이게끔 화면 내림.
+        COMMENTlist.setAdapter(adapter);//TODO : 마지막 채팅이 보이게끔 화면 내리기
         COMMENTedit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -168,8 +146,41 @@ public class Post_Call extends AppCompatActivity {
         PRICEtext = dialog.findViewById(R.id.PRICEtext);
         DISTANCEtext = dialog.findViewById(R.id.DISTANCEtext);
         JOINbutton = dialog.findViewById(R.id.JOINbutton);
-        JOINbutton.setVisibility(View.INVISIBLE);
 
+        Query taxi_call_query = mDatabase.child("taxi-call").orderByChild("index").equalTo(INDEX);
+        taxi_call_query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildren().iterator().hasNext()) {
+                    JOINbutton.setText("이미 택시를 호출했습니다.");
+                    JOINbutton.setEnabled(false);
+                }else{
+                    JOINbutton.setText("택시 호출");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+        JOINbutton.setOnClickListener(new View.OnClickListener() {
+                                          @Override
+                                          public void onClick(View v) {
+                                              Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
+                                              query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                  @Override
+                                                  public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                      for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                                          Data_Post data_post = snapshot.getValue(Data_Post.class);
+                                                          Log.e("INDEX", data_post.getIndex());
+                                                          mDatabase.child("taxi-call").push().setValue(data_post);
+                                                          Toast.makeText(getApplicationContext(), "택시를 호출했습니다.", Toast.LENGTH_SHORT).show();
+                                                          dialog.dismiss();
+                                                      }
+                                                  }
+                                                  @Override
+                                                  public void onCancelled(@NonNull DatabaseError databaseError) { }
+                                              });
+                                          }
+                                      });
         Query query1 = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
         query1.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -184,10 +195,8 @@ public class Post_Call extends AppCompatActivity {
                 }
             }
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-
         try{
             Thread.sleep(500);     // DB에서 받아오는 시간 지연 -> 로딩(원돌아가는거)로 변경하기
         }catch (Exception e){
@@ -204,10 +213,11 @@ public class Post_Call extends AppCompatActivity {
                 googleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title("출발 위치"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                CameraPosition position = new CameraPosition.Builder().target(latLng).zoom(15).build();
+                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
             }
         });
     }
 }
+

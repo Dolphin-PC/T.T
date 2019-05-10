@@ -360,7 +360,9 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 editor.putString("출발",data_post.getStart_Latitude()+","+data_post.getStart_Longitude());
                                 editor.putString("도착",data_post.getArrive_Latitude()+","+data_post.getArrive_Longitude());
                                 editor.putString("MAX",data_post.getMaxPerson()+"");
-                                editor.putString("TIME",data_post.getTime());
+                                editor.putString("TIME",TIMEtext.getText().toString());
+                                editor.putString("DISTANCE",DISTANCEtext.getText().toString());
+                                editor.putString("PRICE",PRICEtext.getText().toString());
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getApplicationContext(),My_taxi.class);
@@ -389,7 +391,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
                     PRICEtext.setText(data_post.getPoint());
-                    DISTANCEtext.setText(data_post.getDistance().split(":")[1]);
+                    DISTANCEtext.setText(data_post.getDistance());
                     SELECT_latitude = data_post.getArrive_Latitude();
                     SELECT_longitude = data_post.getArrive_Longitude();
                 }
@@ -400,7 +402,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         });
 
         try{
-            Thread.sleep(1000);     // DB에서 받아오는 시간 지연 -> 로딩(원돌아가는거)로 변경하기
+            Thread.sleep(500);     // DB에서 받아오는 시간 지연 -> 로딩(원돌아가는거)로 변경하기
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -415,9 +417,9 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                 googleMap.addMarker(new MarkerOptions()
                         .position(latLng)
                         .title("도착 위치"));
-                googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                CameraPosition position = new CameraPosition.Builder().target(latLng).zoom(DEFAULT_ZOOM).build();
+                googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(position));
                 googleMap.getUiSettings().setZoomControlsEnabled(true);
-                googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
             }
         });
         return true;

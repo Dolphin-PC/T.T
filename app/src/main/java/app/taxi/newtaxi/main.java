@@ -155,10 +155,8 @@ public class main extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getChildren().iterator().hasNext()){
-                    Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
                         start_btn.setText("내 노선 보기");
                         JOINbutton.setVisibility(View.INVISIBLE);
-
                 }else{
                     start_btn.setText("노선 생성");
                     JOINbutton.setVisibility(View.VISIBLE);
