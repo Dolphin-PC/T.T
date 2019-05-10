@@ -196,6 +196,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                         }else{
                             Intent intent1 = new Intent(getApplicationContext(),Post_Call.class);
                             intent1.putExtra("INDEX",INDEX);
+                            dialog.dismiss();
                             startActivity(intent1);
                         }
                     }
@@ -249,11 +250,10 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Intent intent = new Intent(getApplicationContext(),main.class);
                 main m = main.mainActivity;
-                QUIT_PROCESS();
-                QUITDIALOG(m);
-                QUITdialog.show();
+                QUIT_PROCESS_reference();
+
                 startActivity(intent);
-                finish(); //TODO : 오류 처리하기(다른 액티비티로 강제 전환 후, 다이얼로그 창 띄우기)
+                finish(); //TODO : 오류 처리하기(다른 액티비티로 강제 전환 후, 다이얼로그 창 띄우기) (Broadcast Receive) 이용하기
             }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
@@ -272,7 +272,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         PAYdialog.setMessage(Point + "P : 결제 하시겠습니까?\n(결제 후, 택시가 호출됩니다.)");
         PAYdialog.setPositiveButton("결제", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(final DialogInterface dialog, int which) {
                 final Query query = mDatabase.child("user").orderByChild("email").equalTo(ID);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -305,8 +305,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                                 });
                                 Intent intent = new Intent(getApplicationContext(),Post_Call.class);
                                 intent.putExtra("INDEX",INDEX);
+                                dialog.dismiss();
                                 startActivity(intent);
-                                finish();
                             }
                         }
                     }
@@ -346,7 +346,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         OUTdialog.setPositiveButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                QUIT_PROCESS();
+                QUIT_PROCESS_reference();
+                QUIT_PROCESS_database();
                 Intent intent = new Intent(getApplicationContext(),main.class);
                 startActivity(intent);
                 finish();
@@ -384,8 +385,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         marker = googleMap.addMarker(new MarkerOptions().position(ARRIVElatlng).title("도착 위치").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
     }
 
-    void QUIT_PROCESS(){
-        SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+    void QUIT_PROCESS_reference() {
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
         editor.remove("DISTANCE");
         editor.remove("PERSON");
@@ -397,6 +398,8 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         editor.remove("출발지");
         editor.remove("INDEX");
         editor.apply();
+    }
+    void QUIT_PROCESS_database(){
         final Query POSTquery = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
         final Query MEMBERSquery_1 = mDatabase.child("post-members").orderByChild("index").equalTo(ID);  //방장이 나갔을때, post-members전체 삭제
         final Query MEMBERSquery_2 = mDatabase.child("post-members").orderByChild("userid").equalTo(ID); //참가인원이 나갔을 때,
