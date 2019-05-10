@@ -1,6 +1,7 @@
 package app.taxi.newtaxi;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -33,7 +34,7 @@ public class MAP_Dialog extends DialogFragment implements OnMapReadyCallback {
 
     private Context context;
     GoogleMap googleMap;
-    TextView TIMEtext,PRICEtext,DISTANCEtext;
+    TextView TIMEtext,PRICEtext,DISTANCEtext,OUTtext;
     Button JOINbutton;
     String USERNAME,USERID,INDEX,URL;
     LatLng ARRIVElatlng;
@@ -51,13 +52,13 @@ public class MAP_Dialog extends DialogFragment implements OnMapReadyCallback {
         TIMEtext = view.findViewById(R.id.TIMEtext);
         PRICEtext = view.findViewById(R.id.PRICEtext);
         DISTANCEtext = view.findViewById(R.id.DISTANCEtext);
+        OUTtext = view.findViewById(R.id.OUTtext);
         JOINbutton = view.findViewById(R.id.JOINbutton);
 
         LATLNG();
         JOINbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -73,14 +74,9 @@ public class MAP_Dialog extends DialogFragment implements OnMapReadyCallback {
                             }
                         }
                     }
-
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
                 });
-
-
             }
         });
         return view;

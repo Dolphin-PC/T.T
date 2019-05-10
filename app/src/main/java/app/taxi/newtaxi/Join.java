@@ -47,6 +47,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -331,10 +333,13 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.map_dialog);
         dialog.show();
+        TextView OUTtext;
         mMapView = dialog.findViewById(R.id.MAP_Dialog);
         TIMEtext = dialog.findViewById(R.id.TIMEtext);
         PRICEtext = dialog.findViewById(R.id.PRICEtext);
         DISTANCEtext = dialog.findViewById(R.id.DISTANCEtext);
+        OUTtext = dialog.findViewById(R.id.OUTtext);
+        OUTtext.setVisibility(View.INVISIBLE);
         JOINbutton = dialog.findViewById(R.id.JOINbutton);
         JOINbutton.setOnClickListener(new View.OnClickListener() {
             @Override

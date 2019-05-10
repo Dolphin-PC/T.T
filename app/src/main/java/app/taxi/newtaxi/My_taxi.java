@@ -41,7 +41,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-//TODO : 1번째 상세정보 클릭시, 게시판의 정보와 결제 버튼 구현(다이얼로그)
 // 나가기 버튼(방장은 나갈때, 다이얼로그 표시)
 
 public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
@@ -225,22 +224,22 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                                 }
                             }
                             @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                                Intent intent = new Intent(getApplicationContext(),main.class);
-                                startActivity(intent);
-                                main m = main.mainActivity;
-                                QUIT_PROCESS();
-                                QUITDIALOG(m);
-                                QUITdialog.show();
-                                finish();
-                            }
+                            public void onCancelled(@NonNull DatabaseError databaseError) { }
                         });
                     }
                 }
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) { }
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Intent intent = new Intent(getApplicationContext(),main.class);
+                main m = main.mainActivity;
+                QUIT_PROCESS();
+                QUITDIALOG(m);
+                QUITdialog.show();
+                startActivity(intent);
+                finish();
+            }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
@@ -382,10 +381,11 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         editor.remove("출발지");
         editor.remove("INDEX");
         editor.apply();
-        final Query POSTquery = mDatabase.child("post").orderByChild("index").equalTo(INDEXtext.getText().toString());
-        final Query MEMBERSquery = mDatabase.child("post-members").orderByChild("userid").equalTo(ID);
+        final Query POSTquery = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
+        final Query MEMBERSquery_1 = mDatabase.child("post-members").orderByChild("index").equalTo(ID);  //방장이 나갔을때, post-members전체 삭제
+        final Query MEMBERSquery_2 = mDatabase.child("post-members").orderByChild("userid").equalTo(ID); //참가인원이 나갔을 때,
         final Query MESSAGEquery_1 = mDatabase.child("post-message").orderByChild("index").equalTo(ID); //방장이 나갔을때, post-message전체 삭제
-        final Query MESSAGEquery_2 = mDatabase.child("post-message").orderByChild("id").equalTo(ID);
+        final Query MESSAGEquery_2 = mDatabase.child("post-message").orderByChild("id").equalTo(ID);    //참가인원이 나갔을 때,
         POSTquery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -394,7 +394,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                     if (ID.equals(data_post.getIndex())){           //방장일 때, 방 전체 파기(post/post-members/post-message)
                         Log.d("post","방장일 때");
                         mDatabase.child("post").child(snapshot.getKey()).removeValue();
-                        MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        MEMBERSquery_1.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
@@ -421,7 +421,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                         Map<String,Object> taskMap = new HashMap<String,Object>();
                         taskMap.put("person",data_post.getPerson()-1);
                         mDatabase.child(path).updateChildren(taskMap);
-                        MEMBERSquery.addListenerForSingleValueEvent(new ValueEventListener() {
+                        MEMBERSquery_2.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for(DataSnapshot snapshot1 : dataSnapshot.getChildren()){
@@ -442,7 +442,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                             public void onCancelled(@NonNull DatabaseError databaseError) { }
                         });
                     }
-
                 }
             }
             @Override
