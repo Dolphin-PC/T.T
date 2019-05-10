@@ -465,4 +465,9 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        OUTDIALOG();
+        OUTdialog.show();
+    }
 }

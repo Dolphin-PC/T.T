@@ -62,7 +62,7 @@ TODO : 모두 들어오거나 결제시에, 백그라운드 알림
 TODO : 이용내역 database 구축 및 이용내역을 볼 수 있는 액티비티 만들기(포인트 충전/차감, 이용일시, 절약 내용)
 
 TODO : bug report/출발지나 도착지가 null일 경우, 강제종료됨. null일 경우 해결 하기
-TODO : bug report/내 노선 보기 됐다 안됐다 함.
+bug report/내 노선 보기 됐다 안됐다 함.
 
 
 // 현재 JsonTask API version 문제 있음
