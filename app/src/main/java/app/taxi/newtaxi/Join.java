@@ -84,7 +84,6 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
 
     void init(){
         JoinActivity = Join.this;
-        main.chkGpsService();
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
         USERNAME = positionDATA.getString("USERNAME","");
