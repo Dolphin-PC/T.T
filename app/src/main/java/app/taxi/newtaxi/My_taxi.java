@@ -69,7 +69,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
     Button INFObutton,OUTbutton,PAYbutton;
     Dialog dialog;
     Query MEMBERSquery;
-
+    QuitReceiver quitReceiver;
     void init() {
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         final SharedPreferences.Editor editor = positionDATA.edit();
@@ -142,6 +142,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
         } else if (MIDDLE_latitude <= 0.3456 || MIDDLE_longitude <= 0.3456) {
             MIDDLE_ZOOM = 9;
         }
+        quitReceiver = new QuitReceiver();
     }
     void click(){
         INFObutton.setOnClickListener(new View.OnClickListener() {
@@ -248,12 +249,10 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-                Intent intent = new Intent(getApplicationContext(),main.class);
-                main m = main.mainActivity;
-                QUIT_PROCESS_reference();
-
-                startActivity(intent);
-                finish(); //TODO : 오류 처리하기(다른 액티비티로 강제 전환 후, 다이얼로그 창 띄우기) (Broadcast Receive) 이용하기
+                Intent QUITintent = new Intent(getApplicationContext(),main.class);
+                QUITintent.putExtra("MESSAGE","방장이 퇴장하여 퇴장처리 되었습니다.");
+                startActivity(QUITintent);
+                finish();
             }
             @Override
             public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) { }

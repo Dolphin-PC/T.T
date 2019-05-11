@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -171,6 +172,11 @@ public class main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Intent QUITintent = getIntent();
+        if(!QUITintent.equals("")){
+            String QUITmessage = QUITintent.getExtras().getString("MESSAGE");
+            Toast.makeText(getApplicationContext(),QUITmessage,Toast.LENGTH_SHORT).show();
+        }
         init();
         Setting();
         click();

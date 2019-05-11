@@ -22,10 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <receiver
-            android:name=".QuitReceiver"
-            android:enabled="true"
-            android:exported="true"></receiver>
 
         <activity android:name=".Join_list" />
         <activity android:name=".Post_Call" />
