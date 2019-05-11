@@ -57,9 +57,24 @@ TODO : 카카오 로그인, 프로필 이미지가 없을시, PROFILE = "default
 TODO : drawble21~24 : API 버전 차이에 따라 오류발생 처리
 
  My_taxi에서 바로 Post_call로 넘어가지 말고, 다이얼로그로 넘어가도록
-TODO : My_taxi에서 결제한 사람 정보 볼 수 있게,
-TODO : 모두 들어오거나 결제시에, 백그라운드 알림
+TODO : 결제한 사람 확인 가능하도록( 1.채팅창에 결제한 사람 정보 입력 / 2. 다같이 결제하기)
+TODO : 모두 들어오거나 결제시에, 백그라운드 알림(Database의 JOIN 상태 변화시, 해당 username 표시 / person == maxperson시, 표시)
+
 TODO : 이용내역 database 구축 및 이용내역을 볼 수 있는 액티비티 만들기(포인트 충전/차감, 이용일시, 절약 내용)
+
+report
+                -charge
+                    -id
+                        - time
+                        - point
+                - taxi
+                    -taxi_id
+                        - 시간(시/분)
+                        - price
+                        - id
+                            - 포인트 이용(차감 내역)
+                            - 절약 내용(기존 택시비 - 내가 낸 택시비)
+
 
 bug report/출발지나 도착지가 null일 경우, 강제종료됨. null일 경우 해결 하기
 bug report/내 노선 보기 됐다 안됐다 함.

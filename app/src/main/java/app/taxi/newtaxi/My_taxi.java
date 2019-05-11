@@ -349,6 +349,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
                 QUIT_PROCESS_reference();
                 QUIT_PROCESS_database();
                 Intent intent = new Intent(getApplicationContext(),main.class);
+                intent.putExtra("MESSAGE","");
                 startActivity(intent);
                 finish();
             }

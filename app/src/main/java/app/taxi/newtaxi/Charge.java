@@ -35,14 +35,18 @@ import kr.co.bootpay.model.BootUser;
 public class Charge extends AppCompatActivity {
     long now = System.currentTimeMillis ();
     Date date = new Date(now);
-    SimpleDateFormat sdfNow = new SimpleDateFormat("MM/DD");
+    SimpleDateFormat sdfNow = new SimpleDateFormat("YYYY/MM/dd HH:mm:ss");
     String Time = sdfNow.format(date);
-    int MONTH = Integer.parseInt(Time.split("/")[0]);
-    int DAY = Integer.parseInt(Time.split("/")[1]);
+    int YEAR = Integer.parseInt(Time.split("/")[0]);
+    int MONTH = Integer.parseInt(Time.split("/")[1]);
+    int DAY = Integer.parseInt(Time.split("/")[2].split(" ")[0]);
+    int HOUR = Integer.parseInt(Time.split(" ")[1].split(":")[0]);
+    int MINUTE = Integer.parseInt(Time.split(" ")[1].split(":")[1]);
+
     private final int stuck = 10;
     Button B1,B2,B3,B4,B5;
     TextView point_textview;
-    String userID,USERNAME,PROFILEURL,PHONENUMBER;
+    String ID,USERNAME,PROFILEURL,PHONENUMBER;
     AlertDialog.Builder alertDialogBuilder;
     private DatabaseReference mDatabase;
     void init(){
@@ -59,7 +63,7 @@ public class Charge extends AppCompatActivity {
         point_textview.setText(intent.getExtras().getString("POINT"));
 
         USERNAME = positionDATA.getString("USERNAME","");
-        userID = positionDATA.getString("ID","");
+        ID = positionDATA.getString("ID","");
         PROFILEURL = positionDATA.getString("PROFILE","");
         PHONENUMBER = positionDATA.getString("PHONENUMBER","");
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -135,13 +139,13 @@ public class Charge extends AppCompatActivity {
         final SharedPreferences.Editor editor = positionDATA.edit();
         String phonenumber = positionDATA.getString("PHONENUMBER","010-1234-5678");
         String orderID = positionDATA.getString("ID","") + MONTH + DAY;
-        BootUser bootUser = new BootUser().setPhone(phonenumber).setUsername(userID);
+        BootUser bootUser = new BootUser().setPhone(phonenumber).setUsername(ID);
         Bootpay.init(getFragmentManager())
                 .setApplicationId("5c5170df396fa67f8155acbe") // 해당 프로젝트(안드로이드)의 application id 값
                 .setPG(PG.KAKAO) // 결제할 PG 사
                 .setBootUser(bootUser)
                 .setMethod(Method.CARD) // 결제수단
-                .setName("택시 비용") // 결제할 상품명
+                .setName("T.T 포인트 결제") // 결제할 상품명
                 .setOrderId(orderID) // 결제 고유번호
                 .setPrice(Price) // 결제할 금액
                 .onConfirm(new ConfirmListener() { // 결제가 진행되기 바로 직전 호출되는 함수로, 주로 재고처리 등의 로직이 수행
@@ -191,14 +195,22 @@ public class Charge extends AppCompatActivity {
         int total;
         total = Integer.valueOf(point_textview.getText().toString()) + Price;
         Update_user(total);
+        REPORT_POINT(Price);
 
         Intent intent = new Intent(getApplicationContext(),main.class);
+        intent.putExtra("MESSAGE","포인트 충전이 완료되었습니다.");
         startActivity(intent);
         finish();
     }
     void Update_user(int point){
         Map<String, Object> taskMap = new HashMap<String, Object>();
-        taskMap.put(userID,new User(USERNAME,"",userID,PHONENUMBER,point,PROFILEURL));
+        taskMap.put(ID,new User(USERNAME,"",ID,PHONENUMBER,point,PROFILEURL));
         mDatabase.child("user").updateChildren(taskMap);
+    }
+    void REPORT_POINT(int point){
+        Data_report_charge data_report_charge = new Data_report_charge(Time,point+"");
+        mDatabase.child("report")
+                .child("charge")
+                .child(ID).push().setValue(data_report_charge);
     }
 }
