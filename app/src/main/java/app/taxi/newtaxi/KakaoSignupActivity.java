@@ -76,13 +76,14 @@ public class KakaoSignupActivity extends Activity{
             editor.putString("PROFILE",profile);
         editor.putString("GENDER","남자");
         editor.apply();
-
+        intent.putExtra("MESSAGE","");
         startActivity(intent);
         finish();
     }
     protected void redirectLoginActivity() {
         final Intent intent = new Intent(this, Login.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        intent.putExtra("MESSAGE","");
         startActivity(intent);
         finish();
     }

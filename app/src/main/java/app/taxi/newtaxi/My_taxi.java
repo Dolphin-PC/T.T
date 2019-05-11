@@ -251,6 +251,7 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                 Intent QUITintent = new Intent(getApplicationContext(),main.class);
                 QUITintent.putExtra("MESSAGE","방장이 퇴장하여 퇴장처리 되었습니다.");
+                QUIT_PROCESS_reference();
                 startActivity(QUITintent);
                 finish();
             }
@@ -364,7 +365,6 @@ public class My_taxi extends AppCompatActivity implements OnMapReadyCallback,Goo
             }
         });
     }
-    //TODO : 방장 퇴장시, 팀원 데이터베이스 삭제 및 액티비티전환(DB 상태받아와서, 메시지도 띄우기)
     @Override
     public void onConnected(@Nullable Bundle bundle) { }
     @Override

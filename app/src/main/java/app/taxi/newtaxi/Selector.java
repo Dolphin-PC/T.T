@@ -77,18 +77,16 @@ public class Selector extends AppCompatActivity {
         click();
         final SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
 
-
-       /* startTEXT.setText(positionDATA.getString("START",""));
-        arriveTEXT.setText(positionDATA.getString("ARRIVE",""));*/
-
         startTEXT.setText(positionDATA.getString("출발지",""));
         arriveTEXT.setText(positionDATA.getString("도착지",""));
+        START = positionDATA.getString("출발","");
+        ARRIVE = positionDATA.getString("도착","");
 
         URL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
-        URL += startTEXT.getText().toString();
-        URL += "&destinations=" + arriveTEXT.getText().toString();
+        URL += START;
+        URL += "&destinations=" + ARRIVE;
         URL += "&mode=transit&key=AIzaSyBDB-w0MZ3KAbm82L7q5iJ3rLfeNB0Z6Zs";
-        if(startTEXT.getText().toString().length()>=1 && arriveTEXT.getText().toString().length()>=1) {
+        if(START.length()>=1 && ARRIVE.length()>=1) {
             new JsonTask().execute(URL);
         }
     }

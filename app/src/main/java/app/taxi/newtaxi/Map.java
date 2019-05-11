@@ -268,6 +268,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
                 if (addressList != null && addressList.size() > 0) {
                     Address address = addressList.get(0);
                     addressText = address.getAdminArea() + " " + (address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : address.getLocality()) + " ";
+                    addressText.replace("null","");
 
                     String txt = address.getSubLocality();
                     if (txt != null) {

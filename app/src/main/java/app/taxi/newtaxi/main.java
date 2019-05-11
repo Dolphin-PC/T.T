@@ -86,6 +86,11 @@ public class main extends AppCompatActivity {
         }
     }
     void init(){
+        Intent QUITintent = getIntent();
+        String QUITmessage = QUITintent.getExtras().getString("MESSAGE");
+        if(!QUITmessage.equals(""))
+            Toast.makeText(getApplicationContext(),QUITmessage,Toast.LENGTH_SHORT).show();
+
         GPSgrant=chkGpsService();
         if(!GPSgrant)
             chkGpsService();
@@ -172,11 +177,7 @@ public class main extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent QUITintent = getIntent();
-        if(!QUITintent.equals("")){
-            String QUITmessage = QUITintent.getExtras().getString("MESSAGE");
-            Toast.makeText(getApplicationContext(),QUITmessage,Toast.LENGTH_SHORT).show();
-        }
+
         init();
         Setting();
         click();
