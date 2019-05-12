@@ -1,6 +1,7 @@
 package app.taxi.newtaxi;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,34 +59,27 @@ public class Login extends AppCompatActivity  {
     private DatabaseReference mDatabase;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mUserInfo;
+    ConstraintLayout LAY1;
+    Button emailLogin,registerButton;
+    CheckBox IDcheck;
 
     void init(){
         getAppKeyHash();
         emailText = findViewById(R.id.emailText);
         pwText = findViewById(R.id.pwText);
+        LAY1 = findViewById(R.id.LAY1);
+        emailLogin = findViewById(R.id.emailButton);
+        KakaoLoginbtn = findViewById(R.id.btn_kakao_login);
+        registerButton = findViewById(R.id.registerButton);
+        taxiButton = findViewById(R.id.taxiloginButton);
+        IDcheck = findViewById(R.id.IDcheck);
+
     }
     void Auth(){
         mAuth = FirebaseAuth.getInstance();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
-        init();
-        Auth();
-        backPressCloseHandler = new BackPressCloseHandler(this);
-        callback = new SessionCallback();
-        Session.getCurrentSession().addCallback(callback);
-        UserManagement.requestLogout(new LogoutResponseCallback() {
-            @Override
-            public void onCompleteLogout() {
-                //카카오톡 로그아웃 성공 후 하고싶은 내용 코딩 ~
-            }
-        });
-
-
-        ConstraintLayout LAY1 = findViewById(R.id.LAY1);
+    void click(){
         LAY1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,18 +87,7 @@ public class Login extends AppCompatActivity  {
                 imm.hideSoftInputFromWindow(emailText.getWindowToken(), 0);
             }
         });
-        Button emailLogin = findViewById(R.id.emailButton);
-        emailLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (emailText != null && pwText != null) {
-                    loginUser(emailText.getText().toString(), pwText.getText().toString());
-                }else{
-                    Toast.makeText(Login.this, "ID와 PW를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-        KakaoLoginbtn = findViewById(R.id.btn_kakao_login);
+
         KakaoLoginbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,7 +98,6 @@ public class Login extends AppCompatActivity  {
                 session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);*/
             }
         });
-        Button registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -122,31 +105,6 @@ public class Login extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {     //카카오 로그인 시 실행됨.
-                    //user is signed in
-                    Intent intent = new Intent(getApplicationContext(), main.class);
-                    intent.putExtra("Nickname","");
-                    intent.putExtra("ID","");
-                    intent.putExtra("Profile","");
-                    intent.putExtra("Email",mAuth.getCurrentUser());
-                    startActivity(intent);
-                    finish();
-                } /*
-                ->  String name = user.getDisplayName();
-                    String email = user.getEmail(); , user.getPhonenumber();
-                else if(user.getPhoneNumber() != null){
-                    // 핸드폰 인증화면으로 넘어가기
-                }*/
-                else{
-                }
-
-            }
-        };
-        taxiButton = (TextView) findViewById(R.id.taxiloginButton);
         taxiButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +112,65 @@ public class Login extends AppCompatActivity  {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
+        init();
+        Auth();
+        click();
+
+        backPressCloseHandler = new BackPressCloseHandler(this);
+        callback = new SessionCallback();
+        Session.getCurrentSession().addCallback(callback);
+        UserManagement.requestLogout(new LogoutResponseCallback() {
+            @Override
+            public void onCompleteLogout() {
+                //카카오톡 로그아웃 성공 후 하고싶은 내용 코딩 ~
+            }
+        });
+
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = positionDATA.edit();
+        if(!positionDATA.getString("LOGIN_EMAIL","").equals("")) {
+            emailText.setText(positionDATA.getString("LOGIN_EMAIL", ""));
+            IDcheck.setChecked(true);
+        }
+        emailLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (emailText.getText().toString().equals("") || pwText.getText().toString().equals("")) {
+                    Toast.makeText(Login.this, "ID와 PW를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else{
+                    if(IDcheck.isChecked()){
+                        editor.putString("LOGIN_EMAIL",emailText.getText().toString());
+                        editor.apply();
+                    }else{
+                        editor.remove("LOGIN_EMAIL");
+                        editor.apply();
+                    }
+                    loginUser(emailText.getText().toString(), pwText.getText().toString());
+                }
+            }
+        });
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    //user is signed in
+                    Intent intent = new Intent(getApplicationContext(), main.class);
+                    intent.putExtra("Nickname","");
+                    intent.putExtra("ID","");
+                    intent.putExtra("Profile","");
+                    intent.putExtra("Email",mAuth.getCurrentUser());
+                    intent.putExtra("MESSAGE","로그인 성공");
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        };
 
     }
 
@@ -163,12 +180,11 @@ public class Login extends AppCompatActivity  {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getApplicationContext(), "로그인 실패!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "로그인 실패\nID와 PW를 확인 후, 재시도해주세요.", Toast.LENGTH_SHORT).show();
                         } else {
                             // If sign in fails, display a message to the user.
                             Toast.makeText(Login.this, "로그인 성공!", Toast.LENGTH_SHORT).show();  //이메일,패스워드 입력 로그인
                         }
-
                     }
                 });
     }
@@ -190,7 +206,6 @@ public class Login extends AppCompatActivity  {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         mAuth.addAuthStateListener(mAuthListener);
     }
 
