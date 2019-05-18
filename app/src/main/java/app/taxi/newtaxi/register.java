@@ -45,7 +45,7 @@ public class register extends AppCompatActivity implements GoogleApiClient.OnCon
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createUser(email.getText().toString(),password.getText().toString());
+                submitUser();
             }
         });
         ConstraintLayout LAY1 = findViewById(R.id.LAY2);
@@ -79,6 +79,7 @@ public class register extends AppCompatActivity implements GoogleApiClient.OnCon
             phone.setError("Required");
             return;
         }
+        createUser(text3,text2);
         User userData = new User(text1,text2,text3,text4,0,null);
         mDatabase.child("user").push().setValue(userData);
 
@@ -93,11 +94,10 @@ public class register extends AppCompatActivity implements GoogleApiClient.OnCon
                             Toast.makeText(getApplicationContext(),"가입 실패!",Toast.LENGTH_SHORT).show();
                         }else{
                             Toast.makeText(getApplicationContext(), "가입 성공!", Toast.LENGTH_SHORT).show();  //이메일 회원가입
-                            submitUser();
                             Intent intent = new Intent(getApplicationContext(),Login.class);
                             startActivity(intent);
                             finish();
-                        }
+                        }//
 
                         // ...
                     }

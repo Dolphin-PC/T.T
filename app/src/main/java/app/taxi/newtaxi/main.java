@@ -108,8 +108,7 @@ public class main extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
     void Setting() {
-        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
-        SharedPreferences.Editor editor = positionDATA.edit();
+        s
 
         nickname = positionDATA.getString("USERNAME", "");
         userid = positionDATA.getString("ID", "");

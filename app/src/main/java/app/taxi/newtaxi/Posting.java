@@ -182,7 +182,7 @@ public class Posting extends AppCompatActivity {
         POSTbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TIMEDIALOG();
+                POSTDIALOG();
                 alertDialogBuilder.show();
                 editor.apply();
             }
@@ -207,7 +207,7 @@ public class Posting extends AppCompatActivity {
 
         POSTbutton.setEnabled(false);
     }
-    void TIMEDIALOG(){
+    void POSTDIALOG(){
         alertDialogBuilder = new AlertDialog.Builder(this);
         alertDialogBuilder.setTitle("정보 확인")
                 .setMessage("게시글을 등록하시겠습니까? \n" + TIME)

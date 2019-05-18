@@ -397,7 +397,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                     TIMEtext.setText(data_post.getTime());
-                    PRICEtext.setText(data_post.getPay());
+                    PRICEtext.setText(data_post.getPay()+"");
                     DISTANCEtext.setText(data_post.getDistance());
                     SELECT_latitude = data_post.getArrive_Latitude();
                     SELECT_longitude = data_post.getArrive_Longitude();
