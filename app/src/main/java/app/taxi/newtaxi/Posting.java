@@ -8,14 +8,12 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -48,7 +46,7 @@ public class Posting extends AppCompatActivity {
         PRICE= intent.getExtras().getString("PRICE");
         INDEX = positionDATA.getString("ID","1");//카카오톡 사용자의 일련번호로 인덱스 번호.
 
-        STARTtext = findViewById(R.id.STARTtext);
+        STARTtext = findViewById(R.id.ArriveText);
         ARRIVEtext = findViewById(R.id.ARRIVEtext);
         DISTANCEtext = findViewById(R.id.DISTANCEtext);
         PRICEtext = findViewById(R.id.PRICEtext);

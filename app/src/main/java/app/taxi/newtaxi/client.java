@@ -73,7 +73,6 @@ public class client extends AppCompatActivity
         postList = findViewById(R.id.postListView);
         nameTextView = view.findViewById(R.id.header_name_textView);
         emailTextView = view.findViewById(R.id.header_email_textView);
-        pointTextView = view.findViewById(R.id.header_point_textView);
         addpostButton = findViewById(R.id.add_post_button);
         addpostButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,7 +241,7 @@ public class client extends AppCompatActivity
             finish();
             Intent logoutIntent = new Intent(this, Login.class);
             startActivity(logoutIntent);
-        }
+        }/*
         else if (id==R.id.nav_reentry){
             Intent intent = new Intent(getApplicationContext(),My_taxi.class);
             intent.putExtra("Index", index);
@@ -254,7 +253,7 @@ public class client extends AppCompatActivity
             intent.putExtra("point",point);
             startActivity(intent);
             finish();
-        }
+        }*/
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

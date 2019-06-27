@@ -100,16 +100,12 @@ public class main extends AppCompatActivity {
         Name_textview = findViewById(R.id.Name_textview);
         UserID_textview = findViewById(R.id.UserID_textview);
         Point_textview = findViewById(R.id.Point_textview);
-        My_button = findViewById(R.id.My_button);
-        charge_btn = findViewById(R.id.charge_btn);
-        start_btn = findViewById(R.id.start_btn);
         JOINbutton=findViewById(R.id.JOINbutton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
     }
     void Setting() {
-        s
-
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         nickname = positionDATA.getString("USERNAME", "");
         userid = positionDATA.getString("ID", "");
         profileURL = positionDATA.getString("PROFILE", "");
@@ -175,7 +171,6 @@ public class main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         init();
         Setting();

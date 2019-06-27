@@ -1,22 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="navigation_view">
+    tools:showIn="navigation_view"
+    android:background="#2F3E4E">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_reentry"
-            android:icon="@drawable/ic_menu_send"
-            android:title="재입장" />
-    </group>
-
-    <item android:title="function">
+    <item android:title="내 정보">
         <menu>
             <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_send"
-                android:title="logout" />
+                android:id="@+id/My_Point"
+                android:icon="@drawable/point"
+                android:title="내 포인트"
+                />
+            <item
+                android:id="@+id/My_Grade"
+                android:icon="@drawable/grade"
+                android:title="내 등급"
+                />
+        </menu>
+    </item>
+
+    <item android:title="공지사항/이벤트">
+        <menu>
+            <item
+                android:id="@+id/Notice"
+                android:icon="@drawable/notice"
+                android:title="IOS 10월 출시 예정"
+                />
+            <item
+                android:id="@+id/Event"
+                android:icon="@drawable/event"
+                android:title="프로모션 이벤트 진행 중!"
+                />
         </menu>
     </item>
 
 </menu>
+

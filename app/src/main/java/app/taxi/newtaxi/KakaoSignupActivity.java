@@ -67,7 +67,7 @@ public class KakaoSignupActivity extends Activity{
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
 
-        Intent intent = new Intent(this,main.class);
+        Intent intent = new Intent(this,Permission.class);
         editor.putString("USERNAME",nickname);
         editor.putString("ID",id);
         if(profile=="")

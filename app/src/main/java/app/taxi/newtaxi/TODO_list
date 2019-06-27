@@ -118,3 +118,5 @@ public void checkCurrentUser() {
         }
         // [END get_user_profile]
     }
+
+TODO : 190627 사이드 메뉴바 하단(로그아웃, 앱정보, 설정)

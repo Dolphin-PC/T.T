@@ -52,7 +52,6 @@ public class Login extends AppCompatActivity  {
     private FirebaseAuth mAuth;
     private EditText emailText;
     private EditText pwText;
-    private TextView taxiButton;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private LoginButton KakaoLoginbtn;
     SessionCallback callback;
@@ -60,7 +59,8 @@ public class Login extends AppCompatActivity  {
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
     private DatabaseReference mUserInfo;
     ConstraintLayout LAY1;
-    Button emailLogin,registerButton;
+    Button emailLogin;
+    TextView registerButton;
     CheckBox IDcheck;
 
     void init(){
@@ -71,7 +71,6 @@ public class Login extends AppCompatActivity  {
         emailLogin = findViewById(R.id.emailButton);
         KakaoLoginbtn = findViewById(R.id.btn_kakao_login);
         registerButton = findViewById(R.id.registerButton);
-        taxiButton = findViewById(R.id.taxiloginButton);
         IDcheck = findViewById(R.id.IDcheck);
 
     }
@@ -102,13 +101,6 @@ public class Login extends AppCompatActivity  {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), register.class);
-                startActivity(intent);
-            }
-        });
-        taxiButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), taxi_main.class);
                 startActivity(intent);
             }
         });
@@ -216,45 +208,6 @@ public class Login extends AppCompatActivity  {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
-    private Task<String> getFirebaseJwt(final String kakaoAccessToken) {
-        final TaskCompletionSource<String> source = new TaskCompletionSource<>();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "https://hackatone-5486f.firebaseio.com/verifyToken";
-        HashMap<String, String> validationObject = new HashMap<>();
-        validationObject.put("token", kakaoAccessToken);
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(validationObject), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String firebaseToken = response.getString("firebase_token");
-                    source.setResult(firebaseToken);
-                } catch (Exception e) {
-                    source.setException(e);
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                source.setException(error);
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("token", kakaoAccessToken);
-                return params;
-            }
-        };
-
-        queue.add(request);
-        return source.getTask();
-    }
-    /**
-     * Session callback class for Kakao Login. OnSessionOpened() is called after successful login.
-     */
     private class SessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
