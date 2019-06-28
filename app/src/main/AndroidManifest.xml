@@ -22,10 +22,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Permission"></activity>
+        <activity android:name=".History_simple"></activity>
+        <activity android:name=".Charge_simple" />
+        <activity android:name=".My_simple" />
+        <activity
+            android:name=".My_taxi_simple"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Posting_simple"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Permission" />
         <activity android:name=".Join_list" />
         <activity android:name=".Post_Call" />
-        <activity android:name=".Login">
+        <activity
+            android:name=".Login"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -34,10 +45,14 @@
         </activity>
         <activity android:name=".Posting" />
         <activity android:name=".Selector" />
-        <activity android:name=".Map" />
+        <activity
+            android:name=".Map"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Charge" />
         <activity android:name=".KakaoSignupActivity" />
-        <activity android:name=".My" />
+        <activity
+            android:name=".My"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".splashActivity"
             android:screenOrientation="portrait"
@@ -49,7 +64,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".main_simple">
+        <activity
+            android:name=".main_simple"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -59,7 +76,9 @@
         <activity
             android:name=".client"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".My_taxi" />
+        <activity
+            android:name=".My_taxi"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".post" />
         <activity android:name=".register" />
         <activity android:name=".Taxi_info" />

@@ -56,7 +56,7 @@ import java.util.Map;
 public class Join extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
     public static Activity JoinActivity;
     main main = new main();
-    Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton;
+    Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton,CreateButton;
     private DatabaseReference mDatabase;
     GoogleMap map;
     GoogleApiClient googleApiClient;
@@ -65,7 +65,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     Task<Location> location;
     Marker marker;
     CircleOptions circle;
-    LatLng latLng,selectlatLng;
+    LatLng latLng,selectlatLng, STARTLatlng,ARRIVELatlng;
     int DISTANCE = 500;
     int MARKERcount=0;
     ArrayList<String> MARKERlist = new ArrayList<String>();
@@ -90,6 +90,10 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         USERID = positionDATA.getString("ID","");
         URL = positionDATA.getString("PROFILE","");
         GENDER = positionDATA.getString("GENDER","미정");
+        STARTLatlng = new LatLng(Double.valueOf(positionDATA.getString("출발","").split(",")[0]),
+                Double.valueOf(positionDATA.getString("출발","").split(",")[1]));
+        ARRIVELatlng = new LatLng(Double.valueOf(positionDATA.getString("도착","").split(",")[0]),
+                Double.valueOf(positionDATA.getString("도착","").split(",")[1]));
 
         m1000button= findViewById(R.id.m1000button);
         m700button= findViewById(R.id.m700button);
@@ -97,6 +101,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         m300button= findViewById(R.id.m300button);
         m100button= findViewById(R.id.m100button);
         LISTbutton= findViewById(R.id.LISTbutton);
+        CreateButton = findViewById(R.id.CreateButton);
 
         googleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -174,6 +179,13 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                 Intent intent = new Intent(getApplicationContext(),Join_list.class);
                 intent.putExtra("MARKER",MARKERlist);
                 intent.putExtra("MARKER_COUNT",MARKERcount);
+                startActivity(intent);
+            }
+        });
+        CreateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),Posting_simple.class);
                 startActivity(intent);
             }
         });
@@ -268,13 +280,13 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                     if(circle!=null) {
                         map.clear();
                         circle.radius(D);
-                        CIRCLE_MARKER(gpsLatLng,D);
+                        CIRCLE_MARKER(STARTLatlng,ARRIVELatlng,D);
                     }
                     else {
                         circle = new CircleOptions().center(gpsLatLng) //원점
                                 .radius(D)      //반지름 단위 : m
                                 .strokeWidth(3f);  //선너비 0f : 선없음;
-                        CIRCLE_MARKER(gpsLatLng,D);
+                        CIRCLE_MARKER(STARTLatlng,ARRIVELatlng,D);
                     }
                     map.addCircle(circle);
                 }
@@ -283,7 +295,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
 
         }
     }
-    void CIRCLE_MARKER(LatLng latLng,int DISTANCE){
+    void CIRCLE_MARKER(final LatLng STARTLatlng, final LatLng ARRIVELatlng, int DISTANCE){
         Double METER = 0.0045;
         switch (DISTANCE){
             case 1000:METER=0.009; break;
@@ -294,8 +306,6 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         }
         final Double M = METER;
 
-        final Double latitude = latLng.latitude;
-        final Double longitude = latLng.longitude;
         MARKERcount=0;
         MARKERlist.clear();
         LISTbutton.setText("리스트로 보기");
@@ -304,10 +314,14 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Data_Post data_post = snapshot.getValue(Data_Post.class);
-                    Double Start_Latitude = Double.valueOf(data_post.getStart_Latitude());
-                    Double Start_Longitude = Double.valueOf(data_post.getStart_Longitude());
-                    if(Math.abs(Start_Latitude-latitude) <= M && Math.abs(Start_Longitude-longitude) <= M) {
-                        map.addMarker(new MarkerOptions().position(new LatLng(Start_Latitude, Start_Longitude)).title(data_post.getIndex())
+                    Double DB_START_latitude = Double.valueOf(data_post.getStart_Latitude());
+                    Double DB_START_longitude = Double.valueOf(data_post.getStart_Longitude());
+                    Double DB_ARRIVE_latitude = Double.valueOf(data_post.getArrive_Latitude());
+                    Double DB_ARRIVE_longitude = Double.valueOf(data_post.getArrive_Longitude());
+
+                    if(Math.abs(DB_START_latitude-STARTLatlng.latitude) <= M && Math.abs(DB_START_longitude-STARTLatlng.longitude) <= M
+                    && Math.abs(DB_ARRIVE_latitude-ARRIVELatlng.latitude) <= M && Math.abs(DB_ARRIVE_longitude-ARRIVELatlng.longitude) <= M) {//출발지와 도착지가 설정한 범위 안에 있을 때,
+                        map.addMarker(new MarkerOptions().position(new LatLng(DB_START_latitude, DB_START_longitude)).title(data_post.getIndex())
                                 .icon(BitmapDescriptorFactory
                                         .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                         MARKERcount++;

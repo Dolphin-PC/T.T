@@ -10,4 +10,7 @@
     <string name="title_activity_taxi_client">taxi_client</string>
     //카카오 앱 키
     <string name="kakao_app_key">f52f753a188af1f4a94675df073415b8</string>
+    <string name="drawer_open">drawer_open</string>
+    <string name="drawer_close">drawer_close</string>
+
 </resources>

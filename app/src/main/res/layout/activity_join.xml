@@ -22,6 +22,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="1,000m"
+        android:textColor="#FFFFFF"
+        android:background="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toTopOf="@+id/LISTbutton"
         app:layout_constraintEnd_toStartOf="@+id/m700button"
         app:layout_constraintStart_toStartOf="parent" />
@@ -31,6 +33,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="500m"
+        android:textColor="#FFFFFF"
+        android:background="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toTopOf="@+id/LISTbutton"
         app:layout_constraintEnd_toStartOf="@+id/m300button"
         app:layout_constraintStart_toEndOf="@+id/m700button" />
@@ -40,6 +44,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="300m"
+        android:textColor="#FFFFFF"
+        android:background="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toTopOf="@+id/LISTbutton"
         app:layout_constraintEnd_toStartOf="@+id/m100button"
         app:layout_constraintStart_toEndOf="@+id/m500button" />
@@ -49,6 +55,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="100m"
+        android:textColor="#FFFFFF"
+        android:background="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toTopOf="@+id/LISTbutton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/m300button" />
@@ -58,6 +66,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="700m"
+        android:textColor="#FFFFFF"
+        android:background="@color/design_default_color_primary_dark"
         app:layout_constraintBottom_toTopOf="@+id/LISTbutton"
         app:layout_constraintEnd_toStartOf="@+id/m500button"
         app:layout_constraintStart_toEndOf="@+id/m1000button" />
@@ -66,10 +76,10 @@
         android:id="@+id/textView4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/holo_orange_dark"
+        android:background="@color/design_default_color_primary_dark"
         android:text="거리 별 노선"
         android:textAlignment="center"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/m1000button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -78,9 +88,24 @@
         android:id="@+id/LISTbutton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/design_default_color_primary_dark"
         android:text="리스트로 보기"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/CreateButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="100dp"
+        android:text="노선 생성하기"
+        android:background="@drawable/border_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/DISTANCEMAP" />
 
 </android.support.constraint.ConstraintLayout>

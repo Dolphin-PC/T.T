@@ -71,8 +71,8 @@ public class client extends AppCompatActivity
 
 
         postList = findViewById(R.id.postListView);
-        nameTextView = view.findViewById(R.id.header_name_textView);
-        emailTextView = view.findViewById(R.id.header_email_textView);
+        nameTextView = view.findViewById(R.id.Header_NameText);
+        emailTextView = view.findViewById(R.id.Header_EmailText);
         addpostButton = findViewById(R.id.add_post_button);
         addpostButton.setOnClickListener(new View.OnClickListener() {
             @Override

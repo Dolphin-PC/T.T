@@ -65,5 +65,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation files('src/main/jniLibs/libDaumMapAndroid.jar')
     implementation 'com.github.bootpay:client_android_java:2.143'
+    implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1'
+
 }
 apply plugin: 'com.google.gms.google-services'
