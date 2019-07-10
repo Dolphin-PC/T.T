@@ -4,9 +4,8 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -34,11 +32,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Posting_simple extends AppCompatActivity {
+    main_simple main = new main_simple();
+    Join join = new Join();
+
     private DatabaseReference mDatabase;
     TextView PayText,DistanceText, TimeText;
     Button LeftButton,RightButton;
     ImageView PersonImage,CreateButton;
-    int person = 1,PAY;
+    int person = 2,PAY;
     ProgressDialog pd;
     String START,ARRIVE,DISTANCE,PRICE,TIME,URL,INDEX;
 
@@ -56,7 +57,7 @@ public class Posting_simple extends AppCompatActivity {
         SharedPreferences.Editor editor = positionDATA.edit();
         START = positionDATA.getString("출발지","");
         ARRIVE = positionDATA.getString("도착지","");
-        INDEX = positionDATA.getString("INDEX","");
+        INDEX = positionDATA.getString("ID","");
         URL = "https://maps.googleapis.com/maps/api/distancematrix/json?origins=";
         URL += START;
         URL += "&destinations=" + ARRIVE;
@@ -107,11 +108,11 @@ public class Posting_simple extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 switch (person){
-                    case 1 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person3));
-                    person=3; break;
-                    case 2 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person1));
+                    case 2 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person3));
+                    person=4; break;
+                    case 3 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person1));
                     person--; break;
-                    case 3 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person2));
+                    case 4 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person2));
                     person--; break;
                 }
             }
@@ -120,12 +121,12 @@ public class Posting_simple extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 switch (person){
-                    case 1 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person2));
+                    case 2 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person2));
                     person++; break;
-                    case 2 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person3));
+                    case 3 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person3));
                     person++; break;
-                    case 3 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person1));
-                    person=1; break;
+                    case 4 : PersonImage.setImageDrawable(getResources().getDrawable(R.drawable.person1));
+                    person=2; break;
                 }
             }
         });
@@ -135,6 +136,8 @@ public class Posting_simple extends AppCompatActivity {
                 int price = Integer.valueOf(PRICE);
                 if( (price/person) % 100 != 0)
                     PAY = price/person + (100 - (price / person % 100));
+                else
+                    PAY = price/person;
 
                 SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
                 SharedPreferences.Editor editor = positionDATA.edit();
@@ -142,7 +145,7 @@ public class Posting_simple extends AppCompatActivity {
                 editor.putString("PERSON",Integer.toString(1));
                 editor.putString("PRICE",PRICE+"");
                 editor.putString("TIME",TIME);
-                editor.putString("INDEX",INDEX);
+                editor.putString("ID",INDEX);
                 editor.putString("DISTANCE",DISTANCE);
                 editor.apply();
 
@@ -170,7 +173,10 @@ public class Posting_simple extends AppCompatActivity {
 
                 Intent intent = new Intent(getApplicationContext(),My_taxi_simple.class);
                 startActivity(intent);
-                finish();
+
+                main.finish();  //main act. finish
+                join.finish();  //join act. finish
+                finish();       //this act. finish
             }
         });
         TimeText.setOnClickListener(new View.OnClickListener() {

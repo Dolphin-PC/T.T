@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="app.taxi.newtaxi">
 
     <permission
@@ -22,20 +23,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".History_simple"></activity>
-        <activity android:name=".Charge_simple" />
-        <activity android:name=".My_simple" />
+
+        <activity android:name=".advertisement"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
-            android:name=".My_taxi_simple"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Posting_simple"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Permission" />
-        <activity android:name=".Join_list" />
-        <activity android:name=".Post_Call" />
-        <activity
-            android:name=".Login"
+            android:name=".Login_simple"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,6 +36,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".History_simple" />
+        <activity
+            android:name=".Charge_simple"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".My_simple"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".My_taxi_simple"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Posting_simple"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Permission"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Join_list"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".Post_Call"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".Posting" />
         <activity android:name=".Selector" />
         <activity
@@ -57,38 +68,22 @@
             android:name=".splashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme" />
-        <activity android:name=".Join">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name=".Join"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".main_simple"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".client"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".My_taxi"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".post" />
-        <activity android:name=".register" />
-        <activity android:name=".Taxi_info" />
-        <activity android:name=".taxi_main" />
-        <activity android:name=".taxi_driver" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
-
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="f52f753a188af1f4a94675df073415b8" />
@@ -98,6 +93,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3940256099942544~3347511713"/>
     </application>
 
 </manifest>

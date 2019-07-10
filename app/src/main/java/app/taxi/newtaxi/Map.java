@@ -2,20 +2,22 @@ package app.taxi.newtaxi;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,16 +40,16 @@ import com.google.android.gms.tasks.Task;
 
 import java.util.List;
 
-public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener,GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
+public class Map extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveListener {
     main main = new main();
     GoogleMap map;
     GoogleApiClient googleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
-    Location mLastKnownLocation;
+    Location mLastKnownLocation, Location;
     Task<Location> location;
     Marker marker;
-    LatLng latLng,selectlatLng;
-    double resultLat,resultLng;
+    LatLng latLng, selectlatLng;
+    double resultLat, resultLng;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -55,7 +57,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
     private final LatLng mDefaultLocation = new LatLng(37.566643, 126.978279);
     private CameraPosition mCameraPosition;
     private boolean mLocationPermissionGranted;
-    String resultAddress,selector;
+    String resultAddress, selector;
     TextView addressView;
     Button settingBUTTON;
 
@@ -65,25 +67,28 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
                 .build();
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this); //마지막 위치
+        final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE); // 현재 GPS 위치
+
         addressView = findViewById(R.id.addressView);
         settingBUTTON = findViewById(R.id.settingBUTTON);
         Intent intent = getIntent();
         selector = intent.getExtras().getString("POSITION");
         settingBUTTON.setText(selector + "지로 설정");
     }
-    void click(){
+
+    void click() {
         settingBUTTON.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //버튼 클릭시, 마커 선택 위치의 좌표를 주소로 변환한 뒤, Intent
                 String address;
                 address = addressView.getText().toString();
-                SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+                SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
                 SharedPreferences.Editor editor = positionDATA.edit();
-                editor.putString(selector+"지",address);
+                editor.putString(selector + "지", address);
                 editor.apply();
-                Intent intent1 = new Intent(getApplicationContext(),main_simple.class);
+                Intent intent1 = new Intent(getApplicationContext(), main_simple.class);
                 startActivity(intent1);
                 finish();
             }
@@ -122,16 +127,16 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
         map = googleMap;
         map.setOnCameraMoveListener(this);
         map.setOnCameraIdleListener(this);
-        if (mLocationPermissionGranted){
+        if (mLocationPermissionGranted) {
             moveMap();
-         }
-        else
+        } else
             setmDefaultLocation();
     }
+
     @SuppressLint("MissingPermission")
     void moveMap() {
         if (location != null && map != null) {
-            Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
+            final Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
             locationTask.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
@@ -146,8 +151,8 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
                     thread.start();
                 }
             });
-        }else{
-
+        } else {
+            // TODO : GPS 현재위치 받아오기(지금은 GPS 사용전적이 있어야만 실행됨)
         }
     }
 
@@ -209,7 +214,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
 
     @Override
     public void onCameraMove() {
-        if(mLocationPermissionGranted)
+        if (mLocationPermissionGranted)
             marker.setPosition(map.getCameraPosition().target);
     }
 
@@ -239,8 +244,9 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
 
         }
     }
-    void setmDefaultLocation(){
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation,DEFAULT_ZOOM));
+
+    void setmDefaultLocation() {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
     }
 
     class MyGeocoderThread extends Thread {
@@ -252,7 +258,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
 
         @Override
         public void run() {
-            SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
+            SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
             SharedPreferences.Editor editor = positionDATA.edit();
 
             Geocoder geocoder = new Geocoder(getApplicationContext());
@@ -260,13 +266,13 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
             String addressText = "";
             try {
                 addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
-                editor.putString(selector,latLng.latitude + "," + latLng.longitude);
+                editor.putString(selector, latLng.latitude + "," + latLng.longitude);
                 editor.apply();
                 Thread.sleep(100);
                 if (addressList != null && addressList.size() > 0) {
                     Address address = addressList.get(0);
                     addressText = address.getAdminArea() + " " + (address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : address.getLocality()) + " ";
-                    addressText.replace("null","");
+                    addressText.replace("null", "");
 
                     String txt = address.getSubLocality();
                     if (txt != null) {
@@ -281,10 +287,10 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
             Message message = new Message();
             message.what = 100;
             message.obj = addressText;
-            handler.sendMessage(message);
+            handler.sendMessage(message);       //TODO : 출발지와 도착지가 null이거나 공백으로 표시될 때, 알림 창 표시
 
             resultAddress = addressText;
-            editor.putString(selector+"지",resultAddress);
+            editor.putString(selector + "지", resultAddress);
             editor.apply();
         }
     }
@@ -292,9 +298,9 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback,GoogleA
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what){
-                case 100:{
-                    addressView.setText((String)msg.obj);
+            switch (msg.what) {
+                case 100: {
+                    addressView.setText((String) msg.obj);
                 }
             }
         }

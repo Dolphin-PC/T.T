@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".advertisement">
+
+    <TextView
+        android:id="@+id/textView48"
+        android:layout_width="151dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="201dp"
+        android:layout_marginEnd="122dp"
+        android:text="광고 준비 중입니다."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/QuitButton"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="앱 종료하기"
+        android:background="#324199"
+        android:textColor="#ffffff"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

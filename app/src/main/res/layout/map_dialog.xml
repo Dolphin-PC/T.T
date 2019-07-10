@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#2F3E4E">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/MAP_Dialog"
@@ -20,7 +21,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="요금 :"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#FFFF"
         android:textSize="18sp"
         android:typeface="normal"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +34,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="시간 :"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#ffff"
         android:textSize="18sp"
         android:typeface="normal"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +47,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="거리 :"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#ffff"
         android:textSize="18sp"
         android:typeface="normal"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +60,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="TextView"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#FFFF"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/TIMEtext" />
@@ -71,7 +72,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="TextView"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#ffff"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/MAP_Dialog" />
@@ -83,7 +84,7 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:text="TextView"
-        android:textColor="@color/com_kakao_button_text_press"
+        android:textColor="#ffff"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/textView5"
         app:layout_constraintTop_toBottomOf="@+id/PRICEtext" />
@@ -93,10 +94,11 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"
-        android:background="@android:color/holo_orange_dark"
+        android:background="#F2D749"
         android:text="참가 신청"
         android:textSize="24sp"
         android:textStyle="bold"
+        android:textColor="#000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -109,8 +111,9 @@
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="5dp"
         android:text="나가기"
+        android:fontFamily="sans-serif-black"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/JOINbutton"
         app:layout_constraintEnd_toEndOf="parent" />
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

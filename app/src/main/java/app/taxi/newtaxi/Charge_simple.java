@@ -4,9 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +20,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -61,7 +59,7 @@ public class Charge_simple extends AppCompatActivity {
 
     void init(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
-        INDEX = positionDATA.getString("INDEX","");
+        INDEX = positionDATA.getString("ID","");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -74,12 +72,13 @@ public class Charge_simple extends AppCompatActivity {
         BootpayAnalytics.init(this, "5c5170df396fa67f8155acbe");
 
         Query query = mDatabase.child("user").orderByChild("email").equalTo(INDEX);
+        Log.e("INDEX",INDEX);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
-                    MyPointText.setText(user.getPoint() + "P");
+                    MyPointText.setText(user.getPoint() + " P");
                     USERNAME = user.getUsername();
                     PHONENUMBER = user.getPhonenumber();
                     PROFILEURL = user.getProfile_url();
@@ -96,7 +95,7 @@ public class Charge_simple extends AppCompatActivity {
         CoinImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreditText.setText(Integer.valueOf(CreditText.getText().toString().split(" ")[0]) + 1000 + "원");
+                CreditText.setText(Integer.valueOf(CreditText.getText().toString().split(" ")[0]) + 1000 + " 원");
                 ResultText.setText(Integer.valueOf(MyPointText.getText().toString().split(" ")[0])
                 + Integer.valueOf(CreditText.getText().toString().split(" ")[0]) + " P");
                 CREDIT = Integer.valueOf(CreditText.getText().toString().split(" ")[0]);
@@ -112,6 +111,7 @@ public class Charge_simple extends AppCompatActivity {
         CreditButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Dialog(CREDIT);
                 alertDialogBuilder.show();
             }
         });
@@ -123,21 +123,14 @@ public class Charge_simple extends AppCompatActivity {
         init();
         click();
     }
-    private void Dialog(String Point) {
-        final String P = Point;
+    private void Dialog(final int Point) {
         alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("결제 확인");
-        alertDialogBuilder.setMessage("충전 : " + Point);
+        alertDialogBuilder.setTitle("결제 확인");
+        alertDialogBuilder.setMessage("충전 : " + Point + " 원");
         alertDialogBuilder.setPositiveButton("결제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (P){
-                    case "1,000 P" : PAY(1000); break;
-                    case "2,000 P" : PAY(2000); break;
-                    case "3,000 P" : PAY(3000); break;
-                    case "5,000 P" : PAY(5000); break;
-                    case "10,000 P" : PAY(10000); break;
-                }
+                PAY(Point);
             }
         });
 

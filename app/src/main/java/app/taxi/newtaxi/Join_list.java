@@ -3,8 +3,8 @@ package app.taxi.newtaxi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Join_list extends AppCompatActivity {
-    Join joinActivity = (Join)Join.JoinActivity;
+    Join joinActivity = (Join)Join.Join;
     DatabaseReference mDatabase;
     ArrayList<String> MARKERlist = new ArrayList<String>();
     String MARKER_COUNT;

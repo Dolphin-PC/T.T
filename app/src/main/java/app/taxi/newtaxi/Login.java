@@ -6,9 +6,9 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -19,15 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,13 +34,9 @@ import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
 
-import org.json.JSONObject;
-
 import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map;
 
-public class Login extends AppCompatActivity  {
+public class Login extends AppCompatActivity {
     private BackPressCloseHandler backPressCloseHandler;
     private FirebaseAuth mAuth;
     private EditText emailText;
@@ -60,10 +49,10 @@ public class Login extends AppCompatActivity  {
     private DatabaseReference mUserInfo;
     ConstraintLayout LAY1;
     Button emailLogin;
-    TextView registerButton;
     CheckBox IDcheck;
+    TextView registerButton;
 
-    void init(){
+    void init() {
         getAppKeyHash();
         emailText = findViewById(R.id.emailText);
         pwText = findViewById(R.id.pwText);
@@ -74,11 +63,12 @@ public class Login extends AppCompatActivity  {
         IDcheck = findViewById(R.id.IDcheck);
 
     }
-    void Auth(){
+
+    void Auth() {
         mAuth = FirebaseAuth.getInstance();
     }
 
-    void click(){
+    void click() {
         LAY1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +95,7 @@ public class Login extends AppCompatActivity  {
             }
         });
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +116,7 @@ public class Login extends AppCompatActivity  {
 
         SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         final SharedPreferences.Editor editor = positionDATA.edit();
-        if(!positionDATA.getString("LOGIN_EMAIL","").equals("")) {
+        if (!positionDATA.getString("LOGIN_EMAIL", "").equals("")) {
             emailText.setText(positionDATA.getString("LOGIN_EMAIL", ""));
             IDcheck.setChecked(true);
         }
@@ -134,11 +125,11 @@ public class Login extends AppCompatActivity  {
             public void onClick(View view) {
                 if (emailText.getText().toString().equals("") || pwText.getText().toString().equals("")) {
                     Toast.makeText(Login.this, "ID와 PW를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                }else{
-                    if(IDcheck.isChecked()){
-                        editor.putString("LOGIN_EMAIL",emailText.getText().toString());
+                } else {
+                    if (IDcheck.isChecked()) {
+                        editor.putString("LOGIN_EMAIL", emailText.getText().toString());
                         editor.apply();
-                    }else{
+                    } else {
                         editor.remove("LOGIN_EMAIL");
                         editor.apply();
                     }
@@ -153,11 +144,11 @@ public class Login extends AppCompatActivity  {
                 if (user != null) {
                     //user is signed in
                     Intent intent = new Intent(getApplicationContext(), main.class);
-                    intent.putExtra("Nickname","");
-                    intent.putExtra("ID","");
-                    intent.putExtra("Profile","");
-                    intent.putExtra("Email",mAuth.getCurrentUser());
-                    intent.putExtra("MESSAGE","로그인 성공");
+                    intent.putExtra("Nickname", "");
+                    intent.putExtra("ID", "");
+                    intent.putExtra("Profile", "");
+                    intent.putExtra("Email", mAuth.getCurrentUser());
+                    intent.putExtra("MESSAGE", "로그인 성공");
                     startActivity(intent);
                     finish();
                 }
@@ -188,6 +179,7 @@ public class Login extends AppCompatActivity  {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -208,6 +200,7 @@ public class Login extends AppCompatActivity  {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
+
     private class SessionCallback implements ISessionCallback {
         @Override
         public void onSessionOpened() {
@@ -216,12 +209,13 @@ public class Login extends AppCompatActivity  {
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            if(exception != null) {
+            if (exception != null) {
                 Logger.e(exception);
             }
             setContentView(R.layout.login);
         }
     }
+
     protected void redirectSignupActivity() {       //세션 연결 성공 시 SignupActivity로 넘김
         final Intent intent = new Intent(this, KakaoSignupActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);

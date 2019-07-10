@@ -1,10 +1,12 @@
 package app.taxi.newtaxi;
 
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 public class My_simple extends AppCompatActivity {
 
+    ImageView ProfileImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

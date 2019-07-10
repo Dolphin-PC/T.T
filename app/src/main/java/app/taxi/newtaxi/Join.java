@@ -10,11 +10,11 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -47,15 +47,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Join extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,GoogleApiClient.ConnectionCallbacks,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnCameraIdleListener,GoogleMap.OnCameraMoveListener {
-    public static Activity JoinActivity;
-    main main = new main();
+    public static Activity Join;
+    main_simple main = new main_simple();
     Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton,CreateButton;
     private DatabaseReference mDatabase;
     GoogleMap map;
@@ -83,9 +81,13 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     TextView TIMEtext,PRICEtext,DISTANCEtext;
 
     void init(){
-        JoinActivity = Join.this;
+        Join = Join.this;
+        Intent intent = getIntent();
+        DISTANCE = intent.getExtras().getInt("METER");
+
         SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
+
         USERNAME = positionDATA.getString("USERNAME","");
         USERID = positionDATA.getString("ID","");
         URL = positionDATA.getString("PROFILE","");
@@ -272,7 +274,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
                     LatLng gpsLatLng = new LatLng(location.getResult().getLatitude(), location.getResult().getLongitude());
-                    CameraPosition position = new CameraPosition.Builder().target(gpsLatLng).zoom(DEFAULT_ZOOM).build();
+                    CameraPosition position = new CameraPosition.Builder().target(STARTLatlng).zoom(DEFAULT_ZOOM).build();
                     map.moveCamera(CameraUpdateFactory.newCameraPosition(position));
                     map.setMyLocationEnabled(mLocationPermissionGranted);
                     selectlatLng = gpsLatLng;
@@ -283,7 +285,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                         CIRCLE_MARKER(STARTLatlng,ARRIVELatlng,D);
                     }
                     else {
-                        circle = new CircleOptions().center(gpsLatLng) //원점
+                        circle = new CircleOptions().center(STARTLatlng) //원점
                                 .radius(D)      //반지름 단위 : m
                                 .strokeWidth(3f);  //선너비 0f : 선없음;
                         CIRCLE_MARKER(STARTLatlng,ARRIVELatlng,D);
@@ -386,10 +388,12 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                                 editor.putString("PRICE",data_post.getPrice());
                                 editor.apply();
                                 Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(),My_taxi.class);
+                                Intent intent = new Intent(getApplicationContext(),My_taxi_simple.class);
                                 intent.putExtra("INDEX",marker.getTitle());
                                 startActivity(intent);
-                                finish();
+
+                                main.finish(); //메인 액티비티 종료
+                                finish(); //현 액티비티 종료
                             }
                             else{
                                 Toast.makeText(getApplicationContext(),"인원이 초과되었습니다.",Toast.LENGTH_SHORT).show();
