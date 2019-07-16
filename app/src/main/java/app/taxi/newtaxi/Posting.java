@@ -98,7 +98,7 @@ public class Posting extends AppCompatActivity {
                 ,PAY
                 ,TIMEtext.getText().toString().split(":")[0]
                 ,"","","");
-        Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),false);
+        Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),false,false);
         mDatabase.child("post").push().setValue(dataPost);
         mDatabase.child("post-members").push().setValue(data_members);
     }

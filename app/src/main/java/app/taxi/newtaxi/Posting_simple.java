@@ -145,7 +145,7 @@ public class Posting_simple extends AppCompatActivity {
                 editor.putString("PERSON",Integer.toString(1));
                 editor.putString("PRICE",PRICE+"");
                 editor.putString("TIME",TIME);
-                editor.putString("ID",INDEX);
+                editor.putString("INDEX",INDEX);
                 editor.putString("DISTANCE",DISTANCE);
                 editor.apply();
 
@@ -167,7 +167,7 @@ public class Posting_simple extends AppCompatActivity {
                         ,PAY //각자 부담할 가격
                         ,TimeText.getText().toString() //예약 시
                         ,"","","");
-                Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),false);
+                Data_Members data_members = new Data_Members(userID,String.valueOf(INDEX),URL,"남",String.valueOf(INDEX),true,false);
                 mDatabase.child("post").push().setValue(dataPost);
                 mDatabase.child("post-members").push().setValue(data_members);
 

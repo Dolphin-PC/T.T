@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -54,7 +56,7 @@ public class My_taxi_simple extends AppCompatActivity {
 
         INDEX = positionDATA.getString("ID", "");
 
-        PersonText = findViewById(R.id.PersonText);
+        PersonText = findViewById(R.id.PayperText);
         TimeText = findViewById(R.id.TimeText);
         QuitButton = findViewById(R.id.QuitButton);
         InfoButton = findViewById(R.id.InfoButton);
@@ -169,25 +171,7 @@ public class My_taxi_simple extends AppCompatActivity {
                         alertDialogBuilder.show();
                     }
                 });
-                PAYbutton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(MAX == adapter.getCount()) {
-                            if (PAYbutton.getText().toString().equals("결제하기")) {
-                                dialog.dismiss();
-                                Dialog("결제필요", PAY + " P 를 결제합니다.");
-                                alertDialogBuilder.show();
-                            } else {
-                                Intent intent1 = new Intent(getApplicationContext(), Post_Call.class);
-                                intent1.putExtra("INDEX", INDEX);
-                                dialog.dismiss();
-                                startActivity(intent1);
-                            }
-                        }else{
-                            Toast.makeText(getApplicationContext(),"인원이 다 모이지 않았습니다.",Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+
             }
         });
         ChattingButton.setOnClickListener(new View.OnClickListener() {
@@ -263,10 +247,8 @@ public class My_taxi_simple extends AppCompatActivity {
                                                 mDatabase.child(path).updateChildren(JOINmap);
                                             }
                                         }
-
                                         @Override
-                                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                                        }
+                                        public void onCancelled(@NonNull DatabaseError databaseError) { }
                                     });
                                     Intent intent = new Intent(getApplicationContext(), Post_Call.class);
                                     intent.putExtra("INDEX", INDEX);

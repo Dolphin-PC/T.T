@@ -2,23 +2,23 @@ package app.taxi.newtaxi;
 
 public class Data_Members {
     private String USER1,PROFILEURL,GENDER,INDEX,USERID;
-    private boolean JOIN;
+    private boolean JOIN,PAY;
 
     public Data_Members(){}
 
-    public Data_Members(String USER1, String INDEX, String PROFILEURL, String GENDER,String USERID,boolean JOIN){
+    public Data_Members(String USER1, String INDEX, String PROFILEURL, String GENDER,String USERID,boolean JOIN,boolean PAY){
         this.USER1= USER1;
         this.INDEX = INDEX;
         this.PROFILEURL=PROFILEURL;
         this.GENDER=GENDER;
         this.USERID = USERID;
         this.JOIN = JOIN;
+        this.PAY = PAY;
     }
 
     public String getUSERID() {
         return USERID;
     }
-
     public void setUSERID(String USERID) {
         this.USERID = USERID;
     }
@@ -59,4 +59,9 @@ public class Data_Members {
     public boolean getJOIN(){
         return JOIN;
     }
+
+    public void setPAY(boolean PAY) {
+        this.PAY = PAY;
+    }
+    public boolean getPAY(){return PAY;}
 }

@@ -23,10 +23,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".Call_Info"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".Auto_Pay" />
 
-        <activity android:name=".advertisement"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <receiver
+            android:name=".PayReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity
+            android:name=".advertisement"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Login_simple"
             android:theme="@style/AppTheme.NoActionBar">
@@ -40,20 +49,24 @@
         <activity
             android:name=".Charge_simple"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".My_simple"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".My_simple"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".My_taxi_simple"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Posting_simple"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Permission"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Join_list"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Post_Call"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".Permission"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Join_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Post_Call"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Posting" />
         <activity android:name=".Selector" />
         <activity
@@ -70,10 +83,10 @@
             android:theme="@style/SplashTheme" />
         <activity
             android:name=".Join"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".main_simple"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".client"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -84,6 +97,7 @@
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
+
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="f52f753a188af1f4a94675df073415b8" />
@@ -95,7 +109,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3940256099942544~3347511713"/>
+            android:value="ca-app-pub-3940256099942544~3347511713" />
     </application>
 
 </manifest>

@@ -127,7 +127,7 @@ public class Join_list extends AppCompatActivity {
                                 Map<String,Object> taskMap = new HashMap<String,Object>();
                                 taskMap.put("person",data_post.getPerson()+1);
                                 mDatabase.child(path).updateChildren(taskMap);
-                                Data_Members data_members = new Data_Members(USERNAME,MARKERlist.get(index),URL,GENDER,USERID,false);
+                                Data_Members data_members = new Data_Members(USERNAME,MARKERlist.get(index),URL,GENDER,USERID,false,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
                                 editor.putString("INDEX",String.valueOf(index));
                                 editor.putString("??",String.valueOf(index));

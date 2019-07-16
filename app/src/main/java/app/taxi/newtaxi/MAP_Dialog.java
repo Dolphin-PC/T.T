@@ -65,7 +65,7 @@ public class MAP_Dialog extends DialogFragment implements OnMapReadyCallback {
                         for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                             Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                             if(data_post.getPerson() < data_post.getMaxPerson()) {
-                                Data_Members data_members = new Data_Members(USERNAME,INDEX,URL,"남",USERID,false);
+                                Data_Members data_members = new Data_Members(USERNAME,INDEX,URL,"남",USERID,false,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
                             }
                             else{

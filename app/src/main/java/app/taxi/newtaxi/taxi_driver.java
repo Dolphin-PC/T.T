@@ -79,10 +79,10 @@ public class taxi_driver extends AppCompatActivity
                 for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                     Data_Taxi dataTaxi = appleSnapshot.getValue(Data_Taxi.class);
                     emailText.setText("Driver :" +  dataTaxi.getDriver());
-                    pointText.setText("Point : " + dataTaxi.getPoint());
-                    point = dataTaxi.getPoint();
+                    pointText.setText("Point : " + dataTaxi.getPay());
+                    point = dataTaxi.getPay();
                     driver = dataTaxi.getDriver();
-                    phonenumber = dataTaxi.getPhonenumber();
+                    phonenumber = dataTaxi.getTaxiPhonenumber();
                     taxinumber = dataTaxi.getTaxinumber();
                 }
             }

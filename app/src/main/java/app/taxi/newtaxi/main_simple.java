@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
+
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,7 +29,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.database.DataSnapshot;
@@ -41,7 +42,7 @@ import java.util.ArrayList;
 
 public class main_simple extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public static main_simple main;
-    private AdView mAdView;
+    private AdView mAdView, navigationAdView;
 
     private DatabaseReference mDatabase;
     Button TabBarButton, webLinkButton, DirectionButton;
@@ -74,7 +75,7 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
         ArriveText = findViewById(R.id.ArriveText);
         MeterSpinner = findViewById(R.id.MeterSpinner);
 
-        mAdView = findViewById(R.id.adView);
+        mAdView = findViewById(R.id.navigationAdView);
         MobileAds.initialize(this, "ca-app-pub-3940256099942544~3347511713");
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -110,15 +111,17 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
                         METER = 1000;
                 }
             }
+
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) { }
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
         });
 
         SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         nickname = positionDATA.getString("USERNAME", "");
         userid = positionDATA.getString("ID", "");
         profileURL = positionDATA.getString("PROFILE", "");
-        INDEX = positionDATA.getString("ID", "");
+        INDEX = positionDATA.getString("INDEX", "");
         START = positionDATA.getString("출발지", "출발지를 입력해주세요.");
         ARRIVE = positionDATA.getString("도착지", "도착지를 입력해주세요.");
 
@@ -208,7 +211,11 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
     }
 
     void check() {
-        Query query = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);
+        if(!INDEX.equals("")){
+            Dialog(INDEX);
+            alertDialogBuilder.show();
+        }
+        /*Query query = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -225,7 +232,7 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     private void Dialog(final String INDEX) {
@@ -239,6 +246,11 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
                 intent.putExtra("INDEX", INDEX);
                 startActivity(intent);
                 finish();
+            }
+        }).setNegativeButton("나가기", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
             }
         });
     }

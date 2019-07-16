@@ -372,10 +372,10 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                             SharedPreferences.Editor editor = positionDATA.edit();
                             if(data_post.getPerson() < data_post.getMaxPerson()) {
                                 String path = "/" + dataSnapshot.getKey() + "/" + appleSnapshot.getKey();
-                                Map<String,Object> taskMap = new HashMap<String,Object>();
+                                Map<String,Object> taskMap = new HashMap<>();
                                 taskMap.put("person",data_post.getPerson()+1);
                                 mDatabase.child(path).updateChildren(taskMap);
-                                Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,GENDER,USERID,false);
+                                Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,GENDER,USERID,true,false);
                                 mDatabase.child("post-members").push().setValue(data_members);
                                 editor.putString("INDEX",marker.getTitle());
                                 editor.putString("??",INDEX);
