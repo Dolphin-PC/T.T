@@ -7,7 +7,7 @@
     android:background="#323E4D">
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/TitleText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="35dp"
@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/pay_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -29,7 +29,7 @@
         android:textSize="8pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/TitleText" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -45,7 +45,7 @@
         app:srcCompat="@drawable/plus" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/service_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <TextView
-        android:id="@+id/textView35"
+        android:id="@+id/result_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -86,24 +86,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="TextView"
-        android:textSize="8pt"
+        android:text="요청 대기"
         android:textColor="#FFFFFF"
+        android:textSize="8pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/service_label" />
 
     <TextView
         android:id="@+id/PayText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:text="TextView"
+        android:text="요청 대기"
         android:textColor="#FFFFFF"
         android:textSize="11pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/PayButton"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/pay_label" />
 
     <TextView
         android:id="@+id/PersonText"
@@ -113,7 +113,7 @@
         android:layout_marginTop="36dp"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/PayText"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/pay_label" />
 
     <TextView
         android:id="@+id/ResultText"
@@ -122,10 +122,10 @@
         android:layout_marginStart="177dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="177dp"
-        android:text="TextView"
-        android:textSize="11pt"
+        android:text="요청 대기"
         android:textColor="#FFFFFF"
+        android:textSize="11pt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView35" />
+        app:layout_constraintTop_toBottomOf="@+id/result_label" />
 </androidx.constraintlayout.widget.ConstraintLayout>

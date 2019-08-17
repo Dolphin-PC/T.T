@@ -23,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".postcall_MenuDialog"></activity>
+        <activity android:name=".Review" />
+        <activity android:name=".chat_guide" />
         <activity
             android:name=".Call_Info"
             android:theme="@style/Theme.AppCompat.NoActionBar" />

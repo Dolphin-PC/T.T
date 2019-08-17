@@ -56,9 +56,15 @@ public class My_taxiAdapter extends BaseAdapter {
         NAMEtext.setText(data_listview.getNAME());
         GENDERtext.setText(data_listview.getGENDER());
 
-        Glide.with(convertView)
-                .load(PROFILE_URL)
-                .into(IMAGEview);
+        if(!PROFILE_URL.equals("")) {
+            Glide.with(convertView)
+                    .load(PROFILE_URL)
+                    .into(IMAGEview);
+        }else{
+            Glide.with(convertView)
+                    .load(R.drawable.default_profile)
+                    .into(IMAGEview);
+        }
         return convertView;
     }
     public void addItem(String PROFILE,String NAME, String GENDER) {
@@ -70,5 +76,15 @@ public class My_taxiAdapter extends BaseAdapter {
         item.setGENDER(GENDER);
 
         listViewItemList.add(item);
+    }
+    public void removeItem(String PROFILE,String NAME,String GENDER){
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Data_Listview item = new Data_Listview();
+
+        item.setPROFILE(PROFILE);
+        item.setNAME(NAME);
+        item.setGENDER(GENDER);
+
+        listViewItemList.remove(item);
     }
 }

@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -86,11 +87,15 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback, Google
                 address = addressView.getText().toString();
                 SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
                 SharedPreferences.Editor editor = positionDATA.edit();
-                editor.putString(selector + "지", address);
-                editor.apply();
-                Intent intent1 = new Intent(getApplicationContext(), main_simple.class);
-                startActivity(intent1);
-                finish();
+                if(address.equals("") || address.equals("TextView")){
+                    Toast.makeText(getApplicationContext(),"다른 지역을 선택해주세요.",Toast.LENGTH_SHORT).show();
+                }else {
+                    editor.putString(selector + "지", address);
+                    editor.apply();
+                    Intent intent1 = new Intent(getApplicationContext(), main_simple.class);
+                    startActivity(intent1);
+                    finish();
+                }
             }
         });
     }
@@ -272,7 +277,7 @@ public class Map extends AppCompatActivity implements OnMapReadyCallback, Google
                 if (addressList != null && addressList.size() > 0) {
                     Address address = addressList.get(0);
                     addressText = address.getAdminArea() + " " + (address.getMaxAddressLineIndex() > 0 ? address.getAddressLine(0) : address.getLocality()) + " ";
-                    addressText.replace("null", "");
+                    addressText.replace("", "");
 
                     String txt = address.getSubLocality();
                     if (txt != null) {

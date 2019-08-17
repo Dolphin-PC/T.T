@@ -29,17 +29,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class My_taxi_simple extends AppCompatActivity {
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase,rDatabase;
 
     TextView PersonText, TimeText;
     ImageView QuitButton, InfoButton, ChattingButton, RecruitImage;
     View View1, View2;
 
-    String PERSON, TIME, INDEX, DISTANCE;
+    String PERSON, TIME, INDEX, DISTANCE,ID;
     int PAY, MY_POINT, MAX;
 
     AlertDialog.Builder alertDialogBuilder;
@@ -50,11 +52,19 @@ public class My_taxi_simple extends AppCompatActivity {
     private TextView INDEXtext, TIMEtext, PRICEtext, DISTANCEtext, PERSONtext;
     Button OUTbutton, PAYbutton;
 
+    long now = System.currentTimeMillis();
+    Date date = new Date(now);
+    SimpleDateFormat dayNow = new SimpleDateFormat("yyyy/MM/dd");
+    SimpleDateFormat timeNow = new SimpleDateFormat(" HH:mm");
+    String onDay = dayNow.format(date);
+    String onTime = timeNow.format(date);
+
     void init() {
         SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
         SharedPreferences.Editor editor = positionDATA.edit();
 
-        INDEX = positionDATA.getString("ID", "");
+        ID = positionDATA.getString("ID", "");
+        INDEX = positionDATA.getString("INDEX","");
 
         PersonText = findViewById(R.id.PayperText);
         TimeText = findViewById(R.id.TimeText);
@@ -76,6 +86,8 @@ public class My_taxi_simple extends AppCompatActivity {
 
     void init_Database() {
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        rDatabase = FirebaseDatabase.getInstance("https://taxitogether.firebaseio.com/").getReference();
+
         Query query = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -94,7 +106,7 @@ public class My_taxi_simple extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-        MEMBERSquery = mDatabase.child("post-members").orderByChild("userid").equalTo(INDEX);
+        MEMBERSquery = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);
         MEMBERSquery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -109,6 +121,20 @@ public class My_taxi_simple extends AppCompatActivity {
 
             @Override
             public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                Data_Members data_members = dataSnapshot.getValue(Data_Members.class);
+                adapter.removeItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                /*if(data_members.getUSERID().equals(data_members.getINDEX())) {
+                    Intent QUITintent = new Intent(getApplicationContext(), main.class);
+                    QUITintent.putExtra("MESSAGE", "방장이 퇴장하여 퇴장처리 되었습니다.");
+                    QUIT_PROCESS_reference();
+                    QUIT_PROCESS_database();
+                    startActivity(QUITintent);
+                    finish();
+                }else{
+                    QUIT_PROCESS_database();
+                    QUIT_PROCESS_reference();
+                    adapter.removeItem(data_members.getPROFILEURL(),data_members.getUSER1(),data_members.getGENDER());
+                }*/
             }
 
             @Override
@@ -158,8 +184,9 @@ public class My_taxi_simple extends AppCompatActivity {
                 });
 
                 MYDIALOGlist.setAdapter(adapter);
-                TIMEtext.setText(TimeText.getText().toString());
-                PRICEtext.setText(PAY + "원");
+                TIMEtext.setText(TimeText.getText().toString().split(" ")[0] + "시 " +
+                        TimeText.getText().toString().split(" ")[2] + "분");
+                PRICEtext.setText(PAY + " P");
                 DISTANCEtext.setText(DISTANCE);
                 PERSONtext.setText(PersonText.getText().toString());
 
@@ -177,27 +204,8 @@ public class My_taxi_simple extends AppCompatActivity {
         ChattingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Query query = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Data_Members data_members = snapshot.getValue(Data_Members.class);
-                            if (data_members.getJOIN()) {
-                                Intent intent = new Intent(getApplicationContext(), Post_Call.class);
-                                startActivity(intent);
-                            } else {
-                                Dialog("결제필요", "결제 후, 채팅이 가능합니다.\n결제를 진행하시겠습니까?");
-                                alertDialogBuilder.show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
+                Intent intent = new Intent(getApplicationContext(), Post_Call.class);
+                startActivity(intent);
             }
         });
     }
@@ -210,6 +218,55 @@ public class My_taxi_simple extends AppCompatActivity {
             alertDialogBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    mDatabase.child("taxi-call").child(INDEX).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.getChildren().iterator().hasNext()){
+                                Data_Taxi data_taxi = dataSnapshot.getValue(Data_Taxi.class);
+                                if(data_taxi.getDriver().equals("")) {
+                                    alertDialogBuilder.setTitle("퇴장 확인").setMessage("택시를 콜한 상태입니다.\n정말 노선에서 이탈하시겠습니까?\n(택시 콜이 취소됩니다)")
+                                            .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(getApplicationContext(), main_simple.class);
+                                                    QUIT_PROCESS_database();
+                                                    QUIT_PROCESS_reference();
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }).setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    }).show();
+                                }else if(!!data_taxi.getDriver().equals("")){
+                                    alertDialogBuilder.setTitle("퇴장 확인").setMessage("택시가 오고있습니다.\n정말 노선에서 이탈하시겠습니까?\n(콜이 취소되며, 이탈자의 서비스 이용료가 차감됩니다)")
+                                            .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    Intent intent = new Intent(getApplicationContext(), main_simple.class);
+                                                    exit_penalty(data_taxi);
+                                                    QUIT_PROCESS_database();
+                                                    QUIT_PROCESS_reference();
+                                                    startActivity(intent);
+                                                    finish();
+                                                }
+                                            }).setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                        }
+                                    }).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                     Intent intent = new Intent(getApplicationContext(), main_simple.class);
                     QUIT_PROCESS_database();
                     QUIT_PROCESS_reference();
@@ -221,7 +278,7 @@ public class My_taxi_simple extends AppCompatActivity {
             alertDialogBuilder.setPositiveButton("결제", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(final DialogInterface dialog, int which) {
-                    final Query query = mDatabase.child("user").orderByChild("email").equalTo(INDEX);
+                    final Query query = mDatabase.child("user").orderByChild("email").equalTo(ID);
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -376,79 +433,93 @@ public class My_taxi_simple extends AppCompatActivity {
     }
 
     void QUIT_PROCESS_database() {
-        final Query POSTquery = mDatabase.child("post").orderByChild("index").equalTo(INDEX);
-        final Query MEMBERSquery_1 = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);  //방장이 나갔을때, post-members전체 삭제
-        final Query MEMBERSquery_2 = mDatabase.child("post-members").orderByChild("userid").equalTo(INDEX); //참가인원이 나갔을 때,
-        final Query MESSAGEquery_1 = mDatabase.child("post-message").orderByChild("index").equalTo(INDEX); //방장이 나갔을때, post-message전체 삭제
-        final Query MESSAGEquery_2 = mDatabase.child("post-message").orderByChild("id").equalTo(INDEX);    //참가인원이 나갔을 때,
-        POSTquery.addListenerForSingleValueEvent(new ValueEventListener() {
+        /*final Query MEMBERSquery_1 = mDatabase.child("post-members").orderByChild("index").equalTo(INDEX);  //방장이 나갔을때, post-members전체 삭제*/
+        /*final Query MESSAGEquery_1 = mDatabase.child("post-message").orderByChild("index").equalTo(INDEX); //방장이 나갔을때, post-message전체 삭제*/
+
+        final Query MESSAGEquery_2 = mDatabase.child("post-message").orderByChild("id").equalTo(ID);    //참가인원이 나갔을 때,
+
+        mDatabase.child("post").child(INDEX).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Data_Post data_post = snapshot.getValue(Data_Post.class);
-                    if (INDEX.equals(data_post.getIndex())) {           //방장일 때, 방 전체 파기(post/post-members/post-message)
-                        Log.d("post", "방장일 때");
-                        mDatabase.child("post").child(snapshot.getKey()).removeValue();
-                        MEMBERSquery_1.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                    mDatabase.child("post-members").child(snapshot1.getKey()).removeValue();
-                                }
-                            }
+                Data_Post data_post = dataSnapshot.getValue(Data_Post.class);
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
-                        MESSAGEquery_1.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                    mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
-                    } else {                                           //참가한 인원일경우, person-1, post-members 파기
-                        Log.d("post", "참가일 때");
-                        String path = "/" + dataSnapshot.getKey() + "/" + snapshot.getKey();
-                        Map<String, Object> taskMap = new HashMap<String, Object>();
-                        taskMap.put("person", data_post.getPerson() - 1);
-                        mDatabase.child(path).updateChildren(taskMap);
-                        MEMBERSquery_2.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                    mDatabase.child("post-members").child(snapshot1.getKey()).removeValue();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
-                        MESSAGEquery_2.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
-                                    mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-                            }
-                        });
-                    }
+                int person = data_post.getPerson() - 1;
+                if (person == 0) {
+                    mDatabase.child("post").child(INDEX).removeValue();
+                } else {
+                    HashMap<String, Object> map = new HashMap<>();
+                    map.put("person", person);
+                    mDatabase.child("post").child(INDEX).updateChildren(map);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "참가 중인 노선이 없습니다.", Toast.LENGTH_SHORT).show();
+                QUIT_PROCESS_reference();
+            }
+        });
+
+        mDatabase.child("post-members").child(ID).removeValue();
+
+        MESSAGEquery_2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot1 : dataSnapshot.getChildren()) {
+                    mDatabase.child("post-message").child(snapshot1.getKey()).removeValue();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
+        });
+
+        mDatabase.child("taxi-call").child(INDEX).removeValue();
+    }
+
+    void exit_penalty(Data_Taxi data_taxi){
+        mDatabase.child("user").child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                HashMap<String,Object> map = new HashMap<>();
+                if(user.getPoint() - data_taxi.getPay() < 0){
+                    map.put("penalty_point",data_taxi.getPay());
+                }else{
+                    map.put("point",user.getPoint()-data_taxi.getPay());
+                }
+                mDatabase.child("user").child(ID).updateChildren(map);
+                rDatabase.child("user").child(ID).updateChildren(map);  //사용자 포인트 차감
+
+                map.clear();                                            //택시기사 패널티 포인트 지급
+                mDatabase.child("taxi-driver").child(data_taxi.getTaxinumber()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Data_TaxiDriver data_taxiDriver = dataSnapshot.getValue(Data_TaxiDriver.class);
+                        map.put("point", data_taxiDriver.getPOINT() + data_taxi.getPay());
+                        mDatabase.child("taxi-driver").child(data_taxi.getTaxinumber()).updateChildren(map);
+                        rDatabase.child("taxi-driver").child(data_taxi.getTaxinumber()).updateChildren(map);
+
+                        map.clear();
+                        map.put("day",onDay);
+                        map.put("time",onTime);
+                        map.put("index",ID);
+                        map.put("point",0);
+                        map.put("service_point",data_taxi.getPay());
+                        map.put("detail","콜 취소 요금");
+
+                        rDatabase.child("report").child("taxi-driver").child(data_taxiDriver.getNUMBER()).push().setValue(map);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }

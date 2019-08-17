@@ -3,7 +3,7 @@ package app.taxi.newtaxi;
 
 public class Data_message {
 
-    private String URL;
+    private String profileurl;
     private String id;
     private String comment;
     private String time;
@@ -11,9 +11,9 @@ public class Data_message {
 
     public Data_message(){}
 
-    public Data_message(String INDEX, String URL, String id,String username, String comment, String time) {
+    public Data_message(String INDEX, String profileurl, String id,String username, String comment, String time) {
         this.INDEX = INDEX;
-        this.URL = URL;
+        this.profileurl = profileurl;
         this.id = id;
         this.comment = comment;
         this.time = time;
@@ -21,7 +21,7 @@ public class Data_message {
     }
 
     public String getPROFILEURL() {
-        return URL;
+        return profileurl;
     }
 
     public String getId() {

@@ -55,7 +55,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     public static Activity Join;
     main_simple main = new main_simple();
     Button m1000button,m700button,m500button,m300button,m100button,LISTbutton,JOINbutton,CreateButton;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase,rDatabase;
     GoogleMap map;
     GoogleApiClient googleApiClient;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -66,9 +66,10 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
     LatLng latLng,selectlatLng, STARTLatlng,ARRIVELatlng;
     int DISTANCE = 500;
     int MARKERcount=0;
+    int MyPoint;
     ArrayList<String> MARKERlist = new ArrayList<String>();
     String SELECT_latitude = "37.566643",SELECT_longitude = "126.978279";
-    String USERNAME,USERID,URL,INDEX,GENDER;
+    String USERNAME,ID,URL,INDEX,GENDER;
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
     private static final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 1;
@@ -89,7 +90,7 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
         SharedPreferences.Editor editor = positionDATA.edit();
 
         USERNAME = positionDATA.getString("USERNAME","");
-        USERID = positionDATA.getString("ID","");
+        ID = positionDATA.getString("ID","");
         URL = positionDATA.getString("PROFILE","");
         GENDER = positionDATA.getString("GENDER","미정");
         STARTLatlng = new LatLng(Double.valueOf(positionDATA.getString("출발","").split(",")[0]),
@@ -112,6 +113,20 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                 .build();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        rDatabase = FirebaseDatabase.getInstance("https://taxitogether.firebaseio.com/").getReference();
+
+        mDatabase.child("user").child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                MyPoint = user.getPoint();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void click(){
@@ -370,31 +385,41 @@ public class Join extends AppCompatActivity implements OnMapReadyCallback, Googl
                             Data_Post data_post = appleSnapshot.getValue(Data_Post.class);
                             SharedPreferences positionDATA = getSharedPreferences("positionDATA",MODE_PRIVATE);
                             SharedPreferences.Editor editor = positionDATA.edit();
-                            if(data_post.getPerson() < data_post.getMaxPerson()) {
-                                String path = "/" + dataSnapshot.getKey() + "/" + appleSnapshot.getKey();
-                                Map<String,Object> taskMap = new HashMap<>();
-                                taskMap.put("person",data_post.getPerson()+1);
-                                mDatabase.child(path).updateChildren(taskMap);
-                                Data_Members data_members = new Data_Members(USERNAME,marker.getTitle(),URL,GENDER,USERID,true,false);
-                                mDatabase.child("post-members").push().setValue(data_members);
-                                editor.putString("INDEX",marker.getTitle());
-                                editor.putString("??",INDEX);
-                                editor.putString("출발",data_post.getStart_Latitude()+","+data_post.getStart_Longitude());
-                                editor.putString("도착",data_post.getArrive_Latitude()+","+data_post.getArrive_Longitude());
-                                editor.putString("MAX",data_post.getMaxPerson()+"");
-                                editor.putString("TIME",TIMEtext.getText().toString());
-                                editor.putString("DISTANCE",DISTANCEtext.getText().toString());
-                                editor.putString("PAY",PRICEtext.getText().toString());
-                                editor.putString("PRICE",data_post.getPrice());
-                                editor.apply();
-                                Toast.makeText(getApplicationContext(),"참가 신청 완료!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(getApplicationContext(),My_taxi_simple.class);
-                                intent.putExtra("INDEX",marker.getTitle());
-                                startActivity(intent);
+                            if(data_post.getPerson() < data_post.getMaxPerson()) {      //  인원 체크
+                                if(MyPoint > 1000) { // 서비스 이용료 체크
+                                    String path = "/" + dataSnapshot.getKey() + "/" + appleSnapshot.getKey();
+                                    Map<String, Object> taskMap = new HashMap<>();
+                                    taskMap.put("person", data_post.getPerson() + 1);
+                                    mDatabase.child(path).updateChildren(taskMap);
 
-                                main.finish(); //메인 액티비티 종료
-                                finish(); //현 액티비티 종료
-                            }
+                                    Data_Members data_members = new Data_Members(USERNAME, marker.getTitle(), URL, GENDER, ID, true, false);
+                                    taskMap.clear();
+                                    taskMap.put(ID, data_members);
+                                    mDatabase.child("post-members").updateChildren(taskMap);
+                                    rDatabase.child("post-members").push().setValue(taskMap);
+
+                                    editor.putString("INDEX", marker.getTitle());
+                                    editor.putString("??", INDEX);
+                                    editor.putString("출발", data_post.getStart_Latitude() + "," + data_post.getStart_Longitude());
+                                    editor.putString("도착", data_post.getArrive_Latitude() + "," + data_post.getArrive_Longitude());
+                                    editor.putString("MAX", data_post.getMaxPerson() + "");
+                                    editor.putString("TIME", TIMEtext.getText().toString());
+                                    editor.putString("DISTANCE", DISTANCEtext.getText().toString());
+                                    editor.putString("PAY", PRICEtext.getText().toString() + " P");
+                                    editor.putString("PRICE", data_post.getPrice());
+                                    editor.putInt("PERSON",data_post.getMaxPerson());
+                                    editor.apply();
+                                    Toast.makeText(getApplicationContext(), "참가 신청 완료!", Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(getApplicationContext(), My_taxi_simple.class);
+                                    intent.putExtra("INDEX", marker.getTitle());
+                                    startActivity(intent);
+
+                                    main.finish(); //메인 액티비티 종료
+                                    finish(); //현 액티비티 종료
+                                } else{
+                                    Toast.makeText(getApplicationContext(),"노선에 참가하기 위한 포인트가 부족합니다.",Toast.LENGTH_SHORT).show();
+                                }
+                            } //  인원 체크
                             else{
                                 Toast.makeText(getApplicationContext(),"인원이 초과되었습니다.",Toast.LENGTH_SHORT).show();
                             }

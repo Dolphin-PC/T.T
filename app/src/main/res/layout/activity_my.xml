@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/Name_textview" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/pay_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -62,7 +62,7 @@
         android:layout_marginTop="17dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintStart_toEndOf="@+id/pay_label"
         app:layout_constraintTop_toBottomOf="@+id/UserID_textview" />
 
     <View

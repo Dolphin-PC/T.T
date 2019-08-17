@@ -41,14 +41,14 @@ import kr.co.bootpay.model.BootUser;
 public class Charge_simple extends AppCompatActivity {
     long now = System.currentTimeMillis ();
     Date date = new Date(now);
-    SimpleDateFormat sdfNow = new SimpleDateFormat("YYYY/MM/dd HH:mm:ss");
+    SimpleDateFormat sdfNow = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     String Time = sdfNow.format(date);
     int YEAR = Integer.parseInt(Time.split("/")[0]);
     int MONTH = Integer.parseInt(Time.split("/")[1]);
     int DAY = Integer.parseInt(Time.split("/")[2].split(" ")[0]);
     private final int stuck = 10;
 
-    DatabaseReference mDatabase;
+    DatabaseReference mDatabase,rDatabase;
 
     TextView MyPointText,CreditText,ResultText;
     ImageView CoinImage;
@@ -59,9 +59,12 @@ public class Charge_simple extends AppCompatActivity {
 
     void init(){
         SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = positionDATA.edit();
+
         INDEX = positionDATA.getString("ID","");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        rDatabase = FirebaseDatabase.getInstance("https://taxitogether.firebaseio.com/").getReference();
 
         MyPointText = findViewById(R.id.MyPointText);
         CreditText = findViewById(R.id.CreditText);
@@ -79,6 +82,7 @@ public class Charge_simple extends AppCompatActivity {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
                     MyPointText.setText(user.getPoint() + " P");
+                    editor.putString("POINT",user.getPoint()+"");
                     USERNAME = user.getUsername();
                     PHONENUMBER = user.getPhonenumber();
                     PROFILEURL = user.getProfile_url();
@@ -205,13 +209,19 @@ public class Charge_simple extends AppCompatActivity {
         finish();
     }
     void Update_user(int point){
+        SharedPreferences positionDATA = getSharedPreferences("positionDATA", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = positionDATA.edit();
+
         Map<String, Object> taskMap = new HashMap<String, Object>();
         taskMap.put(INDEX,new User(USERNAME,"",INDEX,PHONENUMBER,point,PROFILEURL));
         mDatabase.child("user").updateChildren(taskMap);
+        rDatabase.child("user").updateChildren(taskMap);
+        editor.putString("POINT",point+"");
+        editor.apply();
     }
     void REPORT_POINT(int point){
         Data_report_charge data_report_charge = new Data_report_charge(Time,point+"");
-        mDatabase.child("report")
+        rDatabase.child("report")
                 .child("charge")
                 .child(INDEX).push().setValue(data_report_charge);
     }

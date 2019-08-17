@@ -103,7 +103,9 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="100dp"
         android:text="노선 생성하기"
-        android:background="@drawable/border_black"
+        android:textSize="12pt"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/border_create"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/DISTANCEMAP" />

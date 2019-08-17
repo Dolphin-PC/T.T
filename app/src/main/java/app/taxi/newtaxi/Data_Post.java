@@ -1,11 +1,11 @@
 package app.taxi.newtaxi;
 
 public class Data_Post {
-    private String Price,UserID,Title,Start,Arrive,Start_Latitude,Start_Longitude,Arrive_Latitude,Arrive_Longitude,driver,phonenumber,taxinumber,index,time,distance;
+    private String price,UserID,Title,Start,Arrive,Start_Latitude,Start_Longitude,Arrive_Latitude,Arrive_Longitude,driver,phonenumber,taxinumber,index,time,distance;
     private int Person,Pay,MaxPerson;
     public Data_Post(){}
 
-    public Data_Post(String UserID, String Price,String Title, String Start,String Start_Latitude,String Start_Longitude, String Arrive, String Arrive_Latitude,String Arrive_Longitude, int Person,int MaxPerson, String index,String distance, int pay, String time, String driver, String phonenumber, String taxinumber){
+    public Data_Post(String UserID, String price,String Title, String Start,String Start_Latitude,String Start_Longitude, String Arrive, String Arrive_Latitude,String Arrive_Longitude, int Person,int MaxPerson, String index,String distance, int pay, String time, String driver, String phonenumber, String taxinumber){
         this.UserID=UserID;
         this.Title=Title;
         this.Start=Start;
@@ -17,7 +17,7 @@ public class Data_Post {
         this.Person=Person;
         this.MaxPerson=MaxPerson;
         this.index=index;
-        this.Price=Price;
+        this.price=price;
         this.driver = driver;
         this.phonenumber=phonenumber;
         this.taxinumber=taxinumber;
@@ -54,7 +54,7 @@ public class Data_Post {
         return UserID;
     }
     public String getPrice() {
-        return Price;
+        return price;
     }
     public int getPay() { return Pay; }
 
