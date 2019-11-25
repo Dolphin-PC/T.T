@@ -146,8 +146,14 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                editor.putInt("POINT", user.getPoint());
-                editor.apply();
+                Log.e("error: ",ID);
+                try{
+                    editor.putInt("POINT", user.getPoint());
+                    editor.apply();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
 
             @Override
@@ -251,7 +257,7 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
     }
 
     void check() {
-        mDatabase.child("user").child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+       /* mDatabase.child("user").child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
@@ -262,7 +268,7 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
                     HashMap<String,Object> map = new HashMap<>();
                     map.put("point",user.getPoint() - user.getPenalty_point());
                     mDatabase.child("user").child(ID).updateChildren(map); // 페널티 포인트 차감
-                    Toast.makeText(getApplicationContext(),"패널티 포인트가 차감되었습니다.\n서비스 이용이 가능합니다.",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(),"패널티 포인트가 차감되었습니다.\n서비스 이용이 가능합니다.",Toast.LENGTH_SHORT).show();
                 }else if(user.getPoint() < 0 || user.getPenalty_point() >= 0){
                     Dialog("","포인트 부족","이탈 패널티로 인해 포인트가 부족합니다.\n(포인트 충전 후, 서비스 이용이 가능합니다)");
                 }
@@ -272,7 +278,7 @@ public class main_simple extends AppCompatActivity implements NavigationView.OnN
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });  // penalty 포인트 check!
+        }); */ // penalty 포인트 check!
         mDatabase.child("post-members").child(INDEX).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

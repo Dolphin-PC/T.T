@@ -12,6 +12,8 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.usermgmt.LoginButton;
@@ -19,6 +21,8 @@ import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 import com.kakao.util.exception.KakaoException;
 import com.kakao.util.helper.log.Logger;
+
+import java.util.HashMap;
 
 public class Login_simple extends AppCompatActivity  {
     private BackPressCloseHandler backPressCloseHandler;
@@ -28,10 +32,13 @@ public class Login_simple extends AppCompatActivity  {
     Button WebLinkButton;
     SessionCallback callback;
     String url = "https://web-taxi-1.firebaseapp.com";
+    DatabaseReference mDatabase;
 
     void init(){
         KakaoLoginbtn = findViewById(R.id.btn_kakao_login);
         WebLinkButton = findViewById(R.id.WebLinkButton);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
     }
     void Auth(){
         mAuth = FirebaseAuth.getInstance();
@@ -43,6 +50,7 @@ public class Login_simple extends AppCompatActivity  {
             public void onClick(View v) {
                 callback = new SessionCallback();
                 Session.getCurrentSession().addCallback(callback);
+
                 /*Session session = Session.getCurrentSession();
                 session.addCallback(new SessionCallback());
                 session.open(AuthType.KAKAO_LOGIN_ALL, Login.this);*/
@@ -53,6 +61,11 @@ public class Login_simple extends AppCompatActivity  {
             public void onClick(View view) {
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
+//                User user = new User("1","1","1","1",1,"1",1,1);
+//                HashMap<String, Object> postValues = user.toMap();
+//                mDatabase.child("user").updateChildren(postValues);
+
+//                String username, String password, String email, String phonenumber, int point,String profile_url, int penalty,int penalty_poin
             }
         });
     }
@@ -134,7 +147,7 @@ public class Login_simple extends AppCompatActivity  {
             if(exception != null) {
                 Logger.e(exception);
             }
-            setContentView(R.layout.login);
+            setContentView(R.layout.activity_login_simple);
         }
     }
     protected void redirectSignupActivity() {       //세션 연결 성공 시 SignupActivity로 넘김

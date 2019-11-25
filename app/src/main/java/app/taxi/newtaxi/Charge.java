@@ -204,7 +204,7 @@ public class Charge extends AppCompatActivity {
     }
     void Update_user(int point){
         Map<String, Object> taskMap = new HashMap<String, Object>();
-        taskMap.put(ID,new User(USERNAME,"",ID,PHONENUMBER,point,PROFILEURL));
+//        taskMap.put(ID,new User(USERNAME,"",ID,PHONENUMBER,point,PROFILEURL));
         mDatabase.child("user").updateChildren(taskMap);
     }
     void REPORT_POINT(int point){

@@ -1,5 +1,9 @@
 package app.taxi.newtaxi;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+
 public class Data_Post {
     private String price,UserID,Title,Start,Arrive,Start_Latitude,Start_Longitude,Arrive_Latitude,Arrive_Longitude,driver,phonenumber,taxinumber,index,time,distance;
     private int Person,Pay,MaxPerson;
@@ -24,6 +28,30 @@ public class Data_Post {
         this.Pay = pay;
         this.time = time;
         this.distance = distance;
+    }
+    @Exclude
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("UserID", UserID);
+        result.put("Title", Title);
+        result.put("Start", Start);
+        result.put("Arrive", Arrive);
+        result.put("Start_Latitude", Start_Latitude);
+        result.put("Start_Longitude", Start_Longitude);
+        result.put("Arrive_Latitude", Arrive_Latitude);
+        result.put("Arrive_Longitude", Arrive_Longitude);
+        result.put("Person", Person);
+        result.put("MaxPerson", MaxPerson);
+        result.put("index", index);
+        result.put("price", price);
+        result.put("driver", driver);
+        result.put("phonenumber", phonenumber);
+        result.put("taxinumber", taxinumber);
+        result.put("pay", Pay);
+        result.put("time", time);
+        result.put("distance", distance);
+
+        return result;
     }
 
     public String getDistance() {

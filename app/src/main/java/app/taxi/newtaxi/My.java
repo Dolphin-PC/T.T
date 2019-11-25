@@ -134,7 +134,7 @@ public class My extends AppCompatActivity {
                     editor.apply();
 
                     Map<String, Object> taskMap = new HashMap<String, Object>();
-                    taskMap.put(ID,new User(NAME,null,ID,phonenumber,user.getPoint(),PROFILE_URL));
+//                    taskMap.put(ID,new User(NAME,null,ID,phonenumber,user.getPoint(),PROFILE_URL));
                     mDatabase.updateChildren(taskMap);
                 }
             }

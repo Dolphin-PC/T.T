@@ -1,5 +1,9 @@
 package app.taxi.newtaxi;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+
 public class Data_TaxiDriver {
     private String ID,PW,NAME,NUMBER,PHONENUMBER;
     private int POINT;
@@ -10,11 +14,25 @@ public class Data_TaxiDriver {
         this.ID = ID;
         this.PW = PW;
         this.NAME = NAME;
-        this.NUMBER = NUMBER;
+        this.NUMBER = NAME;
         this.POINT = POINT;
         this.PHONENUMBER = PHONENUMBER;
         this.AUTH = AUTH;
         this.CALL = CALL;
+    }
+    @Exclude
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("ID", ID);
+        result.put("PW", PW);
+        result.put("NAME", NAME);
+        result.put("NAME", NAME);
+        result.put("POINT", POINT);
+        result.put("PHONENUMBER", PHONENUMBER);
+        result.put("AUTH", AUTH);
+        result.put("CALL", CALL);
+
+        return result;
     }
 
     public String getNAME() {

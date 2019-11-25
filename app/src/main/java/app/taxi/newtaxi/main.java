@@ -190,11 +190,11 @@ public class main extends AppCompatActivity {
                         editor.putString("POINT",Point_textview.getText().toString());
                         editor.apply();
 
-                        Update_user(user.getPoint(),user.getPhonenumber());
+//                        Update_user(user.getPoint(),user.getPhonenumber());
                         return;
                     }
                 }else{
-                    Update_user(0,"0");
+//                    Update_user(0,"0");
                     Point_textview.setText("0");
                 }
             }
@@ -220,11 +220,11 @@ public class main extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
     }
-    void Update_user(int point,String phonenumber){
-        Map<String, Object> taskMap = new HashMap<String, Object>();
-        taskMap.put(userid,new User(nickname,null,userid,phonenumber,point,null));
-        mDatabase.child("user").updateChildren(taskMap);
-    }
+//    void Update_user(int point,String phonenumber){
+//        Map<String, Object> taskMap = new HashMap<String, Object>();
+//        taskMap.put(userid,new User(nickname,null,userid,phonenumber,point,null));
+//        mDatabase.child("user").updateChildren(taskMap);
+//    }
 
     @Override
     public void onBackPressed(){

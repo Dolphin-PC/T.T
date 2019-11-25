@@ -203,7 +203,7 @@ public class Charge_simple extends AppCompatActivity {
         Update_user(total);
         REPORT_POINT(Price);
 
-        Intent intent = new Intent(getApplicationContext(),main.class);
+        Intent intent = new Intent(getApplicationContext(),main_simple.class);
         intent.putExtra("MESSAGE","포인트 충전이 완료되었습니다.");
         startActivity(intent);
         finish();
@@ -213,7 +213,7 @@ public class Charge_simple extends AppCompatActivity {
         final SharedPreferences.Editor editor = positionDATA.edit();
 
         Map<String, Object> taskMap = new HashMap<String, Object>();
-        taskMap.put(INDEX,new User(USERNAME,"",INDEX,PHONENUMBER,point,PROFILEURL));
+//        taskMap.put(INDEX,new User(USERNAME,"",INDEX,PHONENUMBER,point,PROFILEURL));
         mDatabase.child("user").updateChildren(taskMap);
         rDatabase.child("user").updateChildren(taskMap);
         editor.putString("POINT",point+"");
@@ -221,8 +221,8 @@ public class Charge_simple extends AppCompatActivity {
     }
     void REPORT_POINT(int point){
         Data_report_charge data_report_charge = new Data_report_charge(Time,point+"");
-        rDatabase.child("report")
-                .child("charge")
-                .child(INDEX).push().setValue(data_report_charge);
+//        rDatabase.child("report")
+//                .child("charge")
+//                .child(INDEX).push().setValue(data_report_charge);
     }
 }

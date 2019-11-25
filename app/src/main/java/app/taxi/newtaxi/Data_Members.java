@@ -1,5 +1,9 @@
 package app.taxi.newtaxi;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+
 public class Data_Members {
     private String USER1,PROFILEURL,GENDER,INDEX,USERID;
     private boolean JOIN,PAY;
@@ -14,6 +18,19 @@ public class Data_Members {
         this.USERID = USERID;
         this.JOIN = JOIN;
         this.PAY = PAY;
+    }
+    @Exclude
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("USER1", USER1);
+        result.put("INDEX", INDEX);
+        result.put("PROFILEURL", PROFILEURL);
+        result.put("GENDER", GENDER);
+        result.put("USERID", USERID);
+        result.put("JOIN", JOIN);
+        result.put("PAY", PAY);
+
+        return result;
     }
 
     public String getUSERID() {

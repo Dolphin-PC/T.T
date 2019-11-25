@@ -1,5 +1,9 @@
 package app.taxi.newtaxi;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+
 public class Data_Taxi {
     private String email;
     private String driver;
@@ -27,6 +31,26 @@ public class Data_Taxi {
         this.person = person;
         this.yes = yes;
         this.no = no;
+    }
+    @Exclude
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("email", email);
+        result.put("driver", driver);
+        result.put("taxiphonenumber", taxiphonenumber);
+        result.put("taxinumber", taxinumber);
+        result.put("pay", pay);
+        result.put("pay_complete", pay_complete);
+        result.put("service_each", service_each);
+        result.put("complete_driver", complete_driver);
+        result.put("complete_client", complete_client);
+        result.put("complete_ride", complete_ride);
+        result.put("call", call);
+        result.put("person", person);
+        result.put("yes", yes);
+        result.put("no", no);
+
+        return result;
     }
 
     public int getYes() {

@@ -1,5 +1,9 @@
 package app.taxi.newtaxi;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+
 public class Data_Comment {
     public String userID;
     public String comment;
@@ -16,6 +20,15 @@ public class Data_Comment {
     public Data_Comment(String cmt, int index){
         this.comment = cmt;
         this.index = index;
+    }
+    @Exclude
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("userID", userID);
+        result.put("comment", comment);
+        result.put("index", index);
+
+        return result;
     }
 
     public String getCmt() {

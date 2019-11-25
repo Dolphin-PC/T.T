@@ -1,5 +1,9 @@
 package app.taxi.newtaxi;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+
 class Data_exit {
     String day, menu, reporter, ID, name,index;
     int yes, no;
@@ -17,6 +21,20 @@ class Data_exit {
         this.name = name;
         this.yes = yes;
         this.no = no;
+    }
+    @Exclude
+    public HashMap<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("day", day);
+        result.put("menu", menu);
+        result.put("index", index);
+        result.put("reporter", reporter);
+        result.put("ID", ID);
+        result.put("name", name);
+        result.put("yes", yes);
+        result.put("no", no);
+
+        return result;
     }
 
     public String getIndex() {
