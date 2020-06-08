@@ -11,4 +11,5 @@ T.T(Taxi Toghther)팀 사이트 <a href="http://www.taxitogether.co.kr/index.jsp
 
 *추가<br>
 19.8월 <a href="http://www.u300.or.kr/">학생창업유망팀 300팀</a>에 선정됨.
+<br>
 <a href="https://github.com/Dolphin-PC/T.T/blob/master/T.T%E1%84%90%E1%85%B5%E1%86%B7%20%E1%84%8C%E1%85%A1%E1%84%85%E1%85%AD.pdf" target="_blank">T.T팀 자료</a>
