@@ -1,15 +1,15 @@
-# T.T(Taxi Together)
-2019년 창업 동아리
+### 한림대학교 졸업작품 / 2019 학생창업유망팀 300
+T.T(Taxi Together), 택시 동승 중개 플랫폼 앱 서비스
 
-택시 동승 중개 플랫폼 앱 서비스
-한림대학교 춘천지역을 시작으로 출시준비 중입니다.
+#### 박찬영(팀장 / 아이디어, 서비스 프로세스 기획, 시장조사, 모바일앱 풀스택 개발 참여)
 
-T.T(Taxi Toghther)팀 사이트 <a href="http://www.taxitogether.co.kr/index.jsp">클릭</a><br>
-18.11월 한림대학교 해커톤 금상 수상한 아이디어로,<br>
-19.4월 한림대학교 창업동아리에서
-19.5월 한림대학교 소프트웨어중심대학 spin-off 창업동아리로 이전.
+### 수상이력
+ - 2018 한림SW해커톤 2등
+ - 2019 한림 Spin-Off 창업팀 선정
+ - 2019 교육부 학생창업유망팀 300 선정
 
-*추가<br>
-19.8월 <a href="http://www.u300.or.kr/">학생창업유망팀 300팀</a>에 선정됨.
-<br>
-<a href="https://github.com/Dolphin-PC/T.T/blob/master/T.T%E1%84%90%E1%85%B5%E1%86%B7%20%E1%84%8C%E1%85%A1%E1%84%85%E1%85%AD.pdf" target="_blank">T.T팀 자료</a>
+### 개발 스택
+ - Front-End : Android Studio(Java)
+ - Database : Firebase Real-time DB
+ - Storage : Firebase
+ - API : 로그인(Kakao Login), 지도(Google Maps), 포인트 충전(KakaoPay), 경로 안내(KakaoNavi)
