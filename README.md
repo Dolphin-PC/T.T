@@ -38,6 +38,7 @@
 
 ### 결과물
 - [서비스 디자인 및 설명(Figma)](https://www.figma.com/file/50XVq776jzv2fP4utwKaGn/T.T(Taxi-Together)?type=design&node-id=0%3A1&mode=design&t=WEFFSUXLxd9jPOWc-1)
+- [서비스설명 PPT](https://dolphin-pc.github.io/T.T/T.T%ED%8C%80%20%EC%9E%90%EB%A3%8C.pdf)
 
 ### 서비스 흐름도
 
